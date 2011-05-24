@@ -30,7 +30,7 @@ class Glitch_Controller_Front extends Zend_Controller_Front
     {
         if (null !== $request) {
             $this->setRequest($request);
-        } elseif ((null === $request) && (null === ($request = $this->getRequest()))) {
+        } else {
             $request = new Glitch_Controller_Request_Rest();
             $this->setRequest($request);
         }
