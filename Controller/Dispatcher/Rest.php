@@ -96,7 +96,9 @@ class Glitch_Controller_Dispatcher_Rest
     protected function _renderResponse($vars, $controller, $request)
     {
         if(!is_array($vars)) {
-            $vars = array();
+            $vars = array('data' => null);
+        } elseif(!isset($vars['data'])) {
+        	$vars['data'] = null;
         }
 
         $response = $this->getResponse();
