@@ -169,6 +169,18 @@ class Glitch_Controller_Dispatcher_Rest
         return $controller;
     }
 
+    public function getControllerClass(Zend_Controller_Request_Abstract $request)
+    {
+       $classname = ucfirst($request->getModuleName()) . '_Controller';
+
+       $parentElements = $request->getUrlElements();
+       foreach($parentElements as $parentElement) {
+               $classname .= '_' . ucfirst($parentElement['element']);
+       }
+
+       return $classname;
+    }
+
     public function formatControllerNameByParams($controllername, $module = null)
     {
         if($module == null) {

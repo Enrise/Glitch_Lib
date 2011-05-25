@@ -197,6 +197,35 @@ class Glitch_Controller_Request_Rest
         $this->_parameters = $parameters;
     }
 
+    public function getUrlElements()
+    {
+		if($this->_urlElements == null) {
+			$this->parseUrlElements();
+       }
+
+       return $this->_urlElements;
+    }
+
+     /**
+     * Returns main element or rest end-point if you will.
+     *
+     * Returns comment/5 url element pairs from the url:
+     *   /event/5/talk/3/comment/5
+     *
+     * @return array
+     */
+    public function getMainElement()
+    {
+       $urlElements = $this->getUrlElements();
+        return $urlElements[count($urlElements)-1];
+    }
+
+    public function getResource() {
+        $element = $this->getMainElement();
+        return $element['resource'];
+    }
+
+
     protected function _getRestMapping($name) {
         return isset ($this->_restMappings[$name])
                 ? $this->_restMappings[$name]
