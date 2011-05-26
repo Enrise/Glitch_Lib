@@ -142,13 +142,13 @@ class Glitch_Controller_Request_Rest
 
             if (isset($mapping['isCollection']) && $mapping['isCollection'] == true) {
                 $this->_setResourceType(self::RESOURCE_TYPE_COLLECTION);
-                $resource = array_shift($items);
+		$resource = null;
 //            } elseif (isset($mapping['isCollection'])  && $mapping['isService'] == true) {
 //                $this->_setResourceType(self::RESOURCE_TYPE_SERVICE);
 //                $resource = array_shift($items);
             } else {
                 $this->_setResourceType(self::RESOURCE_TYPE_RESOURCE);
-                $resource = null;
+                $resource = array_shift($items);
             }
 
             $this->_addUrlElement($mapping['name'],
