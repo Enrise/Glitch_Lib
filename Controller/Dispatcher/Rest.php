@@ -78,7 +78,6 @@ class Glitch_Controller_Dispatcher_Rest
         $controller = $this->_getController($request);
 
         foreach ($request->getParentElements() as $element) {
-            $className = $element['path'].$element['element'] . "Controller";
             $className = $this->formatControllerNameByParams($element['element'], $element['module']);
             if(!$className::passThrough($element['resource'])) {
                 throw new Exception ("Cannot continue");
@@ -88,8 +87,7 @@ class Glitch_Controller_Dispatcher_Rest
         $request->setDispatched(true);
         $vars = $controller->dispatch($request);
         echo $response; //headers
-        $this->_renderResponse($vars, $controller, $request);
-
+        echo $this->_renderResponse($vars, $controller, $request);
         exit;
     }
 
@@ -108,10 +106,10 @@ class Glitch_Controller_Dispatcher_Rest
             $filename .= $subResRenderer . '.';
         }
 
-        $filename .= $response->getOutputFormat().'.phtml';
+        $filename = $this->_getRenderScriptName($request, $controller);
 
         if(!file_exists($filename)) {
-            if($subResRenderer != '') {
+            if($this->getResponse()->hasSubResponseRenderer()) {
                 throw new RuntimeException(
                     'A SubResponseRenderer was set but could not be located. '
                    .'Looked for "'.$filename.'" in: '.  get_include_path()
@@ -119,10 +117,26 @@ class Glitch_Controller_Dispatcher_Rest
             }
 
             $filename = 'Glitch/Controller/Response/Renderer/'
-                      . ucfirst($response->getOutputFormat()) . '.php';
+                      . ucfirst($this->getResponse()->getOutputFormat()) . '.php';
         }
 
-        $this->_renderFile($filename, $vars, $this->getResponse());
+        return $this->_renderFile($filename, $vars, $this->getResponse());
+    }
+
+    protected function _getRenderScriptName(
+                            Zend_Controller_Request_Abstract $request,
+                            $controller)
+    {
+        $response = $this->getResponse();
+        $filename = GLITCH_APP_PATH . '/modules/'
+                  . ucfirst($this->_curModule) . '/View/Script/'
+                  . implode('/', $this->_getClassElements($request)) . '/'
+                  . ucfirst($controller->getActionMethod($request)) . '.';
+        if($response->hasSubResponseRenderer()) {
+            $filename .= $response->getSubResponseRenderer() . '.';
+        }
+
+        return $filename . $response->getOutputFormat() . '.phtml';
     }
 
     protected function _renderFile($file, $vars, $response)
@@ -158,6 +172,7 @@ class Glitch_Controller_Dispatcher_Rest
     {
         $className = $this->getControllerClass($request);
         $controller = new $className($request, $this->getResponse(), $this->getParams());
+
         if(!$controller instanceof Glitch_Controller_Action_Rest) {
             require_once 'Zend/Controller/Dispatcher/Exception.php';
             throw new Zend_Controller_Dispatcher_Exception(
@@ -167,6 +182,28 @@ class Glitch_Controller_Dispatcher_Rest
         }
 
         return $controller;
+    }
+
+    public function getControllerClass(Zend_Controller_Request_Abstract $request)
+    {
+        return ucfirst($request->getModuleName()) . '_Controller'
+             . '_' . implode('_', $this->_getClassElements($request));
+    }
+
+    /**
+     * @param Zend_Controller_Request_Abstract $request
+     * @return array
+     */
+    protected function _getClassElements(Zend_Controller_Request_Abstract $request)
+    {
+        $parentElements = $request->getUrlElements();
+        $out = array();
+
+        foreach($parentElements as $parentElement) {
+            $out[] = ucfirst($parentElement['element']);
+        }
+
+        return $out;
     }
 
     public function formatControllerNameByParams($controllername, $module = null)

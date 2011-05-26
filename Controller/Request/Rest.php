@@ -54,69 +54,69 @@ class Glitch_Controller_Request_Rest
     extends Zend_Controller_Request_Http
 {
     const RESOURCE_TYPE_COLLECTION = 'collection';
-    const RESOURCE_TYPE_ELEMENT = 'element';
-    
+    const RESOURCE_TYPE_RESOURCE = 'resource';
+
     /**
      * @var string
      */
     protected $_resourceType;
-    
+
     /**
      * @var array
      */
     protected $_restMappings;
-    
+
     protected $_urlElements;
-    
+
     protected $_parentElements;
-    
+
     protected $_parameters;
-    
+
     public function __construct($uri = null)
     {
         $this->_restMappings = $this->_getRestMappings();
         parent::__construct($uri);
     }
-    
+
     protected function _getRestMappings()
     {
         $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap');
         $router = $bootstrap->getPluginResource('router');
         return $router->getRestMappings();
     }
-    
+
     protected function _getActiveRoute()
     {
         $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap');
         return $bootstrap->getResource('router')->getCurrentRoute(false);
     }
-    
+
     public function getHttpAccept()
     {
         return $this->getServer('HTTP_ACCEPT');
     }
-    
+
     public function getQueryString()
     {
         return $this->getServer('HTTP_QUERYSTRING');
     }
-    
+
     public function getParentElements()
     {
         if($this->_urlElements == null) {
             $this->parseUrlElements();
         }
-        
+
         return $this->_parentElements;
     }
-    
+
     public function parseUrlElements()
     {
         $items = $this->_urlElements = array();
 
         // +2 below is for prefixing and suffixing slashes
         $pathInfo = substr($this->getPathInfo(),
-                          strlen(trim($this->_getActiveRoute()->getRouteUrl(),'/'))+2); 
+                          strlen(trim($this->_getActiveRoute()->getRouteUrl(),'/'))+2);
 
         // collect URL info and sets the url elements.
         $items = explode('/', $pathInfo);
@@ -125,7 +125,7 @@ class Glitch_Controller_Request_Rest
         if (count($items) == 0) {
             $items[] = 'default';
         }
-        
+
         // Map serialized url data into key value pairs
         $path = '';
         while (count($items))
@@ -142,19 +142,19 @@ class Glitch_Controller_Request_Rest
 
             if (isset($mapping['isCollection']) && $mapping['isCollection'] == true) {
                 $this->_setResourceType(self::RESOURCE_TYPE_COLLECTION);
-                $resource = array_shift($items);
+		        $resource = null;
 //            } elseif (isset($mapping['isCollection'])  && $mapping['isService'] == true) {
 //                $this->_setResourceType(self::RESOURCE_TYPE_SERVICE);
 //                $resource = array_shift($items);
             } else {
-                $this->_setResourceType(self::RESOURCE_TYPE_ELEMENT);
-                $resource = null;
+                $this->_setResourceType(self::RESOURCE_TYPE_RESOURCE);
+                $resource = array_shift($items);
             }
-            
+
             $this->_addUrlElement($mapping['name'],
                                   $resource,
                                   $path,
-                                  isset($mapping['module']) ? $mapping['module'] : null 
+                                  isset($mapping['module']) ? $mapping['module'] : null
                                 );
 
             // Holds the "hierarchy" for finding deeper controllers
@@ -164,21 +164,21 @@ class Glitch_Controller_Request_Rest
         // Parse query string and set (default) values
         parse_str($this->getQueryString(), $parameters);
         $this->_setParameters($parameters);
-        
+
         $this->_parentElements = $this->_urlElements;
         array_pop($this->_parentElements);
     }
-    
+
     protected function _setResourceType($resourcetype)
     {
         $this->_resourceType = $resourcetype;
     }
-    
-    public function getResourceType() 
+
+    public function getResourceType()
     {
         return $this->_resourceType;
     }
-    
+
     /**
      * @param  $name
      * @return bool
@@ -191,12 +191,41 @@ class Glitch_Controller_Request_Rest
             'module' => $module
         );
     }
-    
+
     protected function _setParameters($parameters)
     {
         $this->_parameters = $parameters;
     }
-    
+
+    public function getUrlElements()
+    {
+		if($this->_urlElements == null) {
+			$this->parseUrlElements();
+       }
+
+       return $this->_urlElements;
+    }
+
+     /**
+     * Returns main element or rest end-point if you will.
+     *
+     * Returns comment/5 url element pairs from the url:
+     *   /event/5/talk/3/comment/5
+     *
+     * @return array
+     */
+    public function getMainElement()
+    {
+       $urlElements = $this->getUrlElements();
+        return $urlElements[count($urlElements)-1];
+    }
+
+    public function getResource() {
+        $element = $this->getMainElement();
+        return $element['resource'];
+    }
+
+
     protected function _getRestMapping($name) {
         return isset ($this->_restMappings[$name])
                 ? $this->_restMappings[$name]
