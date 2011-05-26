@@ -102,8 +102,9 @@ class Glitch_Controller_Dispatcher_Rest
         }
 
         $response = $this->getResponse();
-        $filename = $this->_curModule . '/views/scripts/'
-                  . $controller->getActionMethod($request) . '.';
+        $filename = GLITCH_APP_PATH . '/modules/'
+                  . ucfirst($this->_curModule) . '/View/Script/'
+                  . ucfirst($controller->getActionMethod($request)) . '.';
         if(($subResRenderer = $response->getSubResponseRenderer()) != '') {
             $filename .= $subResRenderer . '.';
         }
