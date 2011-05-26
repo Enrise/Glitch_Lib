@@ -53,26 +53,31 @@
 class Glitch_Controller_Response_Rest extends Zend_Controller_Response_Abstract
 {
     protected $_outputFormat = 'xml';
-    
+
     protected $_subResponseRenderer = '';
-    
+
     public function setOutputFormat($format = 'xml')
     {
         $this->_outputFormat = $format;
     }
-    
+
     public function getOutputFormat()
     {
         return $this->_outputFormat;
     }
-    
+
     public function setSubResponseRenderer($name = '')
     {
         $this->_subResponseRenderer = $name;
     }
-    
+
     public function getSubResponseRenderer()
     {
         return $this->_subResponseRenderer;
+    }
+
+    public function hasSubResponseRenderer()
+    {
+        return $this->_subResponseRenderer != '';
     }
 }
