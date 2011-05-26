@@ -88,8 +88,7 @@ class Glitch_Controller_Dispatcher_Rest
         $request->setDispatched(true);
         $vars = $controller->dispatch($request);
         echo $response; //headers
-        $this->_renderResponse($vars, $controller, $request);
-
+        echo $this->_renderResponse($vars, $controller, $request);
         exit;
     }
 
@@ -109,7 +108,7 @@ class Glitch_Controller_Dispatcher_Rest
             $filename .= $subResRenderer . '.';
         }
 
-        $filename .= $response->getOutputFormat().'.phtml';
+        $filename .= $response->getOutputFormat() . '.phtml';
 
         if(!file_exists($filename)) {
             if($subResRenderer != '') {
@@ -123,7 +122,7 @@ class Glitch_Controller_Dispatcher_Rest
                       . ucfirst($response->getOutputFormat()) . '.php';
         }
 
-        $this->_renderFile($filename, $vars, $this->getResponse());
+        return $this->_renderFile($filename, $vars, $this->getResponse());
     }
 
     protected function _renderFile($file, $vars, $response)
