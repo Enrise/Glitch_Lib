@@ -102,6 +102,13 @@ class Glitch_Controller_Dispatcher_Rest
         	$vars['data'] = array();
         }
 
+        $response = $this->getResponse();
+        $filename = $this->_curModule . '/views/scripts/'
+                  . $controller->getActionMethod($request) . '.';
+        if(($subResRenderer = $response->getSubResponseRenderer()) != '') {
+            $filename .= $subResRenderer . '.';
+        }
+
         $filename = $this->_getRenderScriptName($request, $controller);
 
         if(!file_exists($filename)) {
