@@ -93,6 +93,9 @@ class Glitch_Controller_Dispatcher_Rest
 
     protected function _renderResponse($vars, $controller, $request)
     {
+        // Move the requested output format to the response
+        $this->getResponse()->setOutputFormat($request->getParam('format'));
+
         if(!is_array($vars)) {
             $vars = array('data' => array());
         } elseif(!isset($vars['data'])) {
@@ -113,7 +116,11 @@ class Glitch_Controller_Dispatcher_Rest
                       . ucfirst($this->getResponse()->getOutputFormat()) . '.php';
         }
 
-        return $this->_renderFile($filename, $vars, $this->getResponse());
+        ob_start();
+        $this->_renderFile($filename, $vars, $this->getResponse());
+        $output = ob_get_contents();
+        ob_end_clean();
+        return $output;
     }
 
     protected function _getRenderScriptName(
@@ -121,6 +128,7 @@ class Glitch_Controller_Dispatcher_Rest
                             $controller)
     {
         $response = $this->getResponse();
+
         $filename = GLITCH_APP_PATH . '/modules/'
                   . ucfirst($this->_curModule) . '/View/Script/'
                   . implode('/', $this->_getClassElements($request)) . '/'
