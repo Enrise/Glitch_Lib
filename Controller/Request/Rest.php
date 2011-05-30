@@ -186,7 +186,7 @@ class Glitch_Controller_Request_Rest
     protected function _addUrlElement($element, $resource, $path, $module = null) {
         $this->_urlElements[] = array(
             'element' => $element,
-            'resource' => $resource,
+            'resource' => urldecode($resource),
             'path' => $path,
             'module' => $module
         );
@@ -216,7 +216,7 @@ class Glitch_Controller_Request_Rest
      */
     public function getMainElement()
     {
-       $urlElements = $this->getUrlElements();
+        $urlElements = $this->getUrlElements();
         return $urlElements[count($urlElements)-1];
     }
 

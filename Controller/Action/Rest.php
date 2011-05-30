@@ -133,7 +133,7 @@ abstract class Glitch_Controller_Action_Rest
      * @param type $request
      * @return bool|stdClass
      */
-    public static function passThrough($request)
+    public static function passThrough(Glitch_Controller_Request_Rest $request, $resource)
     {
         return true;
     }

@@ -78,8 +78,8 @@ class Glitch_Controller_Dispatcher_Rest
         $controller = $this->_getController($request);
 
         foreach ($request->getParentElements() as $element) {
-            $className = $this->formatControllerNameByParams($element['element'], $element['module']);
-            if(!$className::passThrough($element['resource'])) {
+            $className = $this->formatControllerNameByParams($element['path'].$element['element'], $element['module']);
+            if(!$className::passThrough($request, $element['resource'])) {
                 throw new Exception ("Cannot continue");
             }
         }
