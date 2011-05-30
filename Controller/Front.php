@@ -32,8 +32,10 @@ class Glitch_Controller_Front extends Zend_Controller_Front
             $this->setRequest($request);
         } else {
             $request = new Glitch_Controller_Request_Rest();
-            $this->setRequest($request);
         }
+
+        // This works because Glitch_App_Res_Req already sets a request
+        $apache404Req = $this->getRequest();
 
         $router = $this->getRouter();
         $router->route($request);
@@ -44,10 +46,11 @@ class Glitch_Controller_Front extends Zend_Controller_Front
                 Glitch_Controller_Dispatcher_Rest::cloneFromDispatcher($this->getDispatcher())
             );
 
+            $this->setRequest($request);
             $response = new Glitch_Controller_Response_Rest();
         }
 
-        return parent::dispatch($request, $response);
+        return parent::dispatch($this->getRequest(), $response);
     }
 
     /**
