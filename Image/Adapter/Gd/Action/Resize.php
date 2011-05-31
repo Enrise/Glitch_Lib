@@ -23,7 +23,7 @@ class Glitch_Image_Adapter_Gd_Action_Resize
             $fit = true;
         }
 
-//        $handle->resizeImage($newX, $newY, $resize->getFilter(), 1, $fit);
+		//$handle->resizeImage($newX, $newY, $resize->getFilter(), 1, $fit);
         $newImg = imagecreatetruecolor( $newX, $newY);
         imagecopyresampled($newImg, $handle, 0, 0, 0, 0, $newX, $newY, $adapter->getWidth(), $adapter->getHeight());
 
