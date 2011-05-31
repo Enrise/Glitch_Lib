@@ -68,17 +68,17 @@ class Glitch_Controller_Router_Rewrite extends Zend_Controller_Router_Rewrite
             } else {
                 $match = $request;
             }
-            
+
             if($params = $route->match($match)) {
                 $this->_setRequestParams($request, $params);
-                
+
                 return $request;
             }
         }
-        
+
         return parent::route($request);
     }
-    
+
     /**
      * Retrieve a currently matched route
      *
@@ -90,12 +90,12 @@ class Glitch_Controller_Router_Rewrite extends Zend_Controller_Router_Rewrite
         if($throwException) {
             return parent::getCurrentRoute();
         }
-        
+
         if(!isset($this->_routes[$this->_currentRoute])) {
             return;
         }
-        
+
         return $this->getRoute($this->_currentRoute);
     }
-    
+
 }

@@ -65,17 +65,17 @@ class Glitch_Controller_Router_Route_Rest
     {
         return parent::match(trim($path,'/'), true);
     }
-    
+
     public function assemble($data = array(), $reset = false, $encode = false)
     {
         throw new exception('Unimplemented');
     }
-    
+
     public function getRouteUrl()
     {
         return $this->_route;
     }
-    
+
      /**
      * Instantiates route based on passed Zend_Config structure
      *
