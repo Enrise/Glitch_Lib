@@ -36,48 +36,14 @@
  *
  * @category    Glitch
  * @package     Glitch_Controller
- * @subpackage  Response
- * @author      Dolf Schimmel (Freeaqingme) <dolf@enrise.com>
+ * @subpackage  Dispatcher
+ * @author      Joshua Thijssen
  * @copyright   2011, Enrise
- * @license     http://www.opensource.org/licenses/bsd-license.php
  */
 
-/**
- * Action Controller that acts as a base class for
- * all Action Controllers implementing REST
- *
- * @category    Glitch
- * @package     Glitch_Controller
- * @subpackage  Response
- */
-class Glitch_Controller_Response_Rest extends Zend_Controller_Response_Abstract
-{
-    protected $_outputFormat = 'xml';
 
-    protected $_subResponseRenderer = '';
-
-    public function setOutputFormat($format = 'xml')
-    {
-        $this->_outputFormat = $format;
-    }
-
-    public function getOutputFormat()
-    {
-        return $this->_outputFormat;
-    }
-
-    public function setSubResponseRenderer($name = '')
-    {
-        $this->_subResponseRenderer = $name;
-    }
-
-    public function getSubResponseRenderer()
-    {
-        return $this->_subResponseRenderer;
-    }
-
-    public function hasSubResponseRenderer()
-    {
-        return $this->_subResponseRenderer != '';
-    }
-}
+ob_start();
+var_dump($data);
+$output = ob_get_contents();
+ob_end_clean();
+return $output;

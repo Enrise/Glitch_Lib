@@ -45,4 +45,4 @@
 $config = new Zend_Config($data);
 $xml = new Zend_Config_Writer_Xml(array('config' => $config));
 
-echo $xml->render();
+return $xml->render();
