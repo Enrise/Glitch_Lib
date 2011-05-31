@@ -90,7 +90,7 @@ abstract class Glitch_Controller_Action_Rest
 
     public function dispatch($request)
     {
-        return $this->{$this->getActionMethod($request)}();
+        return $this->getActionMethod($request);
     }
 
     public function getActionMethod(Glitch_Controller_Request_Rest $request)

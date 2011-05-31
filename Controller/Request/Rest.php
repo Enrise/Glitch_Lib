@@ -225,7 +225,6 @@ class Glitch_Controller_Request_Rest
         return $element['resource'];
     }
 
-
     protected function _getRestMapping($name) {
         return isset ($this->_restMappings[$name])
                 ? $this->_restMappings[$name]
