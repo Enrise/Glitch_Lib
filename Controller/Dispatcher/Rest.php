@@ -54,6 +54,20 @@ class Glitch_Controller_Dispatcher_Rest
     extends Glitch_Controller_Dispatcher_Standard
     implements Zend_Controller_Dispatcher_Interface
 {
+    protected $_lastController;
+
+    protected $_lastActionMethod;
+
+    public function getLastController()
+    {
+        return $this->_lastController;
+    }
+
+    public function getLastActionMethod()
+    {
+        return $this->_lastActionMethod;
+    }
+
     /**
      * Dispatches a request object to a controller/action.  If the action
      * requests a forward to another action, a new request will be returned.
@@ -75,26 +89,29 @@ class Glitch_Controller_Dispatcher_Rest
         $this->_curModule = $request->getModuleName();
         $this->setResponse($response);
 
-        $controller = $this->_getController($request);
+        $controller = $this->_lastController = $this->_getController($request);
 
         foreach ($request->getParentElements() as $element) {
-            $className = $this->formatControllerNameByParams($element['path'].$element['element'], $element['module']);
-            if(!$className::passThrough($request, $element['resource'])) {
+//            $className = $this->formatControllerNameByParams($element['path'].$element['element'], $element['module']);
+            $className = $this->formatControllerNameByParams($element['element'], $element['module']);
+            if(false === $className::passThrough($element['resource'])) {
                 throw new Exception ("Cannot continue");
             }
         }
 
         $request->setDispatched(true);
-        $vars = $controller->dispatch($request);
-        echo $response; //headers
-        echo $this->_renderResponse($vars, $controller, $request);
-        exit;
+        $this->_lastActionMethod = $controller->dispatch($request);
+
+        $vars = $controller->{$this->_lastActionMethod}();
+        $response->setBody($this->_renderResponse($vars, $controller, $request));
     }
 
     protected function _renderResponse($vars, $controller, $request)
     {
         // Move the requested output format to the response
-        $this->getResponse()->setOutputFormat($request->getParam('format'));
+        if(($format = $request->getParam('format')) != null) {
+            $this->getResponse()->setOutputFormat($request->getParam('format'));
+        }
 
         if(!is_array($vars)) {
             $vars = array('data' => array());
@@ -102,6 +119,7 @@ class Glitch_Controller_Dispatcher_Rest
         	$vars['data'] = array();
         }
 
+        //@todo Code looks duplicated with _getRenderScriptName(). Evaluate and fix.
         $response = $this->getResponse();
         $filename = $this->_curModule . '/views/scripts/'
                   . $controller->getActionMethod($request) . '.';
@@ -123,11 +141,7 @@ class Glitch_Controller_Dispatcher_Rest
                       . ucfirst($this->getResponse()->getOutputFormat()) . '.php';
         }
 
-        ob_start();
-        $this->_renderFile($filename, $vars, $this->getResponse());
-        $output = ob_get_contents();
-        ob_end_clean();
-        return $output;
+        return $this->_renderFile($filename, $vars, $this->getResponse());
     }
 
     protected function _getRenderScriptName(
@@ -140,6 +154,7 @@ class Glitch_Controller_Dispatcher_Rest
                   . ucfirst($this->_curModule) . '/View/Script/'
                   . implode('/', $this->_getClassElements($request)) . '/'
                   . ucfirst($controller->getActionMethod($request)) . '.';
+
         if($response->hasSubResponseRenderer()) {
             $filename .= $response->getSubResponseRenderer() . '.';
         }
@@ -154,7 +169,9 @@ class Glitch_Controller_Dispatcher_Rest
             return include $_filename;
         };
 
-        return $func($vars, $file, $response);
+        ob_start();
+        $func($vars, $file, $response);
+        return ob_get_clean();
     }
 
     public static function cloneFromDispatcher(
