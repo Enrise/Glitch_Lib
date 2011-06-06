@@ -118,6 +118,7 @@ class Glitch_Controller_Dispatcher_Rest
         	$vars['data'] = array();
         }
 
+        //@todo Code looks duplicated with _getRenderScriptName(). Evaluate and fix.
         $response = $this->getResponse();
         $filename = $this->_curModule . '/views/scripts/'
                   . $controller->getActionMethod($request) . '.';
