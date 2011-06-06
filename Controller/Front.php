@@ -30,8 +30,10 @@ class Glitch_Controller_Front extends Zend_Controller_Front
     {
         if (null !== $request) {
             $this->setRequest($request);
-        } else {
+        } elseif(!$this->_request instanceof Glitch_Controller_Request_Rest) {
             $request = new Glitch_Controller_Request_Rest();
+        } else {
+            $request = $this->getRequest();
         }
 
         // This works because Glitch_App_Res_Req already sets a request
@@ -39,15 +41,19 @@ class Glitch_Controller_Front extends Zend_Controller_Front
 
         $router = $this->getRouter();
         $router->route($request);
-        if($router->getCurrentRoute(false) != null &&
-           $router->getCurrentRoute(false) instanceof Glitch_Controller_Router_Route_Rest)
-        {
-            $this->setDispatcher(
-                Glitch_Controller_Dispatcher_Rest::cloneFromDispatcher($this->getDispatcher())
-            );
 
-            $this->setRequest($request);
-            $response = new Glitch_Controller_Response_Rest();
+        // Not all routers have a getCurrentRoute method
+        if(is_callable(array($router, 'getCurrentRoute'), false)) {
+            if($router->getCurrentRoute(false) != null &&
+               $router->getCurrentRoute(false) instanceof Glitch_Controller_Router_Route_Rest)
+            {
+                $this->setDispatcher(
+                    Glitch_Controller_Dispatcher_Rest::cloneFromDispatcher($this->getDispatcher())
+                );
+
+                $this->setRequest($request);
+                $response = new Glitch_Controller_Response_Rest();
+            }
         }
 
         return parent::dispatch($this->getRequest(), $response);
@@ -69,7 +75,7 @@ class Glitch_Controller_Front extends Zend_Controller_Front
     public function setRouter($router = null)
     {
         if($router == null) {
-             $router = new Zend_Controller_Router_Rewrite();
+             $router = new Glitch_Controller_Router_Rewrite();
         }
 
         return parent::setRouter($router);
