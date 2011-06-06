@@ -128,7 +128,7 @@ class Glitch_Image_Action_Resize extends Glitch_Image_Action_ActionAbstract {
         return $this->_yAmountCalculated;
     }
     
-    public function perform(Glitch_Image_Adapter_AdapterAbstract $adapter = null) {
+    public function perform(Glitch_Image_Adapter_AdapterAbstract $adapter) {
         $newX = $this->getXAmount();
         $newY = $this->getYAmount();
 
