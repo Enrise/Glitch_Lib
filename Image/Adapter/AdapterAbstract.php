@@ -46,7 +46,7 @@ abstract class Glitch_Image_Adapter_AdapterAbstract
                     $this->setPath($value);
                     break;
                 default:
-                    require 'Zend/Image/Exception.php';
+                    require 'Glitch/Image/Exception.php';
                     throw new Glitch_Image_Exception("Unknown config parameter specified: '" . $key . "'");
             }
         }
