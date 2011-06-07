@@ -18,14 +18,27 @@ class Glitch_Controller_Action_RestError
         $error = $this->_getParam('error_handler');
         $exception = $error->exception;
 
+        // Default zend_exceptions are considered 500's (actual message set
+        // inside the view scripts)
         $message = '';
         $code = 500;
 
         if($exception instanceof Glitch_Exception_Message) {
+            // Set correct message and output
             $message = $exception->getMessage();
             if($exception->getCode() != 0) {
                 $code = $exception->getCode();
             }
+        }
+
+        if ($exception instanceof Glitch_Exception) {
+            // Set correct code
+            if($exception->getCode() != 0) {
+                $code = $exception->getCode();
+            }
+
+            // Disable output
+            $this->getResponse()->setBody('');
         }
 
         $this->getResponse()->setHttpResponseCode($code);

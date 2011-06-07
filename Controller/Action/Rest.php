@@ -141,53 +141,58 @@ abstract class Glitch_Controller_Action_Rest
     }
 
     public function collectionGetAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
     public function resourceGetAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
     public function collectionPutAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
     public function resourcePutAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
     public function collectionDeleteAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
     public function resourceDeleteAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
     public function collectionPostAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
     public function resourcePostAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
     public function collectionOptionsAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
     public function resourceOptionsAction() {
-        return $this->notImplementedAction();
+        return $this->notImplementedException();
     }
 
-    public function notImplementedAction($functionname = null)
+    public function notImplementedException($functionname = null)
     {
-        $this->getResponse()->setHttpResponseCode(501);
-        throw new Glitch_Exception_Message('action ' . $functionname . ' could not be found');
+        throw new Glitch_Exception_Message('action ' . $functionname . ' is not implemented', 501);
     }
+
+    public function notFoundException()
+    {
+        throw new Glitch_Exception('', 404);
+    }
+
 
     public function __call($function, $args)
     {
-        return $this->notImplementedAction($function);
+        return $this->notImplementedException($function);
     }
 }
