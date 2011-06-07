@@ -100,7 +100,7 @@ class Glitch_Controller_Response_Rest extends Zend_Controller_Response_Abstract
      */
     public function outputBody()
     {
-        if(!$this->renderBody()) {
+        if($this->renderBody()) {
             return parent::outputBody();
         }
 

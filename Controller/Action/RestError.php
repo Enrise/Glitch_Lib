@@ -24,21 +24,22 @@ class Glitch_Controller_Action_RestError
         $code = 500;
 
         if($exception instanceof Glitch_Exception_Message) {
+
             // Set correct message and output
             $message = $exception->getMessage();
             if($exception->getCode() != 0) {
                 $code = $exception->getCode();
             }
-        }
 
-        if ($exception instanceof Glitch_Exception) {
+        } elseif ($exception instanceof Glitch_Exception) {
+            print "B";
             // Set correct code
             if($exception->getCode() != 0) {
                 $code = $exception->getCode();
             }
 
             // Disable output
-            $this->getResponse()->setBody('');
+            $this->getResponse()->renderBody(false);
         }
 
         $this->getResponse()->setHttpResponseCode($code);
