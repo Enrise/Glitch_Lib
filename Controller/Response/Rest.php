@@ -56,6 +56,8 @@ class Glitch_Controller_Response_Rest extends Zend_Controller_Response_Abstract
 
     protected $_subResponseRenderer = '';
 
+    protected $_renderBody = true;
+
     public function setOutputFormat($format = 'xml')
     {
         $this->_outputFormat = $format;
@@ -80,4 +82,29 @@ class Glitch_Controller_Response_Rest extends Zend_Controller_Response_Abstract
     {
         return $this->_subResponseRenderer != '';
     }
+
+    public function renderBody($in = null)
+    {
+        if($in === null) {
+            return $this->_renderBody;
+        }
+
+        $this->_renderBody = (bool) $in;
+        return $this;
+    }
+
+    /**
+     * Echo the body segments
+     *
+     * @return void
+     */
+    public function outputBody()
+    {
+        if(!$this->renderBody()) {
+            return parent::outputBody();
+        }
+
+        return null;
+    }
+
 }

@@ -102,7 +102,9 @@ class Glitch_Controller_Dispatcher_Rest
         $request->setActionName($this->_lastActionMethod);
 
         $vars = $controller->{$this->_lastActionMethod}();
-        $response->setBody($this->_renderResponse($vars, $controller, $request));
+        if($response->renderBody()) {
+            $response->setBody($this->_renderResponse($vars, $controller, $request));
+        }
     }
 
     protected function _renderResponse($vars, $controller, $request)
@@ -170,6 +172,7 @@ class Glitch_Controller_Dispatcher_Rest
 
         ob_start();
         $func($vars, $file, $response);
+
         return ob_get_clean();
     }
 
