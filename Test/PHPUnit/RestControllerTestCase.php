@@ -33,7 +33,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         }
     }
 
-    protected function _doDispatch($requestMethod, $uri, $postData, $httpCode,
+    protected function _doDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode,
                                      $module, $controller, $action, $displayBody=false)
     {
         $this->getFrontController()->setDispatcher(
@@ -41,6 +41,11 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
                 $this->getFrontController()->getDispatcher()
         ));
         $this->_request = new Glitch_Controller_Request_RestTestCase();
+        if(is_array($acceptHeader)) {
+            $this->_request->setHeader('Accept', 'application/vnd.' . $acceptHeader[0] . '+' . $acceptHeader[1]);
+        } else {
+            $this->_request->setHeader('Accept', 'application/vnd.unittest' . '+' . $acceptHeader);
+        }
 
         // Set dispatch data
         if ($postData != null) {
@@ -103,14 +108,14 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
      * @param bool $checkRest
      * @return void
      */
-    protected function _testDispatch($requestMethod, $uri, $postData, $httpCode,
+    protected function _testDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode,
                                      $module, $controller, $action, $displayBody=false)
     {
         // Reset to a clean response
         $this->resetResponse();
 
         // Dispatch to the requested MCA
-        $response = $this->_doDispatch($requestMethod, $uri, $postData, $httpCode, $module, $controller, $action, $displayBody);
+        $response = $this->_doDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $module, $controller, $action, $displayBody);
 
         // Test if we got the correct response returned
         $this->assertResponseCode($httpCode);

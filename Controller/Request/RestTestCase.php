@@ -5,6 +5,8 @@ class Glitch_Controller_Request_RestTestCase
 {
     protected $_method = 'GET';
 
+    protected $_headers = array();
+
     /**
      * Return the method by which the request was made
      *
@@ -19,5 +21,18 @@ class Glitch_Controller_Request_RestTestCase
     {
         $this->_method = $method;
         return $this;
+    }
+
+    public function setHeader($key, $value)
+    {
+        $this->_headers[$key] = $value;
+    }
+
+    public function getHeader($key) {
+        if(isset($this->_headers[$key])) {
+            return $this->_headers[$key];
+        }
+
+        return parent::getHeader();
     }
 }
