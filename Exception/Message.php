@@ -22,6 +22,6 @@
  * @category    Glitch
  * @package     Glitch_Exception
  */
-class Glitch_Exception extends Zend_Exception
+class Glitch_Exception_Message extends Glitch_Exception
 {
 }

@@ -95,13 +95,15 @@ abstract class Glitch_Controller_Action_Rest
 
     public function getActionMethod(Glitch_Controller_Request_Rest $request)
     {
-//        if(!$request instanceof App_Controller_Request_Rest) {
-//            throw new \RuntimeException(
-//                'Supplied argument must be an instance of '
-//               .' Glitch_Controller_Request_Rest, but ' . get_class($request)
-//               .' was given');
-//        }
-
+        // Logic moved
+//        return $request->getActionName() . 'Action';
+////        if(!$request instanceof App_Controller_Request_Rest) {
+////            throw new \RuntimeException(
+////                'Supplied argument must be an instance of '
+////               .' Glitch_Controller_Request_Rest, but ' . get_class($request)
+////               .' was given');
+////        }
+//
         return $request->getResourceType()
               . ucfirst(strtolower($request->getMethod()))
               . 'Action';
@@ -178,13 +180,14 @@ abstract class Glitch_Controller_Action_Rest
         return $this->notImplementedAction();
     }
 
-    public function notImplementedAction()
+    public function notImplementedAction($functionname = null)
     {
         $this->getResponse()->setHttpResponseCode(501);
+        throw new Glitch_Exception_Message('action ' . $functionname . ' could not be found');
     }
 
     public function __call($function, $args)
     {
-        return $this->notImplementedAction();
+        return $this->notImplementedAction($function);
     }
 }

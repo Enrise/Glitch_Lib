@@ -4,6 +4,7 @@ require_once 'Zend/Controller/Front.php';
 
 class Glitch_Controller_Front extends Zend_Controller_Front
 {
+
     /**
      * Singleton instance
      *
@@ -54,6 +55,16 @@ class Glitch_Controller_Front extends Zend_Controller_Front
                 $this->setRequest($request);
                 $response = new Glitch_Controller_Response_Rest();
             }
+        }
+
+        if (!$this->getParam('noErrorHandler') && !$this->_plugins->hasPlugin('Zend_Controller_Plugin_ErrorHandler')) {
+            $plugin = new Zend_Controller_Plugin_ErrorHandler(
+                            isset($this->_invokeParams['errorHandler'])
+                                ? $this->_invokeParams['errorHandler']
+                                : array()
+                      );
+
+            $this->_plugins->registerPlugin($plugin, 100);
         }
 
         return parent::dispatch($this->getRequest(), $response);

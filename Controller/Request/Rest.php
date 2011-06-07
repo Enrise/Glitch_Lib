@@ -158,7 +158,7 @@ class Glitch_Controller_Request_Rest
                                 );
 
             // Holds the "hierarchy" for finding deeper controllers
-            $path .= $mapping['name']."_";
+            $path .= $mapping['name'] . '_';
         }
 
         // Parse query string and set (default) values
@@ -230,4 +230,20 @@ class Glitch_Controller_Request_Rest
                 ? $this->_restMappings[$name]
                 : false;
     }
+
+        /**
+     * Set the controller name to use
+     *
+     * @param string $value
+     * @return Zend_Controller_Request_Abstract
+     */
+    public function setControllerName($value)
+    {
+        $this->_controller = $value;
+        $this->_urlElements = array(0 => array('element' => $value));
+        $this->_parentElements = array();
+
+        return $this;
+    }
+
 }

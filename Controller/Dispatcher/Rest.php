@@ -88,7 +88,6 @@ class Glitch_Controller_Dispatcher_Rest
 
         $this->_curModule = $request->getModuleName();
         $this->setResponse($response);
-
         $controller = $this->_lastController = $this->_getController($request);
 
         foreach ($request->getParentElements() as $element) {
@@ -101,6 +100,7 @@ class Glitch_Controller_Dispatcher_Rest
 
         $request->setDispatched(true);
         $this->_lastActionMethod = $controller->dispatch($request);
+        $request->setActionName($this->_lastActionMethod);
 
         $vars = $controller->{$this->_lastActionMethod}();
         $response->setBody($this->_renderResponse($vars, $controller, $request));
@@ -153,7 +153,7 @@ class Glitch_Controller_Dispatcher_Rest
         $filename = GLITCH_APP_PATH . '/modules/'
                   . ucfirst($this->_curModule) . '/View/Script/'
                   . implode('/', $this->_getClassElements($request)) . '/'
-                  . ucfirst($controller->getActionMethod($request)) . '.';
+                  . ucfirst($request->getActionName()) . '.';
 
         if($response->hasSubResponseRenderer()) {
             $filename .= $response->getSubResponseRenderer() . '.';
@@ -196,6 +196,7 @@ class Glitch_Controller_Dispatcher_Rest
     protected function _getController(Glitch_Controller_Request_Rest $request)
     {
         $className = $this->getControllerClass($request);
+        $this->loadClass($className); // Throws exception if unloadable
         $controller = new $className($request, $this->getResponse(), $this->getParams());
 
         if(!$controller instanceof Glitch_Controller_Action_Rest) {
