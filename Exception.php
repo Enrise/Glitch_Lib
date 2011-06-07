@@ -17,7 +17,8 @@
  */
 
 /**
- * Exception class
+ * Exception class that doesn't output a body to the client. For instance during
+ * a 404 status code that has to be returned to the client.
  *
  * @category    Glitch
  * @package     Glitch_Exception

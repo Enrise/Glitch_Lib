@@ -17,7 +17,7 @@
  */
 
 /**
- * Exception class
+ * Exception class that returns an output body to the client
  *
  * @category    Glitch
  * @package     Glitch_Exception
