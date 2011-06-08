@@ -187,7 +187,7 @@ abstract class Glitch_Controller_Action_Rest
 
     public function notFoundException()
     {
-        throw new Glitch_Exception('', 404);
+        throw new Glitch_Exception_Message('Resource was not found', 404);
     }
 
 
