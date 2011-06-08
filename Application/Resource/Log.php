@@ -38,18 +38,7 @@ class Glitch_Application_Resource_Log extends Zend_Application_Resource_Log
         {
             $options = $this->getOptions();
 
-            // Force these options to be set - don't rely on the defaults!
-            if (!isset($options['level']))
-            {
-                throw new Glitch_Application_Resource_Exception('Undefined log option: "level"');
-            }
-
-            // Validate the log level
-            $level = constant('Zend_Log::' . $options['level']);
-            if (null === $level)
-            {
-                throw new Glitch_Application_Resource_Exception('Unknown log level: "' . $options['level'] . '"');
-            }
+            $level = $this->_getLevel($options);
 
             // Ensure the request is initialized
             $this->_bootstrap->bootstrap('Request');
@@ -58,16 +47,11 @@ class Glitch_Application_Resource_Log extends Zend_Application_Resource_Log
 
             // Use localhost as name if not running in HTTP mode
             $host = ($isHttpRequest) ? $request->getHttpHost() : 'localhost';
-            if (strncasecmp($host, 'www.', 4) == 0)
-            {
-                $host = substr($host, 4); // Remove "www." prefix for readability
-            }
 
             $this->_log = new Zend_Log();
 
             // Build filename, e.g. "20090601_localhost.log"
-            $file = Zend_Date::now()->toString('yyyyMMdd') . '_' . $host . '.log';
-            $file = GLITCH_LOGS_PATH . DIRECTORY_SEPARATOR . $file;
+            $file = GLITCH_LOG_PATH . APP_NAME . '.log';
 
             $writer = new Zend_Log_Writer_Stream($file);
 
@@ -98,5 +82,30 @@ class Glitch_Application_Resource_Log extends Zend_Application_Resource_Log
             Glitch_Registry::setLog($this->_log);
         }
         return $this->_log;
+    }
+
+    /**
+     *
+     * Validate the log level set.
+     * @param array $options
+     * @throws Glitch_Application_Resource_Exception if invalid
+     * @return true
+     */
+    protected function _getLevel(array $options)
+    {
+        // Force these options to be set - don't rely on the defaults!
+        if (!isset($options['level']))
+        {
+            throw new Glitch_Application_Resource_Exception('Undefined log option: "level"');
+        }
+
+        // Validate the log level
+        $level = constant('Zend_Log::' . $options['level']);
+        if (null === $level)
+        {
+            throw new Glitch_Application_Resource_Exception('Unknown log level: "' . $options['level'] . '"');
+        }
+
+        return $level;
     }
 }
