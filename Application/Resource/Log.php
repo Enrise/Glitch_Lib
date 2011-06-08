@@ -51,7 +51,7 @@ class Glitch_Application_Resource_Log extends Zend_Application_Resource_Log
             $this->_log = new Zend_Log();
 
             // Build filename, e.g. "20090601_localhost.log"
-            $file = GLITCH_LOG_PATH . APP_NAME . '.log';
+            $file = $options['path'] . DIRECTORY_SEPARATOR . APP_NAME . '.log';
 
             $writer = new Zend_Log_Writer_Stream($file);
 

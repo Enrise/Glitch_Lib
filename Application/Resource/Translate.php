@@ -33,27 +33,47 @@
  * @package     Glitch_Application
  * @subpackage  Resource
  */
-class Glitch_Application_Resource_Translate extends Zend_Application_Resource_Translate implements Glitch_Application_Resource_ModuleInterface
+class Glitch_Application_Resource_Translate
+    extends Zend_Application_Resource_Translate
+//    implements Glitch_Application_Resource_ModuleInterface
 {
-    /**
-     * Adapter name
-     *
-     * @var string
-     */
-    protected $_adapterName = Zend_Translate::AN_INI;
 
     /**
-     * Adapter file extension (dot omitted!)
+     * Retrieves the translate object
      *
-     * @var string
+     * @return Zend_Translate
      */
-    protected $_adapterFileExtension = 'ini';
+    public function getTranslate()
+    {
+        if (null === $this->_translate)
+        {
+            $options = $this->getOptions();
+            $this->_setCache();
+            if(isset($options['cache'])) {
+                unset($options['cache']);
+            }
 
-    /**
-     * Sets the translation cache
-     *
-     * @return void
-     */
+            $this->_bootstrap->bootstrap('Log');
+            $options['log'] = $this->_bootstrap->getResource('Log');
+
+            if($options['modular']) {
+                $iterator = new FilesystemIterator($options['dataDir'], FilesystemIterator::SKIP_DOTS);
+                foreach($iterator as $item) {
+                    if($item->isDir()) {
+                        $options['content'][] = (string) $item;
+                    }
+                }
+            } else {
+                throw new Exception('Not implemented yet');
+            }
+
+            $this->_options = $options;
+            parent::getTranslate();
+        }
+
+        return $this->_translate;
+    }
+
     protected function _setCache()
     {
         $options = $this->getOptions();
@@ -77,103 +97,5 @@ class Glitch_Application_Resource_Translate extends Zend_Application_Resource_Tr
         $cache->setOption('logger', $logger);
 
         Zend_Translate::setCache($cache);
-    }
-
-    /**
-     * Retrieves the translate object
-     *
-     * @return Zend_Translate
-     */
-    public function getTranslate()
-    {
-        if (null === $this->_translate)
-        {
-            $options = $this->getOptions();
-
-            // First init cache, then create the translator
-            $this->_setCache();
-
-            // Ensure locale is set: required by translator. There's no need to
-            // pass this locale to translate, though: will be done automatically.
-            $this->_bootstrap->bootstrap('Locale');
-            $locale = $this->_bootstrap->getResource('Locale');
-
-            // Load the file with shared, module-independant translations.
-            // Performance: use absolute path, so that ZF doesn't need to resolve it
-            // Filepath format: {locale}/{locale}.ini, e.g. "nl_NL/nl_NL.ini".
-            $filename = sprintf('%s%s%s%s%s.%s',
-                    GLITCH_LANGUAGES_PATH,
-                    DIRECTORY_SEPARATOR,
-                    $locale->toString(),
-                    DIRECTORY_SEPARATOR,
-                    $locale->toString(),
-                    $this->_adapterFileExtension
-                );
-
-            // Config may contain additional translate options
-            $params = (isset($options['options'])) ? $options['options'] : array();
-
-            // Auto-set the logger to which notices and messages are written to
-            $this->_bootstrap->bootstrap('Log');
-            $params['log'] = $this->_bootstrap->getResource('Log');
-
-            $this->_translate = new Zend_Translate($this->_adapterName, $filename, null, $params);
-
-            // Allow application-wide access; e.g. Zend_Form uses this.
-            // Use the registry to change the locale at some point in your
-            // application, i.e. after the user has switched language:
-            // Glitch_Registry::getTranslate()->setLocale('en_GB')
-            Glitch_Registry::setTranslate($this->_translate);
-        }
-        return $this->_translate;
-    }
-
-    /**
-     * Sets module-specific options
-     *
-     * This method is called automatically by the Modules controller plugin
-     *
-     * @param string $module
-     * @return void
-     */
-    public function setModuleOptions($module)
-    {
-        // Format $module if unformatted, e.g. "default" --> "Default"
-        $dispatcher = Zend_Controller_Front::getInstance()->getDispatcher();
-        $module = $dispatcher->formatModuleName($module);
-
-        $options = $this->getOptions();
-
-        // Grab the modules with translations, if any
-        $modules = array();
-        if (isset($options['modules']))
-        {
-            $modules = (array) $options['modules'];
-        }
-
-        // Performance: don't attempt to load module translation unless explicitly defined
-        if (!in_array($module, $modules))
-        {
-            return;
-        }
-
-        $this->_bootstrap->bootstrap('Locale');
-        $locale = $this->_bootstrap->getResource('Locale');
-
-        // Performance: use absolute path, so that ZF doesn't need to resolve it.
-        // Filepath format: {locale}/{module}.ini, e.g. "nl_NL/Default.ini".
-        // Don't test whether the file exists - Zend_Translate takes care of that
-        $filename = sprintf('%s%s%s%s%s.%s',
-            GLITCH_LANGUAGES_PATH,
-            DIRECTORY_SEPARATOR,
-            $locale->toString(),
-            DIRECTORY_SEPARATOR,
-            $module,
-            $this->_adapterFileExtension
-        );
-
-        // Add the module-specific file to the existing translations.
-        // Be aware: identical messages will be overwritten by this new translation.
-        $this->getTranslate()->addTranslation($filename);
     }
 }

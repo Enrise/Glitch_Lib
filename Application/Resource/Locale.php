@@ -87,6 +87,7 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
             // Force formatter to use the above registered default locale
             Zend_Locale_Format::setOptions(array('locale' => null));
         }
+
         return $this->_locale;
     }
 }
