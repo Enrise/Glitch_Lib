@@ -18,6 +18,30 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         {
             $db->query($sqlline);
         }
+
+    }
+
+    public function getRequest()
+    {
+        if (null === $this->_request) {
+            // require_once 'Zend/Controller/Request/HttpTestCase.php';
+            $this->_request = new Glitch_Controller_Request_RestTestCase;
+        }
+        return $this->_request;
+    }
+
+    /**
+     * Retrieve test case response object
+     *
+     * @return Zend_Controller_Response_Abstract
+     */
+    public function getResponse()
+    {
+        if (null === $this->_response) {
+            // require_once 'Zend/Controller/Response/HttpTestCase.php';
+            $this->_response = new Glitch_Controller_Response_RestTestCase;
+        }
+        return $this->_response;
     }
 
     public function appBootstrap ()
@@ -59,8 +83,9 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
             // @codeCoverageIgnoreStart
 
             // Display (debug) data
+            print "From: ".$requestMethod." ".$uri."\n";
             print 'STATUSCODE: ' . $this->_response->getHttpResponseCode()."\n";;
-//            print_r($this->_request->getHeaders());
+            print_r($this->_request->getHeaders());
             print_r($this->_response->getHeaders());
             echo $this->_response->getBody();
             flush();
@@ -142,9 +167,9 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         $this->assertResponseCode($httpCode);
 
         // Make sure it's the error controller we end up in
-        $this->assertModule('general');
+        $this->assertModule('error');
         $this->assertController('error');
-        $this->assertAction('resterror');
+        $this->assertAction('error');
 
         // But the parameters should contain the 'correct' MCA values
         $this->assertEquals($this->_request->getParam('module'), $module);

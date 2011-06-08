@@ -23,6 +23,7 @@ class Glitch_Controller_Action_RestError
         $message = '';
         $code = 500;
 
+
         if($exception instanceof Glitch_Exception_Message) {
             // Set correct message and output
             $message = $exception->getMessage();

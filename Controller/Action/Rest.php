@@ -180,7 +180,7 @@ abstract class Glitch_Controller_Action_Rest
         return $this->notImplementedException();
     }
 
-    public function notImplementedException($functionname = null)
+    public function notImplementedException($functionname = "")
     {
         throw new Glitch_Exception_Message('action ' . $functionname . ' is not implemented', 501);
     }
