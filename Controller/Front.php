@@ -4,6 +4,24 @@ require_once 'Zend/Controller/Front.php';
 
 class Glitch_Controller_Front extends Zend_Controller_Front
 {
+    public function resetInstance()
+    {
+        /* Save information. Somehow the settings with which we boot glitch are reset by the resetInstance() call.
+         * Therefor we save our mandatory information, reset the frontcontroller and restore that information again.
+         * Not the most beautiful way of doing things, but it works. */
+        $invokeParams = $this->_invokeParams;
+        $router = $this->getRouter();
+        $dispatcher = $this->getDispatcher();
+
+        // Reset front controller instance
+        parent::resetInstance();
+
+        // Restore information
+        $this->setRouter($router);
+        $this->setDispatcher($dispatcher);
+        $this->_invokeParams = $invokeParams;
+    }
+
 
     /**
      * Singleton instance
