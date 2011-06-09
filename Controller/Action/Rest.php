@@ -141,43 +141,43 @@ abstract class Glitch_Controller_Action_Rest
     }
 
     public function collectionGetAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourceGetAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function collectionPutAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourcePutAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function collectionDeleteAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourceDeleteAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function collectionPostAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourcePostAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function collectionOptionsAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourceOptionsAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function notImplementedException($functionname = "")
