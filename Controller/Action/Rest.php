@@ -133,9 +133,9 @@ abstract class Glitch_Controller_Action_Rest
 
 	/**
      * @param type $request
-     * @return bool|stdClass
+     * @return bool
      */
-    public static function passThrough(Glitch_Controller_Request_Rest $request, $resource)
+    public function passThrough(Glitch_Controller_Request_Rest $request, $resource)
     {
         return true;
     }
@@ -188,6 +188,11 @@ abstract class Glitch_Controller_Action_Rest
     public function notFoundException()
     {
         throw new Glitch_Exception_Message('Resource was not found', 404);
+    }
+
+    public function notAcceptedException()
+    {
+        throw new Glitch_Exception_message('Incorrect format specified', 406);
     }
 
 

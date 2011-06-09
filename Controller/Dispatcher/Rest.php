@@ -92,13 +92,16 @@ class Glitch_Controller_Dispatcher_Rest
 
         foreach ($request->getParentElements() as $element) {
             $className = $this->formatControllerNameByParams($element['path'].$element['element'], $element['module']);
-            if(false === $className::passThrough($request, $element['resource'])) {
+            $ptController = new $className($request, $response, $this->getParams());
+            if (true !== $ptController->passThrough($request, $element['resource'])) {
                 throw new Exception ("Cannot continue");
             }
+            unset($ptController);
         }
 
         $request->setDispatched(true);
         $this->_lastActionMethod = $controller->dispatch($request);
+
         $request->setActionName($this->_lastActionMethod);
 
         $vars = $controller->{$this->_lastActionMethod}();

@@ -65,7 +65,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
                 $this->getFrontController()->getDispatcher()
         ));
         $this->_request = new Glitch_Controller_Request_RestTestCase();
-        $this->_request->setHeader('Accept', 'application/vnd.' . $acceptHeader);
+        $this->_request->setHeader('Accept', $acceptHeader);
 
         // Set dispatch data
         if ($postData != null) {
@@ -152,27 +152,13 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         return $response;
     }
 
-    protected function _testDispatchToError($requestMethod, $uri, $postData, $httpCode,
-                                            $module, $controller, $action, $displayBody=false)
+    protected function _testDispatchToError($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $displayBody=false)
     {
-        $this->resetResponse();
+        $module = 'error';
+        $controller = 'Error_Controller_Error';
+        $action = 'restAction';
 
-        $this->_doDispatch($requestMethod, $uri, $postData, $httpCode, $module, $controller, $action, $displayBody);
-
-        $this->assertRoute('rest');
-        $this->assertResponseCode($httpCode);
-
-        // Make sure it's the error controller we end up in
-        $this->assertModule('error');
-        $this->assertController('error');
-        $this->assertAction('error');
-
-        // But the parameters should contain the 'correct' MCA values
-        $this->assertEquals($this->_request->getParam('module'), $module);
-        $this->assertEquals($this->_request->getParam('controller'), $controller);
-        $this->assertEquals($this->_request->getParam('action'), $action);
-
-        $this->resetRequest();
+        return $this->_testDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $module, $controller, $action, $displayBody);
     }
 
     protected function _getHeaderFromResponse($name)
