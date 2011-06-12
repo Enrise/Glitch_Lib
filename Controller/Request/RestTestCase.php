@@ -33,7 +33,7 @@ class Glitch_Controller_Request_RestTestCase
             return $this->_headers[$key];
         }
 
-        return parent::getHeader();
+        return parent::getHeader($key);
     }
 
     public function getHeaders() {
