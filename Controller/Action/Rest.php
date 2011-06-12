@@ -55,39 +55,7 @@ abstract class Glitch_Controller_Action_Rest
     implements Zend_Controller_Action_Interface
 {
 
-    /**
-     * Array of arguments provided to the constructor, minus the
-     * {@link $_request Request object}.
-     * @var array
-     */
-    protected $_invokeArgs = array();
-
-    /**
-     * Front controller instance
-     * @var Zend_Controller_Front
-     */
-    protected $_frontController;
-
-    /**
-     * Zend_Controller_Request_Abstract object wrapping the request environment
-     * @var Zend_Controller_Request_Abstract
-     */
-    protected $_request = null;
-
-    /**
-     * Zend_Controller_Response_Abstract object wrapping the response
-     * @var Zend_Controller_Response_Abstract
-     */
-    protected $_response = null;
-
-    /*
-     * Helper Broker to assist in routing help requests to the proper object
-     *
-     * @var Zend_Controller_Action_HelperBroker
-     */
-    protected $_helper = null;
-
-
+   
     public function dispatch($request)
     {
         return $this->getActionMethod($request);
@@ -95,15 +63,6 @@ abstract class Glitch_Controller_Action_Rest
 
     public function getActionMethod(Glitch_Controller_Request_Rest $request)
     {
-        // Logic moved
-//        return $request->getActionName() . 'Action';
-////        if(!$request instanceof App_Controller_Request_Rest) {
-////            throw new \RuntimeException(
-////                'Supplied argument must be an instance of '
-////               .' Glitch_Controller_Request_Rest, but ' . get_class($request)
-////               .' was given');
-////        }
-//
         return $request->getResourceType()
               . ucfirst(strtolower($request->getMethod()))
               . 'Action';
@@ -140,54 +99,16 @@ abstract class Glitch_Controller_Action_Rest
         return true;
     }
 
-    public function collectionGetAction() {
-         $this->notImplementedException();
-    }
-
-    public function resourceGetAction() {
-         $this->notImplementedException();
-    }
-
-    public function collectionPutAction() {
-         $this->notImplementedException();
-    }
-
-    public function resourcePutAction() {
-         $this->notImplementedException();
-    }
-
-    public function collectionDeleteAction() {
-         $this->notImplementedException();
-    }
-
-    public function resourceDeleteAction() {
-         $this->notImplementedException();
-    }
-
-    public function collectionPostAction() {
-         $this->notImplementedException();
-    }
-
-    public function resourcePostAction() {
-         $this->notImplementedException();
-    }
-
-    public function collectionOptionsAction() {
-         $this->notImplementedException();
-    }
-
-    public function resourceOptionsAction() {
-         $this->notImplementedException();
-    }
-
-    public function notImplementedException($functionname = "")
+    public function notImplementedException($functionname = '')
     {
-        throw new Glitch_Exception_Message('action ' . $functionname . ' is not implemented', 501);
+        throw new Glitch_Exception_Message(
+        	'Requested action ' . $functionname . ' not implemented', 501
+        );
     }
 
     public function notFoundException()
     {
-        throw new Glitch_Exception_Message('Resource was not found', 404);
+        throw new Glitch_Exception_Message('Requested resource could not be found', 404);
     }
 
     public function notAcceptedException()
