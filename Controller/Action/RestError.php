@@ -30,6 +30,9 @@ class Glitch_Controller_Action_RestError
                 $code = $exception->getCode();
             }
 
+            // Enable output
+            $this->getResponse()->renderBody(true);
+            
         } elseif ($exception instanceof Glitch_Exception) {
             // Set correct code
             if($exception->getCode() != 0) {

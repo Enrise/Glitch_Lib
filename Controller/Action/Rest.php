@@ -68,29 +68,8 @@ abstract class Glitch_Controller_Action_Rest
               . 'Action';
     }
 
+    
     /**
-     * Assemble link
-     *
-     * @todo Determine if we really need this method
-     * @param unknown_type $rel
-     * @param unknown_type $url
-     * @param unknown_type $method
-     * @return Array
-     */
-    protected function _createLink($rel, $url, $method = '')
-    {
-        $ret = array();
-        $ret['rel'] = $rel;
-        $ret['href'] = '<a href="'.$url.'">'.$url.'</a>';
-        if (! empty($method)) {
-               $ret['method'] = $method;
-        }
-
-        return $ret;
-    }
-
-
-	/**
      * @param type $request
      * @return bool
      */
