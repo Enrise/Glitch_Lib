@@ -208,4 +208,17 @@ abstract class Glitch_Controller_Action_Rest
     {
         return $this->notImplementedException($function);
     }
+
+    /**
+     * Returns xpath string from XML or empty when not found
+     * 
+     * @param  $xml
+     * @param  $xpath
+     * @return string
+     */
+    protected function _getXpathString($xml, $xpath, $default = "") {
+        $tmp = $xml->xpath($xpath);
+        if (! is_array($tmp) || count($tmp) == 0) return $default;
+        return (string)$tmp[0];
+    }
 }
