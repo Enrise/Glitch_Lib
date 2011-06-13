@@ -86,6 +86,7 @@ class Glitch_Application_Resource_Request extends Zend_Application_Resource_Reso
             $front = $this->_bootstrap->getResource('FrontController');
             $front->setRequest($this->_request);
         }
+
         return $this->_request;
     }
 }

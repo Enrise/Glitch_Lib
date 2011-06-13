@@ -62,8 +62,14 @@ class Glitch_Controller_Router_Rewrite extends Zend_Controller_Router_Rewrite
     public function route(Zend_Controller_Request_Abstract $request)
     {
         if(($curRouteName = $this->_currentRoute) != null) {
+             if (!$request instanceof Zend_Controller_Request_Http) {
+                throw new Zend_Controller_Router_Exception('Zend_Controller_Router_Rewrite requires a Zend_Controller_Request_Http-based request object');
+            }
+
             $route = $this->getRoute($curRouteName);
-            if (!method_exists($route, 'getVersion') || $route->getVersion() == 1) {
+            if (method_exists($request, 'getPathInfo') &&
+                (!method_exists($route, 'getVersion') || $route->getVersion() == 1))
+            {
                 $match = $request->getPathInfo();
             } else {
                 $match = $request;

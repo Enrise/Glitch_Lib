@@ -49,7 +49,9 @@ class Glitch_Controller_Front extends Zend_Controller_Front
     {
         if (null !== $request) {
             $this->setRequest($request);
-        } elseif(!$this->_request instanceof Glitch_Controller_Request_Rest) {
+        } elseif(!$this->_request instanceof Glitch_Controller_Request_Rest
+//                 && !(PHP_SAPI == 'CLI' && GLITCH_APP_ENV == 'testing')
+        ) {
             $request = new Glitch_Controller_Request_Rest();
         } else {
             $request = $this->getRequest();
