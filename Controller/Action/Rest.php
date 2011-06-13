@@ -195,6 +195,14 @@ abstract class Glitch_Controller_Action_Rest
         throw new Glitch_Exception_message('Incorrect format specified', 406);
     }
 
+    public function incorrectFormatException()
+    {
+        throw new Glitch_Exception_message('Incorrect format specified', 501);
+    }
+
+    public function badRequestException() {
+        throw new Glitch_Exception_Message('Bad request', 400);
+    }
 
     public function __call($function, $args)
     {
