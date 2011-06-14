@@ -133,61 +133,66 @@ abstract class Glitch_Controller_Action_Rest
 
 	/**
      * @param type $request
-     * @return bool|stdClass
+     * @return bool
      */
-    public static function passThrough(Glitch_Controller_Request_Rest $request, $resource)
+    public function passThrough(Glitch_Controller_Request_Rest $request, $resource)
     {
         return true;
     }
 
     public function collectionGetAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourceGetAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function collectionPutAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourcePutAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function collectionDeleteAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourceDeleteAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function collectionPostAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourcePostAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function collectionOptionsAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
     public function resourceOptionsAction() {
-        return $this->notImplementedException();
+         $this->notImplementedException();
     }
 
-    public function notImplementedException($functionname = null)
+    public function notImplementedException($functionname = "")
     {
         throw new Glitch_Exception_Message('action ' . $functionname . ' is not implemented', 501);
     }
 
     public function notFoundException()
     {
-        throw new Glitch_Exception('', 404);
+        throw new Glitch_Exception_Message('Resource was not found', 404);
+    }
+
+    public function notAcceptedException()
+    {
+        throw new Glitch_Exception_message('Incorrect format specified', 406);
     }
 
 

@@ -18,6 +18,30 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         {
             $db->query($sqlline);
         }
+
+    }
+
+    public function getRequest()
+    {
+        if (null === $this->_request) {
+            // require_once 'Zend/Controller/Request/HttpTestCase.php';
+            $this->_request = new Glitch_Controller_Request_RestTestCase;
+        }
+        return $this->_request;
+    }
+
+    /**
+     * Retrieve test case response object
+     *
+     * @return Zend_Controller_Response_Abstract
+     */
+    public function getResponse()
+    {
+        if (null === $this->_response) {
+            // require_once 'Zend/Controller/Response/HttpTestCase.php';
+            $this->_response = new Glitch_Controller_Response_RestTestCase;
+        }
+        return $this->_response;
     }
 
     public function appBootstrap ()
@@ -28,7 +52,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
 
         // Set the bootstrapper parameter (this is normally done by the "run" method of zend application
         $front = Zend_Controller_Front::getInstance();
-        if($front->getParam('bootstrap') === null) {
+        if ($front->getParam('bootstrap') === null) {
             $front->setParam('bootstrap', $this->_application->getBootstrap());
         }
     }
@@ -41,11 +65,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
                 $this->getFrontController()->getDispatcher()
         ));
         $this->_request = new Glitch_Controller_Request_RestTestCase();
-        if(is_array($acceptHeader)) {
-            $this->_request->setHeader('Accept', 'application/vnd.' . $acceptHeader[0] . '+' . $acceptHeader[1]);
-        } else {
-            $this->_request->setHeader('Accept', 'application/vnd.unittest' . '+' . $acceptHeader);
-        }
+        $this->_request->setHeader('Accept', $acceptHeader);
 
         // Set dispatch data
         if ($postData != null) {
@@ -59,8 +79,9 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
             // @codeCoverageIgnoreStart
 
             // Display (debug) data
+            print "From: ".$requestMethod." ".$uri."\n";
             print 'STATUSCODE: ' . $this->_response->getHttpResponseCode()."\n";;
-//            print_r($this->_request->getHeaders());
+            print_r($this->_request->getHeaders());
             print_r($this->_response->getHeaders());
             echo $this->_response->getBody();
             flush();
@@ -111,8 +132,11 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
     protected function _testDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode,
                                      $module, $controller, $action, $displayBody=false)
     {
-        // Reset to a clean response
-        $this->resetResponse();
+        // Reset to the primary state
+        $this->reset();
+
+        $front = Zend_Controller_Front::getInstance();
+        $front->setParam('bootstrap', $this->_application->getBootstrap());
 
         // Dispatch to the requested MCA
         $response = $this->_doDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $module, $controller, $action, $displayBody);
@@ -125,33 +149,16 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         $this->assertController($controller);
         $this->assertAction($action);
 
-        // Reset to a clean request
-        $this->resetRequest();
-
         return $response;
     }
 
-    protected function _testDispatchToError($requestMethod, $uri, $postData, $httpCode,
-                                            $module, $controller, $action, $displayBody=false)
+    protected function _testDispatchToError($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $displayBody=false)
     {
-        $this->resetResponse();
+        $module = 'error';
+        $controller = 'Error_Controller_Error';
+        $action = 'restAction';
 
-        $this->_doDispatch($requestMethod, $uri, $postData, $httpCode, $module, $controller, $action, $displayBody);
-
-        $this->assertRoute('rest');
-        $this->assertResponseCode($httpCode);
-
-        // Make sure it's the error controller we end up in
-        $this->assertModule('general');
-        $this->assertController('error');
-        $this->assertAction('resterror');
-
-        // But the parameters should contain the 'correct' MCA values
-        $this->assertEquals($this->_request->getParam('module'), $module);
-        $this->assertEquals($this->_request->getParam('controller'), $controller);
-        $this->assertEquals($this->_request->getParam('action'), $action);
-
-        $this->resetRequest();
+        return $this->_testDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $module, $controller, $action, $displayBody);
     }
 
     protected function _getHeaderFromResponse($name)
