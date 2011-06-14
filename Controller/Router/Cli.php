@@ -38,6 +38,31 @@ class Glitch_Controller_Router_Cli extends Zend_Controller_Router_Abstract
      */
     public function route(Zend_Controller_Request_Abstract $request)
     {
+        $console = Glitch_Console_Getopt::getInstance('Glitch_Controller_Router_Cli');
+
+        // Make sure the request is properly formatted
+        $parts = array_filter(explode('.', $console->request));
+        if (count($parts) != 3)
+        {
+            throw new Exception('Request is not in format module.controller.action');
+        }
+
+        // Check for additional parameters to the request
+        $params = array();
+        if (isset($console->params))
+        {
+            if (function_exists('mb_parse_str'))
+            {
+                mb_parse_str($console->params, $params);
+            } else {
+                parse_str($console->params, $params);
+            }
+        }
+
+        $request->setModuleName($parts[0]);
+        $request->setControllerName($parts[1]);
+        $request->setActionName($parts[2]);
+        $request->setParams($params);
     }
 
     /**

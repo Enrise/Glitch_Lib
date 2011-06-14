@@ -41,8 +41,4 @@
  * @copyright   2011, Enrise
  */
 
-
-ob_start();
 var_dump($data);
-
-return ob_get_clean();

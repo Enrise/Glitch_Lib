@@ -5,27 +5,27 @@ require_once 'Zend/Controller/Front.php';
 class Glitch_Controller_Front extends Zend_Controller_Front
 {
     protected $_defaultRequestType;
-    
+
     public function setDefaultRequestType($type = null)
     {
         if($type == null) {
             $type = 'Glitch_Controller_Request_Rest';
         }
-        
+
         $this->_defaultRequestType = $type;
         return $this;
     }
-    
+
     public function getDefaultRequestType()
     {
         if($this->_defaultRequestType == null) {
             $this->setDefaultRequestType();
             return $this->getDefaultRequestType();
         }
-        
+
         return $this->_defaultRequestType;
     }
-    
+
     public function resetInstance()
     {
         /* Save information. Somehow the settings with which we boot glitch are reset by the resetInstance() call.
@@ -72,9 +72,10 @@ class Glitch_Controller_Front extends Zend_Controller_Front
     {
         if (null !== $request) {
             $this->setRequest($request);
-        } elseif(!$this->_request instanceof Glitch_Controller_Request_Rest) {
-            $type = $this->getDefaultRequestType();
-            $request = new $type();
+        } elseif(!$this->_request instanceof Glitch_Controller_Request_Rest
+//                 && !(PHP_SAPI == 'CLI' && GLITCH_APP_ENV == 'testing')
+        ) {
+            $request = new Glitch_Controller_Request_Rest();
         } else {
             $request = $this->getRequest();
         }

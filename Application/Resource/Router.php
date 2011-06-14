@@ -72,9 +72,8 @@ class Glitch_Application_Resource_Router extends Zend_Application_Resource_Route
 
             // Don't instantiate a URL rewriter in CLI mode
             if(($router = $front->getRouter()) != null) {
-                if(PHP_SAPI == 'cli') {
-//@todo fix this. Should only be invoked if no tests are run
-//                    $front->setRouter(($router = new Glitch_Controller_Router_Cli()));
+                if(PHP_SAPI == 'cli' && GLITCH_APP_ENV != 'testing') {
+                    $front->setRouter(($router = new Glitch_Controller_Router_Cli()));
                 } elseif(!($front instanceof Glitch_Controller_Front &&
                            !$front->isRouterSet()))
                 {
