@@ -23,6 +23,6 @@
  * @category    Glitch
  * @package     Glitch_Exception
  */
-class Glitch_Exception extends Zend_Exception
+class Glitch_Exception extends Zend_Exception implements Glitch_ExceptionInterface
 {
 }

@@ -4,27 +4,6 @@ require_once 'Zend/Controller/Front.php';
 
 class Glitch_Controller_Front extends Zend_Controller_Front
 {
-    protected $_defaultRequestType;
-
-    public function setDefaultRequestType($type = null)
-    {
-        if($type == null) {
-            $type = 'Glitch_Controller_Request_Rest';
-        }
-
-        $this->_defaultRequestType = $type;
-        return $this;
-    }
-
-    public function getDefaultRequestType()
-    {
-        if($this->_defaultRequestType == null) {
-            $this->setDefaultRequestType();
-            return $this->getDefaultRequestType();
-        }
-
-        return $this->_defaultRequestType;
-    }
 
     public function resetInstance()
     {
@@ -42,7 +21,6 @@ class Glitch_Controller_Front extends Zend_Controller_Front
         $this->setRouter($router);
         $this->setDispatcher($dispatcher);
         $this->_invokeParams = $invokeParams;
-        $this->setDefaultRequestType();
     }
 
 
@@ -63,9 +41,11 @@ class Glitch_Controller_Front extends Zend_Controller_Front
 
     /**
      * Match route first, then determine dispatcher to use,
-     * then call parent method.
+     * then call parent method (dispatch a request to a controller/action).
      *
-     * @param Zend_Controller_Request_Abstract $request
+     * @param Zend_Controller_Request_Abstract|null $request
+     * @param Zend_Controller_Response_Abstract|null $response
+     * @return void|Zend_Controller_Response_Abstract Returns response object if returnResponse() is true
      */
     public function dispatch(Zend_Controller_Request_Abstract $request = null,
                              Zend_Controller_Response_Abstract $response = null)
