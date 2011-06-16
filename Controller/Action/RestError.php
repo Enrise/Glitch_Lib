@@ -1,5 +1,5 @@
 <?php
-class Glitch_Controller_Action_RestError
+abstract class Glitch_Controller_Action_RestError
     extends Glitch_Controller_Action_Rest
 {
     protected $_errorMethod = 'errorAction';
@@ -32,8 +32,8 @@ class Glitch_Controller_Action_RestError
 
             // Enable output
             $this->getResponse()->renderBody(true);
-            
-        } elseif ($exception instanceof Glitch_Exception) {
+
+        } elseif ($exception instanceof Glitch_ExceptionInterface) {
             // Set correct code
             if($exception->getCode() != 0) {
                 $code = $exception->getCode();
