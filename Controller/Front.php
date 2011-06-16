@@ -68,8 +68,9 @@ class Glitch_Controller_Front extends Zend_Controller_Front
 
         // Not all routers have a getCurrentRoute method
         if(is_callable(array($router, 'getCurrentRoute'), false)) {
-            if($router->getCurrentRoute(false) != null &&
-               $router->getCurrentRoute(false) instanceof Glitch_Controller_Router_Route_Rest)
+            $currentRoute = $router->getCurrentRoute(false);
+            if($currentRoute != null &&
+               $currentRoute instanceof Glitch_Controller_Router_Route_Rest)
             {
                 $this->setDispatcher(
                     Glitch_Controller_Dispatcher_Rest::cloneFromDispatcher($this->getDispatcher())
