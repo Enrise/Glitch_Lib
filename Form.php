@@ -80,7 +80,7 @@ class Glitch_Form extends Zend_Form
         if (empty($decorators)) {
             $this->addDecorator('FormElements')
                  ->addDecorator('ViewHelper', array('helper' => 'Placeholder', 'placement' => Zend_Form_Decorator_Abstract::PREPEND))
-                 ->addDecorator('Fieldset', array('class' => 'zend_form'))
+                 ->addDecorator('Fieldset', array('id' => '', 'class' => 'zend_form'))
                  ->addDecorator('Form');
         }
         return $this;
@@ -118,7 +118,7 @@ class Glitch_Form extends Zend_Form
             ->addDecorator('Errors')
             ->addDecorator('Wrapper', array(
                 'tag' => 'div',
-                'id' => $elm->getName() . '-wrapper',
+//                'id' => $elm->getName() . '-wrapper',
                 'class' => $class,
         ));
         if ($elm instanceof Zend_Form_Element_Submit)
