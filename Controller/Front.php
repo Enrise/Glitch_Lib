@@ -4,6 +4,7 @@ require_once 'Zend/Controller/Front.php';
 
 class Glitch_Controller_Front extends Zend_Controller_Front
 {
+
     public function resetInstance()
     {
         /* Save information. Somehow the settings with which we boot glitch are reset by the resetInstance() call.
@@ -40,9 +41,11 @@ class Glitch_Controller_Front extends Zend_Controller_Front
 
     /**
      * Match route first, then determine dispatcher to use,
-     * then call parent method.
+     * then call parent method (dispatch a request to a controller/action).
      *
-     * @param Zend_Controller_Request_Abstract $request
+     * @param Zend_Controller_Request_Abstract|null $request
+     * @param Zend_Controller_Response_Abstract|null $response
+     * @return void|Zend_Controller_Response_Abstract Returns response object if returnResponse() is true
      */
     public function dispatch(Zend_Controller_Request_Abstract $request = null,
                              Zend_Controller_Response_Abstract $response = null)
@@ -65,8 +68,9 @@ class Glitch_Controller_Front extends Zend_Controller_Front
 
         // Not all routers have a getCurrentRoute method
         if(is_callable(array($router, 'getCurrentRoute'), false)) {
-            if($router->getCurrentRoute(false) != null &&
-               $router->getCurrentRoute(false) instanceof Glitch_Controller_Router_Route_Rest)
+            $currentRoute = $router->getCurrentRoute(false);
+            if($currentRoute != null &&
+               $currentRoute instanceof Glitch_Controller_Router_Route_Rest)
             {
                 $this->setDispatcher(
                     Glitch_Controller_Dispatcher_Rest::cloneFromDispatcher($this->getDispatcher())

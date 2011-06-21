@@ -56,6 +56,8 @@ class Glitch_Controller_Request_Rest
     const RESOURCE_TYPE_COLLECTION = 'collection';
     const RESOURCE_TYPE_RESOURCE = 'resource';
 
+    protected $_bootstrap;
+    
     /**
      * @var string
      */
@@ -77,18 +79,22 @@ class Glitch_Controller_Request_Rest
         $this->_restMappings = $this->_getRestMappings();
         parent::__construct($uri);
     }
+    
 
     protected function _getRestMappings()
     {
-        $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap');
-        $router = $bootstrap->getPluginResource('router');
-        return $router->getRestMappings();
+        $out = $this->_restMappings;
+        if($out == null) {
+            $out = $this->_restMappings = $this->_getRouterAppResourcePlugin()
+                                                    ->getRestMappings();
+        }
+        
+        return $out;
     }
 
     protected function _getActiveRoute()
     {
-        $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap');
-        return $bootstrap->getResource('router')->getCurrentRoute(false);
+        return $this->_getRouter()->getCurrentRoute(false);
     }
 
     public function getHttpAccept()
@@ -104,13 +110,13 @@ class Glitch_Controller_Request_Rest
     public function getParentElements()
     {
         if($this->_urlElements == null) {
-            $this->parseUrlElements();
+            $this->_parseUrlElements();
         }
 
         return $this->_parentElements;
     }
 
-    public function parseUrlElements()
+    protected function _parseUrlElements()
     {
         $items = $this->_urlElements = array();
 
@@ -120,11 +126,6 @@ class Glitch_Controller_Request_Rest
 
         // collect URL info and sets the url elements.
         $items = explode('/', $pathInfo);
-
-        // Default defaults to default..
-        if (count($items) == 0) {
-            $items[] = 'default';
-        }
 
         // Map serialized url data into key value pairs
         $path = '';
@@ -137,15 +138,14 @@ class Glitch_Controller_Request_Rest
 
             $mapping = $this->_getRestMapping($k);
             if ($mapping === false) {
-                throw new Exception("Mapping not found");
+                throw new Glitch_Controller_Exception(
+                	'No configuration could be found for the requested mapping'
+                );
             }
 
             if (isset($mapping['isCollection']) && $mapping['isCollection'] == true) {
                 $this->_setResourceType(self::RESOURCE_TYPE_COLLECTION);
 		        $resource = null;
-//            } elseif (isset($mapping['isCollection'])  && $mapping['isService'] == true) {
-//                $this->_setResourceType(self::RESOURCE_TYPE_SERVICE);
-//                $resource = array_shift($items);
             } else {
                 $this->_setResourceType(self::RESOURCE_TYPE_RESOURCE);
                 $resource = array_shift($items);
@@ -176,6 +176,10 @@ class Glitch_Controller_Request_Rest
 
     public function getResourceType()
     {
+        if($this->_resourceType == null) {
+            $this->_parseUrlElements();
+        }
+        
         return $this->_resourceType;
     }
 
@@ -183,7 +187,8 @@ class Glitch_Controller_Request_Rest
      * @param  $name
      * @return bool
      */
-    protected function _addUrlElement($element, $resource, $path, $module = null) {
+    protected function _addUrlElement($element, $resource, $path, $module = null)
+    {
         $this->_urlElements[] = array(
             'element' => $element,
             'resource' => urldecode($resource),
@@ -200,7 +205,7 @@ class Glitch_Controller_Request_Rest
     public function getUrlElements()
     {
 		if($this->_urlElements == null) {
-			$this->parseUrlElements();
+			$this->_parseUrlElements();
        }
 
        return $this->_urlElements;
@@ -220,18 +225,20 @@ class Glitch_Controller_Request_Rest
         return $urlElements[count($urlElements)-1];
     }
 
-    public function getResource() {
+    public function getResource()
+    {
         $element = $this->getMainElement();
         return $element['resource'];
     }
 
-    protected function _getRestMapping($name) {
+    protected function _getRestMapping($name)
+    {
         return isset ($this->_restMappings[$name])
                 ? $this->_restMappings[$name]
                 : false;
     }
 
-        /**
+    /**
      * Set the controller name to use
      *
      * @param string $value
@@ -246,4 +253,41 @@ class Glitch_Controller_Request_Rest
         return $this;
     }
 
+    /**
+     * @throws \RuntimeException If no bootstrap is registered
+     * @return Glitch_Application_Bootstrap_Bootstrap
+     */
+    protected function _getBootstrap()
+    {
+        if($this->_bootstrap == null) {
+            $this->_bootstrap = Zend_Controller_Front::getInstance()
+                                                    ->getParam('bootstrap');
+
+            if($this->_bootstrap == null) {
+                throw new \RuntimeException(
+                	'No bootstrap was found'
+                );
+            }
+        }
+        
+        return $this->_bootstrap;
+    }
+    
+    protected function _getRouter()
+    {
+        return $this->_getRouterAppResourcePlugin()->getRouter();
+    }
+    
+    protected function _getRouterAppResourcePlugin()
+    {
+        $router = $this->_getBootstrap()->getPluginResource('router');
+        if($router === null) {
+            throw new Glitch_Controller_Exception(
+                'The router application resource plugin was not loaded'
+            );
+        }
+        
+        return $router;
+    }
+    
 }
