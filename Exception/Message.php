@@ -22,6 +22,8 @@
  * @category    Glitch
  * @package     Glitch_Exception
  */
-class Glitch_Exception_Message extends Glitch_Exception
+class Glitch_Exception_Message
+    extends Glitch_Exception
+    implements Glitch_Exception_MessageInterface
 {
 }

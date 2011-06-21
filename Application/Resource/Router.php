@@ -113,6 +113,11 @@ class Glitch_Application_Resource_Router extends Zend_Application_Resource_Route
     public function getRestMappings()
     {
         if($this->_restMappings == null) {
+            if (null === $this->_router) {
+                $this->getRouter();
+                return $this->getRestMappings();
+            }
+
             throw new \RuntimeException(
                 'The rest mappings were tried to retrieve but have not been set'
             );

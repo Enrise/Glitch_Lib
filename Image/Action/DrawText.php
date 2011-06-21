@@ -310,4 +310,9 @@ class Glitch_Image_Action_DrawText extends Glitch_Image_Action_ActionAbstract {
     public function getName() {
         return self::NAME;
     }
+    
+    public function addOptions($options = array()) {
+        throw new exception('not implemented');
+    }
+    
 }

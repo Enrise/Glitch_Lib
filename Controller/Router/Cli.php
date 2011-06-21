@@ -30,6 +30,8 @@
  */
 class Glitch_Controller_Router_Cli extends Zend_Controller_Router_Abstract
 {
+    const CONSOLE_GETOPT_KEY = 'Glitch_Controller_Router_Cli';
+
     /**
      * Processes a request and sets its controller and action
      *
@@ -38,13 +40,22 @@ class Glitch_Controller_Router_Cli extends Zend_Controller_Router_Abstract
      */
     public function route(Zend_Controller_Request_Abstract $request)
     {
-        $console = Glitch_Console_Getopt::getInstance('Glitch_Controller_Router_Cli');
+        $console = Glitch_Console_Getopt::getInstance(self::CONSOLE_GETOPT_KEY);
 
         // Make sure the request is properly formatted
-        $parts = array_filter(explode('.', $console->request));
+        $reqString = $console->request;
+        if(empty($reqString)) {
+            throw new Glitch_Controller_Router_Exception_InvalidArgumentException(
+            			'No Request String found in Glitch_Console_GetOpt'
+            );
+        }
+
+        $parts = array_filter(explode('.', $reqString));
         if (count($parts) != 3)
         {
-            throw new Exception('Request is not in format module.controller.action');
+            throw new Glitch_Controller_Router_Exception_InvalidArgumentException(
+            			'Request is not in format module.controller.action'
+            );
         }
 
         // Check for additional parameters to the request
