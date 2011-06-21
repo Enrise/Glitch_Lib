@@ -41,4 +41,4 @@
  * @copyright   2011, Enrise
  */
 
-return json_encode($data);
+echo json_encode($data);

@@ -80,7 +80,7 @@ class Glitch_Controller_Dispatcher_Rest
                              Zend_Controller_Response_Abstract $response)
     {
         if(!$request instanceof Glitch_Controller_Request_Rest) {
-            throw new RuntimeException(
+            throw new Glitch_Controller_Exception(
                 'Request must be of type Glitch_Controller_Request_Rest but was '
                . get_class($request)
             );
@@ -93,9 +93,11 @@ class Glitch_Controller_Dispatcher_Rest
         foreach ($request->getParentElements() as $element) {
             $className = $this->formatControllerNameByParams($element['path'].$element['element'], $element['module']);
             $ptController = new $className($request, $response, $this->getParams());
+
             if (true !== $ptController->passThrough($request, $element['resource'])) {
-                throw new Exception ("Cannot continue");
+                throw new Glitch_Controller_Exception('Passthrough method returned false');
             }
+
             unset($ptController);
         }
 
@@ -114,7 +116,7 @@ class Glitch_Controller_Dispatcher_Rest
     {
         // Move the requested output format to the response
         if(($format = $request->getParam('format')) != null) {
-            $this->getResponse()->setOutputFormat($request->getParam('format'));
+            $this->getResponse()->setOutputFormat($format);
         }
 
         if(!is_array($vars)) {
@@ -125,7 +127,7 @@ class Glitch_Controller_Dispatcher_Rest
 
         //@todo Code looks duplicated with _getRenderScriptName(). Evaluate and fix.
         $response = $this->getResponse();
-        $filename = $this->_curModule . '/views/scripts/'
+        $filename = '/'.$this->_curModule . '/views/scripts/'
                   . $controller->getActionMethod($request) . '.';
         if(($subResRenderer = $response->getSubResponseRenderer()) != '') {
             $filename .= $subResRenderer . '.';
@@ -133,11 +135,20 @@ class Glitch_Controller_Dispatcher_Rest
 
         $filename = $this->_getRenderScriptName($request, $controller);
 
-        if(!file_exists($filename)) {
+        $includePaths = explode(PATH_SEPARATOR, '.' . PATH_SEPARATOR . get_include_path());
+        $path = false;
+        foreach($includePaths as $incpath) {
+            if(file_exists($incpath . '/' . $filename)) {
+                $path = $incpath . '/' . $filename;
+                break;
+            }
+        }
+
+        if($path === false) {
             if($this->getResponse()->hasSubResponseRenderer()) {
-                throw new RuntimeException(
+                throw new Glitch_Controller_Exception(
                     'A SubResponseRenderer was set but could not be located. '
-                   .'Looked for "'.$filename.'" in: '.  get_include_path()
+                   .'Looked for "'.$filename.'" in: ' . get_include_path()
                 );
             }
 
@@ -154,8 +165,7 @@ class Glitch_Controller_Dispatcher_Rest
     {
         $response = $this->getResponse();
 
-        $filename = GLITCH_APP_PATH . '/modules/'
-                  . ucfirst($this->_curModule) . '/View/Script/'
+        $filename = ucfirst($this->_curModule) . '/View/Script/'
                   . implode('/', $this->_getClassElements($request)) . '/'
                   . ucfirst($request->getActionName()) . '.';
 
@@ -201,6 +211,7 @@ class Glitch_Controller_Dispatcher_Rest
     protected function _getController(Glitch_Controller_Request_Rest $request)
     {
         $className = $this->getControllerClass($request);
+
         $this->loadClass($className); // Throws exception if unloadable
         $controller = new $className($request, $this->getResponse(), $this->getParams());
 
