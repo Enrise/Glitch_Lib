@@ -48,54 +48,77 @@ class Glitch_Application_Resource_Translate
         if (null === $this->_translate)
         {
             $options = $this->getOptions();
-            $this->_setCache();
-            if(isset($options['cache'])) {
-                unset($options['cache']);
-            }
 
             $this->_bootstrap->bootstrap('Log');
             $options['log'] = $this->_bootstrap->getResource('Log');
 
-            if($options['modular']) {
+            if (($cache = $this->_getCache($options)) != null) {
+                $options['cache'] = $cache;
+            } else {
+                unset($options['cache']);
+            }
+
+            if ($options['modular']) {
                 $iterator = new FilesystemIterator($options['dataDir'], FilesystemIterator::SKIP_DOTS);
-                foreach($iterator as $item) {
+                foreach ($iterator as $item) {
                     if($item->isDir()) {
-                        $options['content'][] = (string) $item;
+                        $this->_addDir($item . $options['content'], $options);
                     }
                 }
+
             } else {
-                throw new Exception('Not implemented yet');
+                $this->_addDir($options['content'], $options);
             }
 
             $this->_options = $options;
-            parent::getTranslate();
         }
+
+        $this->_saveInstance($this->_translate, $options);
 
         return $this->_translate;
     }
 
-    protected function _setCache()
+    protected function _addDir($dir, array $options = array())
     {
-        $options = $this->getOptions();
+        $options['scan'] = Zend_Translate::LOCALE_DIRECTORY;
+        $options['content'] = $dir;
 
-        // Disable cache? If not defined, cache will be active
+        if (null === $this->_translate) {
+            if (!isset($options['adapter'])) {
+                throw new Glitch_Application_Exception_RuntimeException(
+                    'A translation adapter must be specified but wasn\'t'
+                );
+            }
+
+            $adapterName = 'Zend_Translate_Adapter_' . ucfirst($options['adapter']);
+            $this->_translate = new $adapterName($options);
+        } else {
+            $this->_translate->addTranslation($options);
+        }
+    }
+
+    protected function _saveInstance($translate, array $options = array())
+    {
+        $key = (isset($options['registry_key']) && !is_numeric($options['registry_key']))
+                 ? $options['registry_key']
+                 : self::DEFAULT_REGISTRY_KEY;
+        Zend_Registry::set($key, $translate);
+    }
+
+    protected function _getCache(array $options = array())
+    {
         if (isset($options['cache']['active']) && !$options['cache']['active'])
         {
-            // Explicitly remove cache, in case it was set before
             Zend_Translate::removeCache();
-            return;
+            return false;
+        } else {
+            $this->_bootstrap->bootstrap('CacheManager');
+            $manager = $this->_bootstrap->getResource('CacheManager');
+            $cache = $manager->getCache('translate');
+            $cache->setOption('logger', $options['log']);
+
+            return $cache;
         }
-
-        // Get the cache using the config settings as input
-        $this->_bootstrap->bootstrap('CacheManager');
-        $manager = $this->_bootstrap->getResource('CacheManager');
-        $cache = $manager->getCache('translate');
-
-        // Write caching errors to log file (if activated in the config)
-        $this->_bootstrap->bootstrap('Log');
-        $logger = $this->_bootstrap->getResource('Log');
-        $cache->setOption('logger', $logger);
-
-        Zend_Translate::setCache($cache);
     }
+
 }
