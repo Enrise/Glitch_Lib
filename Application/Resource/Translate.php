@@ -50,7 +50,9 @@ class Glitch_Application_Resource_Translate
             $options = $this->getOptions();
 
             $this->_bootstrap->bootstrap('Log');
-            $options['log'] = $this->_bootstrap->getResource('Log');
+            if (null !== ($log = $this->_bootstrap->getResource('Log'))) {
+                $options['log'] = $this->_bootstrap->getResource('Log');
+            }
 
             if (($cache = $this->_getCache($options)) != null) {
                 $options['cache'] = $cache;
@@ -128,7 +130,9 @@ class Glitch_Application_Resource_Translate
 				);
             }
 
-            $cache->setOption('logger', $options['log']);
+            if(isset($options['log'])) {
+                $cache->setOption('logger', $options['log']);
+            }
 
             return $cache;
         }
