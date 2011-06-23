@@ -53,7 +53,7 @@ class Glitch_Application_Resource_Log
      */
     public function init()
     {
-        return $this->getLog();
+        return $this->_initLog();
     }
 
     /**
@@ -90,7 +90,11 @@ class Glitch_Application_Resource_Log
     protected function _initLog()
     {
         $options = $this->getOptions();
-        foreach ($options as $name => $logOptions) {
+        if(isset($options['enabled']) && false == $options['enabled']) {
+            return;
+        }
+
+        foreach ($options['writers'] as $name => $logOptions) {
             if (!is_array($logOptions)) {
                 continue;
             }

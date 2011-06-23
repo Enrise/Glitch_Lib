@@ -119,6 +119,15 @@ class Glitch_Application_Resource_Translate
             $this->_bootstrap->bootstrap('CacheManager');
             $manager = $this->_bootstrap->getResource('CacheManager');
             $cache = $manager->getCache('translate');
+
+            if (!$cache) {
+                throw new Glitch_Application_Exception_RuntimeException(
+                    'Translation caching was enabled but no caching object
+                     identified by "translate" could be retrieved from the
+                     cachemanager'
+				);
+            }
+
             $cache->setOption('logger', $options['log']);
 
             return $cache;
