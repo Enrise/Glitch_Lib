@@ -80,7 +80,7 @@ class Glitch_Application_Resource_Log
 
         if ( !isset($this->_log[$name])) {
             throw new Glitch_Application_Exception_RuntimeException(sprintf(
-                'A log instance with name %s was tried to retrieve but wasn\'t set.', $name)
+                'A log instance with name "%s" was tried to retrieve but wasn\'t set.', $name)
             );
         }
 
@@ -91,6 +91,10 @@ class Glitch_Application_Resource_Log
     {
         $options = $this->getOptions();
         foreach ($options as $name => $logOptions) {
+            if (!is_array($logOptions)) {
+                continue;
+            }
+
             $this->_log[$name] = $this->_initInstance($logOptions);
         }
 
@@ -103,6 +107,7 @@ class Glitch_Application_Resource_Log
         foreach ($options as $option)
         {
             $writerClass = $this->_getActorClassName('Writer', $option['writerName']);
+
             $writer = new $writerClass($option['writerParams']);
             $logger->addWriter($writer);
 
