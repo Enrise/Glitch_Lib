@@ -117,12 +117,12 @@ class Glitch_Image_Adapter_Gd extends Glitch_Image_Adapter_AdapterAbstract
 	 *
 	 * @param string $format (Optional) The format or mimetype to return
 	 */
-	public function getImage($format='png') {
+	public function getImage($format='png', $savePath = null) {
 	    switch ($format) {
             case 'image/png':
             case 'png':
             	ob_start();
-                imagepng($this->getHandle());
+                imagepng($this->getHandle(), $savePath);
                 return ob_get_flush();
                 break;
 	   }
