@@ -1,109 +1,147 @@
 <?php
 /**
- * Glitch
+ * Zend Framework
  *
- * This source file is proprietary and protected by international
- * copyright and trade secret laws. No part of this source file may
- * be reproduced, copied, adapted, modified, distributed, transferred,
- * translated, disclosed, displayed or otherwise used by anyone in any
- * form or by any means without the express written authorization of
- * 4worx software innovators BV (www.4worx.com)
+ * LICENSE
  *
- * @category    Glitch
- * @package     Glitch_Application
- * @subpackage  Resource
- * @author      4worx <info@4worx.com>
- * @copyright   2010, 4worx
- * @version     $Id$
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   Zend
+ * @package    Zend_Application
+ * @subpackage Resource
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Log.php 23775 2011-03-01 17:25:24Z ralph $
  */
 
 /**
- * Resource for initializing the logger
- *
- * @category    Glitch
- * @package     Glitch_Application
- * @subpackage  Resource
+ * @see Zend_Application_Resource_ResourceAbstract
  */
-class Glitch_Application_Resource_Log extends Zend_Application_Resource_Log
+// require_once 'Zend/Application/Resource/ResourceAbstract.php';
+
+
+/**
+ * Resource for initializing the locale
+ *
+ * @uses       Zend_Application_Resource_ResourceAbstract
+ * @category   Zend
+ * @package    Zend_Application
+ * @subpackage Resource
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ */
+class Glitch_Application_Resource_Log
+    extends Zend_Application_Resource_Log
 {
+    const DEFAULT_LOGNAME = 'main';
+
     /**
-     * Retrieves the logger object
+     * @var array
+     */
+    protected $_log = array();
+
+    /**
+     * Defined by Zend_Application_Resource_Resource
      *
      * @return Zend_Log
-     * @throws Glitch_Application_Resource_Exception
      */
-    public function getLog()
+    public function init()
     {
-        if (null === $this->_log)
-        {
-            $options = $this->getOptions();
-
-            $level = $this->_getLevel($options);
-
-            // Ensure the request is initialized
-            $this->_bootstrap->bootstrap('Request');
-            $request = $this->_bootstrap->getResource('Request');
-            $isHttpRequest = ($request instanceof Zend_Controller_Request_Http);
-
-            // Use localhost as name if not running in HTTP mode
-            $host = ($isHttpRequest) ? $request->getHttpHost() : 'localhost';
-
-            $this->_log = new Zend_Log();
-            $file = $options['path'] . DIRECTORY_SEPARATOR . APP_NAME . '.log';
-
-            $writer = new Zend_Log_Writer_Stream($file);
-
-            // Use custom logging format, e.g.
-            // [2010-08-07T17:03:18+02:00] ERR (/account/login): Method "_getParams" does not exist
-            $format = '[%timestamp%] %priorityName%';
-            if ($isHttpRequest)
-            {
-                $format .= ' (%requestUri%)';
-                $this->_log->setEventItem('requestUri', $request->getRequestUri());
-            }
-            $format .= ': %message%';
-
-            $formatter = new Zend_Log_Formatter_Simple($format . PHP_EOL);
-            $writer->setFormatter($formatter);
-            $this->_log->addWriter($writer);
-
-            // Also send log output to browser console?
-            if ($isHttpRequest && (isset($options['toFirebug']) && $options['toFirebug']))
-            {
-                $this->_log->addWriter(new Zend_Log_Writer_Firebug());
-            }
-
-            $filter = new Zend_Log_Filter_Priority($level);
-            $this->_log->addFilter($filter);
-
-            // Allow application-wide access
-            Glitch_Registry::setLog($this->_log);
-        }
-        return $this->_log;
+        return $this->getLog();
     }
 
     /**
+     * Attach logger
      *
-     * Validate the log level set.
-     * @param array $options
-     * @throws Glitch_Application_Resource_Exception if invalid
-     * @return true
+     * @param  Zend_Log $log
+     * @return Zend_Application_Resource_Log
      */
-    protected function _getLevel(array $options)
+    public function setLog(Zend_Log $log, $name = self::DEFAULT_LOGNAME)
     {
-        // Force these options to be set - don't rely on the defaults!
-        if (!isset($options['level']))
-        {
-            throw new Glitch_Application_Resource_Exception('Undefined log option: "level"');
-        }
-
-        // Validate the log level
-        $level = constant('Zend_Log::' . $options['level']);
-        if (null === $level)
-        {
-            throw new Glitch_Application_Resource_Exception('Unknown log level: "' . $options['level'] . '"');
-        }
-
-        return $level;
+        $this->_log[$name] = $log;
+        return $this;
     }
+
+    public function getLog($name = null)
+    {
+        if (null === $name) {
+            $name = self::DEFAULT_LOGNAME;
+        }
+
+        if (count($this->_log) == 0) {
+            $this->_initLog();
+        }
+
+        if ( !isset($this->_log[$name])) {
+            throw new Glitch_Application_Exception_RuntimeException(sprintf(
+                'A log instance with name %s was tried to retrieve but wasn\'t set.', $name)
+            );
+        }
+
+        return $this->_log[$name];
+    }
+
+    protected function _initLog()
+    {
+        $options = $this->getOptions();
+        foreach ($options as $name => $logOptions) {
+            $this->_log[$name] = $this->_initInstance($logOptions);
+        }
+
+    }
+
+    protected function _initInstance(array $options)
+    {
+        $logger = new Zend_Log();
+
+        foreach ($options as $option)
+        {
+            $writerClass = $this->_getActorClassName('Writer', $option['writerName']);
+            $writer = new $writerClass($option['writerParams']);
+            $logger->addWriter($writer);
+
+            if (isset($option['formatter']) && is_array($option['formatter'])) {
+                // @todo (unit)test
+                $formatterClass = $this->_getActorClassName('Formatter', $option['formatter']['name']);
+                $formatter = new $formatterClass($option['formatter']['options']);
+                $writer->setFormatter($formatter);
+            }
+
+            if (isset($option['filters']) && is_array($option['filters'])) {
+                // @todo (unti)test
+                foreach($option['filters'] as $filterOptions) {
+                    $filterClass = $this->_getActorClassName('Filter', $filterOptions['name']);
+                    $filter = new $filterClass($filterOptions['options']);
+                    $writer->addFilter($filter);
+                }
+            }
+
+        }
+
+        return $logger;
+    }
+
+    protected function _getActorClassName($type, $name)
+    {
+        $name = ucfirst($name);
+        if (Zend_Loader_Autoloader::autoload($name)) {
+            return $name;
+        } elseif (Zend_Loader_Autoloader::autoload('Glitch_Log_' . $type . '_' . $name)) {
+            return 'Glitch_Log_' . $type . '_' . $name;
+        } elseif (Zend_Loader_Autoloader::autoload('Zend_Log_' . $type . '_' . $name)) {
+            return 'Zend_Log_' . $type . '_' . $name;
+        }
+
+        throw new Glitch_Application_Exception_RuntimeException(sprintf(
+            'A Log %s Class with name %s was tried to retrieve but coult not be found.',
+            $type, $name)
+        );
+    }
+
 }

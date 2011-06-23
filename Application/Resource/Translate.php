@@ -61,8 +61,12 @@ class Glitch_Application_Resource_Translate
             if ($options['modular']) {
                 $iterator = new FilesystemIterator($options['dataDir'], FilesystemIterator::SKIP_DOTS);
                 foreach ($iterator as $item) {
-                    if($item->isDir()) {
-                        $this->_addDir($item . $options['content'], $options);
+                    // Not all dirs in data/ are modules (thhink of data/jenkins)
+                    // so therefore we check if the translation dir actually exists
+                    $dir = $item . '/' . $options['content'];
+                    if ($item->isDir() && file_exists($dir))
+                    {
+                        $this->_addDir($dir, $options);
                     }
                 }
 

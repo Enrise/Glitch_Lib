@@ -15,8 +15,11 @@ abstract class Glitch_Controller_Action_RestError
 
     public function restAction()
     {
+
         $error = $this->_getParam('error_handler');
         $exception = $error->exception;
+
+        $this->getHelper('exceptionLogger')->logException($exception);
 
         // Default zend_exceptions are considered 500's (actual message set
         // inside the view scripts)
