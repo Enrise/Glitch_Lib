@@ -20,6 +20,7 @@ abstract class Glitch_Image_Adapter_AdapterAbstract
     protected $_length;
     protected $_height;
     protected $_width;
+    protected $_savePath = null;
 
     public function __construct($config) {
         if(is_array($config)) {
@@ -104,7 +105,7 @@ abstract class Glitch_Image_Adapter_AdapterAbstract
      */
     public function render ($format = 'png')
     {
-        return $this->getImage($format);
+        return $this->getImage($format, $this->getSavePath());
     }
 
     public function display ($format = 'png', $sendHeader = true)
@@ -114,6 +115,17 @@ abstract class Glitch_Image_Adapter_AdapterAbstract
         }
 
         echo $this->render($format);
+    }
+    
+    public function setSavePath($path = '')
+    {
+        $this->_savePath = $path;
+        return $this;
+    }
+    
+    public function getSavePath()
+    {
+        return $this->_savePath;
     }
 
     /**
