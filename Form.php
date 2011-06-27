@@ -113,7 +113,7 @@ class Glitch_Form extends Zend_Form
         }
         $elm->clearDecorators()
             ->addDecorator('Label', $labelSettings)
-            ->addDecorator('ViewHelper')
+            ->addDecorator(($elm instanceof Zend_Form_Element_File) ? "File" : "ViewHelper")
             ->addDecorator('Description', array('escape' => false))
             ->addDecorator('Errors')
             ->addDecorator('Wrapper', array(
