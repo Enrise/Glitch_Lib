@@ -78,7 +78,25 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
         	// First init cache, then create the locale
             $this->_setCache();
 
-            $this->_locale = new Zend_Locale($options['default']);
+            $this->_locale = new Zend_Locale();
+
+            $override = true;
+
+            if(isset($options['allowed'])) {
+                $envLocale = $this->_locale->getDefault(Zend_Locale::BROWSER,TRUE);
+
+                foreach($envLocale as $locale => $present) {
+                    if($present && in_array($locale, $options['allowed'])) {
+                        $override = false;
+                        break;
+                    }
+                }
+            }
+
+            if($override) {
+                $this->_locale->setLocale($options['default']);
+            }
+
             Zend_Locale::setDefault($this->_locale);
 
             // Allow application-wide access; e.g. Zend_Date uses this
