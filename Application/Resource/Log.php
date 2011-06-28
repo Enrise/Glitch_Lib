@@ -112,7 +112,12 @@ class Glitch_Application_Resource_Log
         {
             $writerClass = $this->_getActorClassName('Writer', $option['writerName']);
 
-            $writer = new $writerClass($option['writerParams']);
+            $writerParams = array();
+            if(isset($option['writerParams'])) {
+                $writerParams = $option['writerParams'];
+            }
+
+            $writer = new $writerClass($writerParams);
             $logger->addWriter($writer);
 
             if (isset($option['formatter']) && is_array($option['formatter'])) {
