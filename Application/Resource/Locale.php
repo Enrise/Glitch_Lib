@@ -82,18 +82,18 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
 
             $override = true;
 
-            if(isset($options['allowed'])) {
+            if (isset($options['allowed'])) {
                 $envLocale = $this->_locale->getDefault(Zend_Locale::BROWSER,TRUE);
 
-                foreach($envLocale as $locale => $present) {
-                    if($present && in_array($locale, $options['allowed'])) {
+                foreach ($envLocale as $locale => $present) {
+                    if ($present && in_array($locale, $options['allowed'])) {
                         $override = false;
                         break;
                     }
                 }
             }
 
-            if($override) {
+            if ($override) {
                 $this->_locale->setLocale($options['default']);
             }
 
