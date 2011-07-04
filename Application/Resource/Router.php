@@ -71,11 +71,13 @@ class Glitch_Application_Resource_Router extends Zend_Application_Resource_Route
             $front = $this->_bootstrap->getResource('FrontController');
 
             // Don't instantiate a URL rewriter in CLI mode
-            if(($router = $front->getRouter()) != null) {
-                if(PHP_SAPI == 'cli' && GLITCH_APP_ENV != 'testing') {
+            if ( ($router = $front->getRouter()) != null) {
+                if ($this->_getPhpSapi() == 'cli' &&
+                    $this->_getApplicationEnvironment() != 'testing')
+                {
                     $front->setRouter(($router = new Glitch_Controller_Router_Cli()));
-                } elseif(!($front instanceof Glitch_Controller_Front &&
-                           !$front->isRouterSet()))
+                } elseif ( ! ($front instanceof Glitch_Controller_Front &&
+                              !$front->isRouterSet()))
                 {
                     $front->setRouter(($router = new Glitch_Controller_Router_Rewrite()));
                 }
@@ -99,7 +101,7 @@ class Glitch_Application_Resource_Router extends Zend_Application_Resource_Route
     protected function _initRestMappings()
     {
         $options = $this->getOptions();
-        if(isset($options['restmappings']) && $options['restmappings'] !== null)
+        if (isset($options['restmappings']) && $options['restmappings'] !== null)
         {
             $this->_restMappings = $options['restmappings'];
         }
@@ -124,5 +126,21 @@ class Glitch_Application_Resource_Router extends Zend_Application_Resource_Route
         }
 
         return $this->_restMappings;
+    }
+
+    /*
+     * This method was added to allow for testing
+     */
+    protected function _getPhpSapi()
+    {
+        return PHP_SAPI;
+    }
+
+    /*
+     * This method was added to allow for testing
+     */
+    protected function _getApplicationEnvironment()
+    {
+        return GLITCH_APP_ENV;
     }
 }
