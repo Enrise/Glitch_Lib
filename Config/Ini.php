@@ -119,17 +119,17 @@ class Glitch_Config_Ini
             'cached_entity' => __CLASS__
         );
         $backendOptions = array(
-            'namespace' => 'Glitch_' . md5(dirname(__FILE__))
+            'namespace' => APP_NAME . '_Config'
         );
 
         $backend = 'BlackHole';
-        if (function_exists('zend_shm_cache_store'))
-        {
-        	$backend = 'ZendServer_ShMem';
-        }
-        else if (extension_loaded('apc'))
-        {
-        	$backend = 'Apc';
+        if(GLITCH_APP_ENV != 'testing' && GLITCH_APP_ENV != 'development') {
+            if (function_exists('zend_shm_cache_store'))
+            {
+            	$backend = 'ZendServer_ShMem';
+            } else if (extension_loaded('apc')) {
+            	$backend = 'Apc';
+            }
         }
 
         // Use a shared memory type of caching, because the configuration won't be
