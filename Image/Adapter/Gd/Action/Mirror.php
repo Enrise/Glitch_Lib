@@ -7,7 +7,7 @@ class Glitch_Image_Adapter_Gd_Action_Mirror
 {
 
     public function perform(Glitch_Image_Adapter_Gd $adapter,
-        Glitch_Image_Action_Mirror $rotate)
+        Glitch_Image_Action_Mirror $mirror)
     {
         $handle = $adapter->getHandle();
 
@@ -15,7 +15,7 @@ class Glitch_Image_Adapter_Gd_Action_Mirror
         $sizeY = $adapter->getHeight();
 
         $successFlop = true;
-        if($rotate->flop()) {
+        if($mirror->flop()) {
             $handleNew = imagecreatetruecolor($sizeX, $sizeY);
             $successFlop = imagecopyresampled(
                               $handleNew, $handle, 0, 0, ($sizeX - 1),
@@ -25,7 +25,7 @@ class Glitch_Image_Adapter_Gd_Action_Mirror
         }
 
         $successFlip = true;
-        if($rotate->flip()) {
+        if($mirror->flip()) {
             $handleNew = imagecreatetruecolor($sizeX, $sizeY);
             $successFlip = imagecopyresampled(
                               $handleNew, $handle, 0, 0, 0, ($sizeY - 1),
