@@ -91,6 +91,7 @@ class Glitch_Application_Resource_Encoding extends Zend_Application_Resource_Res
         	// Allow application-wide access; e.g. Zend_Mail uses this
         	Glitch_Registry::setEncoding($this->_encoding);
         }
+
         return $this->_encoding;
     }
 }
