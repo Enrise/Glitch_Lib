@@ -52,9 +52,9 @@ class Glitch_Controller_Front extends Zend_Controller_Front
     {
         $glitchRouter = false;
         if( ! (null == ($bootstrap = $this->getParam('bootstrap')) ||
-                   ($router = $bootstrap->getPluginResource('router') &&
-               $router instanceof Glitch_Application_Resource_Router &&
-               $glitchRouter = true)))
+               (null !== ($router = $bootstrap->getPluginResource('router')) &&
+                $router instanceof Glitch_Application_Resource_Router &&
+                $glitchRouter = true)))
         {
             return parent::dispatch($request, $response);
         } elseif ( $glitchRouter && ! $router->hasRestMappings()) {
