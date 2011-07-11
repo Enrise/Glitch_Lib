@@ -57,8 +57,8 @@ class Glitch_Controller_Front extends Zend_Controller_Front
             ($router instanceof Glitch_Application_Resource_Router &&
              ! $router->hasRestMappings()))
         {
-           	return parent::dispatch($request, $response);
-	    }
+               return parent::dispatch($request, $response);
+        }
 
         if (null !== $request) {
             $this->setRequest($request);
