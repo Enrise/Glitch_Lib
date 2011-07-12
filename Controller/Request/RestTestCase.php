@@ -39,4 +39,26 @@ class Glitch_Controller_Request_RestTestCase
     public function getHeaders() {
         return $this->_headers;
     }
+
+    /**
+     * Set raw POST body
+     *
+     * @param  string $content
+     * @return Zend_Controller_Request_HttpTestCase
+     */
+    public function setRawBody($content)
+    {
+        $this->_rawBody = (string) $content;
+        return $this;
+    }
+
+    /**
+     * Get RAW POST body
+     *
+     * @return string|null
+     */
+    public function getRawBody()
+    {
+        return $this->_rawBody;
+    }
 }
