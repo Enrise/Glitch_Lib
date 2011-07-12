@@ -87,7 +87,11 @@ class Glitch_Controller_Front extends Zend_Controller_Front
                 );
 
                 $this->setRequest($request);
-                $response = new Glitch_Controller_Response_Rest();
+                if (! $response instanceof Glitch_Controller_Response_Rest) {
+                    $response = new Glitch_Controller_Response_Rest();
+                }
+
+                $this->setResponse($response);
             }
         }
 
