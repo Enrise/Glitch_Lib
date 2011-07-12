@@ -76,10 +76,12 @@ class Glitch_Application_Resource_Db extends Zend_Application_Resource_Db
         if (null === $this->_db)
         {
             // Use parent for basic initialization
-            parent::init();
+            if (null === ($db = parent::init())) {
+            	return null;
+            }
 
             // Has profiler? Attach it to the database adapter
-            if ($this->_db->getProfiler()->getEnabled())
+            if ($db->getProfiler()->getEnabled())
             {
                 // Check whether this is a HTTP request; if not, don't use Firebug
                 $this->_bootstrap->bootstrap('Request');
@@ -90,14 +92,16 @@ class Glitch_Application_Resource_Db extends Zend_Application_Resource_Db
                     : new Zend_Db_Profiler();
 
                 $profiler->setEnabled(true);
-                $this->_db->setProfiler($profiler);
+                $db->setProfiler($profiler);
             }
 
             $this->_setCache();
 
             // Allow application-wide access
-            Glitch_Registry::setDb($this->_db);
+            Glitch_Registry::setDb($db);
+            $this->_db = $db;
         }
+
         return $this->_db;
     }
 }
