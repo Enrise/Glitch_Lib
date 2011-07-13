@@ -57,7 +57,7 @@ class Glitch_Controller_Request_Rest
     const RESOURCE_TYPE_RESOURCE = 'resource';
 
     protected $_bootstrap;
-    
+
     /**
      * @var string
      */
@@ -79,7 +79,7 @@ class Glitch_Controller_Request_Rest
         $this->_restMappings = $this->_getRestMappings();
         parent::__construct($uri);
     }
-    
+
 
     protected function _getRestMappings()
     {
@@ -88,7 +88,7 @@ class Glitch_Controller_Request_Rest
             $out = $this->_restMappings = $this->_getRouterAppResourcePlugin()
                                                     ->getRestMappings();
         }
-        
+
         return $out;
     }
 
@@ -179,7 +179,7 @@ class Glitch_Controller_Request_Rest
         if($this->_resourceType == null) {
             $this->_parseUrlElements();
         }
-        
+
         return $this->_resourceType;
     }
 
@@ -244,11 +244,13 @@ class Glitch_Controller_Request_Rest
      * @param string $value
      * @return Zend_Controller_Request_Abstract
      */
-    public function setControllerName($value)
+    public function setControllerName($value, $keepUrlElements = false)
     {
         $this->_controller = $value;
-        $this->_urlElements = array(0 => array('element' => $value));
-        $this->_parentElements = array();
+        if (! $keepUrlElements) {
+            $this->_urlElements = array(0 => array('element' => $value));
+            $this->_parentElements = array();
+        }
 
         return $this;
     }
@@ -269,15 +271,15 @@ class Glitch_Controller_Request_Rest
                 );
             }
         }
-        
+
         return $this->_bootstrap;
     }
-    
+
     protected function _getRouter()
     {
         return $this->_getRouterAppResourcePlugin()->getRouter();
     }
-    
+
     protected function _getRouterAppResourcePlugin()
     {
         $router = $this->_getBootstrap()->getPluginResource('router');
@@ -286,8 +288,8 @@ class Glitch_Controller_Request_Rest
                 'The router application resource plugin was not loaded'
             );
         }
-        
+
         return $router;
     }
-    
+
 }

@@ -88,6 +88,7 @@ class Glitch_Controller_Dispatcher_Rest
 
         $this->_curModule = $request->getModuleName();
         $this->setResponse($response);
+
         $controller = $this->_lastController = $this->_getController($request);
 
         foreach ($request->getParentElements() as $element) {
@@ -102,11 +103,18 @@ class Glitch_Controller_Dispatcher_Rest
         }
 
         $request->setDispatched(true);
-        $this->_lastActionMethod = $controller->dispatch($request);
 
-        $request->setActionName($this->_lastActionMethod);
+        if (($this->_lastActionMethod = $request->getActionName()) === null) {
+            $this->_lastActionMethod = $controller->dispatch($request);
+            $request->setActionName($this->_lastActionMethod);
+
+        } elseif (!method_exists($controller, $this->_lastActionMethod)) {
+            $this->_lastActionMethod = $this->_lastActionMethod . 'Action';
+            $request->setActionName($this->_lastActionMethod);
+        }
 
         $vars = $controller->{$this->_lastActionMethod}();
+
         if($response->renderBody()) {
             $response->setBody($this->_renderResponse($vars, $controller, $request));
         }
@@ -228,15 +236,21 @@ class Glitch_Controller_Dispatcher_Rest
 
     public function getControllerClass(Zend_Controller_Request_Abstract $request)
     {
+        return static::getStaticControllerClass($request);
+    }
+
+    public static function getStaticControllerClass(
+                                    Zend_Controller_Request_Abstract $request)
+    {
         return ucfirst($request->getModuleName()) . '_Controller'
-             . '_' . implode('_', $this->_getClassElements($request));
+             . '_' . implode('_', static::_getClassElements($request));
     }
 
     /**
      * @param Zend_Controller_Request_Abstract $request
      * @return array
      */
-    protected function _getClassElements(Zend_Controller_Request_Abstract $request)
+    protected static function _getClassElements(Zend_Controller_Request_Abstract $request)
     {
         $parentElements = $request->getUrlElements();
         $out = array();

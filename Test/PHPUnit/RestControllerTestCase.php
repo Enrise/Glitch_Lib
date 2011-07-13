@@ -162,7 +162,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
     {
         $module = 'error';
         $controller = 'Error_Controller_Error';
-        $action = 'restAction';
+        $action = 'error';
 
         return $this->_testDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $module, $controller, $action, $displayBody);
     }
@@ -234,7 +234,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
      * @param  string $message
      * @return void
      */
-    public function assertQueryCount($path, $count, $message = '')
+   /* public function assertQueryCount($path, $count, $message = '')
     {
         $this->_incrementAssertionCount();
         $constraint = new Zend_Test_PHPUnit_Constraint_DomQuery($path);
@@ -244,6 +244,6 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         if (!$constraint->evaluate($content, __FUNCTION__, $count)) {
             $constraint->fail($path, $message);
         }
-    }
+    }*/
 
 }

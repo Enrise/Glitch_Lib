@@ -78,12 +78,19 @@ class Glitch_Controller_Router_Rewrite extends Zend_Controller_Router_Rewrite
             if($params = $route->match($match)) {
                 $this->_setRequestParams($request, $params);
 
+                if($route instanceof Glitch_Controller_Router_Route_Rest) {
+                    $controller = Glitch_Controller_Dispatcher_Rest::getStaticControllerClass($request);
+                    $request->setControllerName($controller, true);
+                    $request->setActionName($controller::getStaticActionMethod($request));
+                }
+
                 return $request;
             }
         }
 
         return parent::route($request);
     }
+
 
     /**
      * Retrieve a currently matched route
@@ -97,7 +104,7 @@ class Glitch_Controller_Router_Rewrite extends Zend_Controller_Router_Rewrite
             return parent::getCurrentRoute();
         }
 
-        if(!isset($this->_routes[$this->_currentRoute])) {
+        if ( ! isset($this->_routes[$this->_currentRoute])) {
             return;
         }
 
