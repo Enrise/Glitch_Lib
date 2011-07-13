@@ -27,6 +27,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
             // require_once 'Zend/Controller/Request/HttpTestCase.php';
             $this->_request = new Glitch_Controller_Request_RestTestCase;
         }
+
         return $this->_request;
     }
 
@@ -41,6 +42,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
             // require_once 'Zend/Controller/Response/HttpTestCase.php';
             $this->_response = new Glitch_Controller_Response_RestTestCase;
         }
+
         return $this->_response;
     }
 
@@ -69,7 +71,11 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
 
         // Set dispatch data
         if ($postData != null) {
-            $this->_request->setPost($postData);
+            if(is_string($postData)) {
+                $this->_request->setRawBody($postData);
+            } else {
+                $this->_request->setPost($postData);
+            }
         }
 
         $this->_request->setMethod($requestMethod);
@@ -114,7 +120,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
              ->throwExceptions(false)
              ->returnResponse(true);
 
-        return $this->frontController->dispatch();
+        return $this->frontController->dispatch($request, $this->getResponse());
     }
 
     /**
