@@ -26,6 +26,8 @@
  */
 class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Locale
 {
+    const SESSION_NAME = 'GLITCH_SESSION';
+
     /**
      * Sets the locale cache
      *
@@ -65,6 +67,7 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
      */
     public function getLocale()
     {
+
         if (null === $this->_locale)
         {
             $options = $this->getOptions();
@@ -81,20 +84,15 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
             $this->_locale = new Zend_Locale();
 
             $override = true;
-
             if (isset($options['allowed'])) {
-                $envLocale = $this->_locale->getDefault(Zend_Locale::BROWSER,TRUE);
-
-                foreach ($envLocale as $locale => $present) {
-                    if ($present && in_array($locale, $options['allowed'])) {
-                        $override = false;
-                        break;
-                    }
-                }
+                $locale = $this->_detectLocale($options['allowed']);
+                $override = ! $locale;
             }
 
             if ($override) {
                 $this->_locale->setLocale($options['default']);
+            } else {
+                $this->_locale->setLocale($locale);
             }
 
             Zend_Locale::setDefault($this->_locale);
@@ -107,5 +105,26 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
         }
 
         return $this->_locale;
+    }
+
+    protected function _detectLocale($allowed)
+    {
+        $session = new Zend_Session_Namespace(self::SESSION_NAME);
+        if(isset($session->locale) &&
+                 $session->locale != null &&
+                 in_array($session->locale, $allowed))
+        {
+            return $session->locale;
+        } else {
+            $envLocale = $this->_locale->getDefault(Zend_Locale::BROWSER, true);
+
+            foreach ($envLocale as $locale => $present) {
+                if ($present && in_array($locale, $allowed)) {
+                    return $locale;
+                }
+            }
+        }
+
+        return null;
     }
 }
