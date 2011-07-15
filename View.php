@@ -118,4 +118,22 @@ class Glitch_View extends Zend_View
 
         return $this;
     }
+
+    protected function _run()
+    {
+        $_ = function($string) {
+            $options = func_get_args();
+            array_shift($options);
+
+            return Zend_Layout::getMvcInstance()
+                        ->getView()
+                            ->getHelper('translate')->translate($string, $options);
+        };
+
+        if ($this->useStreamWrapper()) {
+            include 'zend.view://' . func_get_arg(0);
+        } else {
+            include func_get_arg(0);
+        }
+    }
 }
