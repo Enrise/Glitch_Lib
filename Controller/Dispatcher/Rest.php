@@ -180,6 +180,16 @@ class Glitch_Controller_Dispatcher_Rest
     {
         $func = function($_vars, $_filename, $responseObject) {
             extract($_vars);
+
+            $_ = function($string) {
+                $options = func_get_args();
+                array_shift($options);
+
+                return Zend_Layout::getMvcInstance()
+                            ->getView()
+                                ->getHelper('translate')->translate($string, $options);
+            };
+
             return include $_filename;
         };
 
