@@ -58,6 +58,8 @@ class Glitch_Controller_Dispatcher_Rest
 
     protected $_lastActionMethod;
 
+    protected $_rendererHelperBroker;
+
     public function getLastController()
     {
         return $this->_lastController;
@@ -122,7 +124,7 @@ class Glitch_Controller_Dispatcher_Rest
         if(!is_array($vars)) {
             $vars = array('data' => array());
         } elseif(!isset($vars['data'])) {
-        	$vars['data'] = array();
+            $vars['data'] = array();
         }
 
         //@todo Code looks duplicated with _getRenderScriptName(). Evaluate and fix.
@@ -180,18 +182,12 @@ class Glitch_Controller_Dispatcher_Rest
     {
         $func = function($_vars, $_filename, $responseObject) {
             extract($_vars);
-
-            $_ = function($string) {
-                $options = func_get_args();
-                array_shift($options);
-
-                return Zend_Layout::getMvcInstance()
-                            ->getView()
-                                ->getHelper('translate')->translate($string, $options);
-            };
-
+            unset($_vars);
             return include $_filename;
         };
+
+        $vars['helper'] = $this->getRendererHelperBroker();
+        $vars = array_merge($vars, $vars['helper']->getShortCuts());
 
         ob_start();
         $func($vars, $file, $response);
@@ -265,6 +261,21 @@ class Glitch_Controller_Dispatcher_Rest
         }
 
         return $this->formatModuleName($module) . '_Controller_' . $this->_formatName($controllername);
+    }
+
+    public function getRendererHelperBroker()
+    {
+        if (null == $this->_rendererHelperBroker) {
+            $this->_rendererHelperBroker = new Glitch_Controller_Response_Renderer_HelperBroker();
+        }
+
+        return $this->_rendererHelperBroker;
+    }
+
+    public function setRendererHelperBroker($broker)
+    {
+        $this->_rendererHelperBroker = $broker;
+        return $this;
     }
 
 }
