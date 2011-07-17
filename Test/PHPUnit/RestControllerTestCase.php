@@ -228,7 +228,6 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
 
     protected function assertXpathContentRightContains($path, $match, $message = '')
     {
-        return;
         $domQuery = new Zend_Dom_Query($this->_response->outputBody());
 
         $result = $domQuery->query($path)->current()->value;
