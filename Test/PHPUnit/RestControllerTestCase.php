@@ -59,8 +59,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         }
     }
 
-    protected function _doDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode,
-                                     $module, $controller, $action, $displayBody=false)
+    protected function _doDispatch($requestMethod, $uri, $acceptHeader, $postData, $displayBody = false)
     {
         $this->getFrontController()->setDispatcher(
             Glitch_Controller_Dispatcher_Rest::cloneFromDispatcher(
@@ -145,7 +144,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         $front->setParam('bootstrap', $this->_application->getBootstrap());
 
         // Dispatch to the requested MCA
-        $response = $this->_doDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $module, $controller, $action, $displayBody);
+        $response = $this->_doDispatch($requestMethod, $uri, $acceptHeader, $postData, $displayBody);
 
         // Test if we got the correct response returned
         $this->assertResponseCode($httpCode);
