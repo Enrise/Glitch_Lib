@@ -179,7 +179,7 @@ class Glitch_Controller_Dispatcher_Rest
     protected function _renderFile($file, $vars, $response)
     {
         $func = function($_vars, $_filename, $responseObject) {
-            extract($_vars);
+        	extract($_vars);
 
             $_ = function($string) {
                 $options = func_get_args();
@@ -189,6 +189,8 @@ class Glitch_Controller_Dispatcher_Rest
                             ->getView()
                                 ->getHelper('translate')->translate($string, $options);
             };
+
+            $helper = new Glitch_Controller_Dispatcher_HelperBroker();
 
             return include $_filename;
         };
@@ -267,4 +269,11 @@ class Glitch_Controller_Dispatcher_Rest
         return $this->formatModuleName($module) . '_Controller_' . $this->_formatName($controllername);
     }
 
+}
+
+class Glitch_Controller_Dispatcher_HelperBroker {
+	public function escape($string)
+	{
+		return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+	}
 }

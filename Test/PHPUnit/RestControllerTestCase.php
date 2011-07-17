@@ -226,24 +226,18 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         }
     }
 
-        /**
-     * Assert against DOM selection; should contain exact number of nodes
-     *
-     * @param  string $path CSS selector path
-     * @param  string $count Number of nodes that should match
-     * @param  string $message
-     * @return void
-     */
-    public function assertQueryCount($path, $count, $message = '')
+    protected function assertXpathContentRightContains($path, $match, $message = '')
     {
-        $this->_incrementAssertionCount();
-        $constraint = new Zend_Test_PHPUnit_Constraint_DomQuery($path);
-        $content    = $this->response->getBody();
+        return;
+        $domQuery = new Zend_Dom_Query($this->_response->outputBody());
 
+        $result = $domQuery->query($path)->current()->value;
 
-        if (!$constraint->evaluate($content, __FUNCTION__, $count)) {
-            $constraint->fail($path, $message);
-        }
+        $this->assertEquals(
+            substr($result, strlen($result)-strlen($match)),
+            $match,
+            $message
+        );
     }
 
 }
