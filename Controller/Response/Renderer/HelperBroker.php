@@ -25,7 +25,7 @@ class Glitch_Controller_Response_Renderer_HelperBroker
         return call_user_func_array($helper, $args);
     }
 
-    public function __callstatic($method, $args)
+    public static function __callstatic($method, $args)
     {
         $helpers = static::_getStaticHelpers();
         return call_user_func_array($helpers, $args);
