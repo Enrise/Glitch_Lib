@@ -25,15 +25,10 @@ class Glitch_Controller_Response_Renderer_HelperBroker
         return call_user_func_array($helper, $args);
     }
 
-    public function getHelper($name)
-    {
-        return $this->_helpers[$name];
-    }
-
-    public static function getStaticHelper($name)
+    public function __callstatic($method, $args)
     {
         $helpers = static::_getStaticHelpers();
-        return $helpers[$name];
+        return call_user_func_array($helpers, $args);
     }
 
     protected static function _initStaticHelpers()
