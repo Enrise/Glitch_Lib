@@ -57,7 +57,7 @@ class Glitch_Controller_Request_Rest
     const RESOURCE_TYPE_RESOURCE = 'resource';
 
     protected $_bootstrap;
-    
+
     /**
      * @var string
      */
@@ -79,7 +79,7 @@ class Glitch_Controller_Request_Rest
         $this->_restMappings = $this->_getRestMappings();
         parent::__construct($uri);
     }
-    
+
 
     protected function _getRestMappings()
     {
@@ -88,7 +88,7 @@ class Glitch_Controller_Request_Rest
             $out = $this->_restMappings = $this->_getRouterAppResourcePlugin()
                                                     ->getRestMappings();
         }
-        
+
         return $out;
     }
 
@@ -139,22 +139,25 @@ class Glitch_Controller_Request_Rest
             $mapping = $this->_getRestMapping($k);
             if ($mapping === false) {
                 throw new Glitch_Controller_Exception(
-                	'No configuration could be found for the requested mapping'
+                    'No configuration could be found for the requested mapping'
                 );
             }
 
             if (isset($mapping['isCollection']) && $mapping['isCollection'] == true) {
                 $this->_setResourceType(self::RESOURCE_TYPE_COLLECTION);
-		        $resource = null;
+                $resource = null;
+                $isCollection = true;
             } else {
                 $this->_setResourceType(self::RESOURCE_TYPE_RESOURCE);
                 $resource = array_shift($items);
+                $isCollection = false;
             }
 
             $this->_addUrlElement($mapping['name'],
                                   $resource,
                                   $path,
-                                  isset($mapping['module']) ? $mapping['module'] : null
+                                  isset($mapping['module']) ? $mapping['module'] : null,
+                                  $isCollection
                                 );
 
             // Holds the "hierarchy" for finding deeper controllers
@@ -179,7 +182,7 @@ class Glitch_Controller_Request_Rest
         if($this->_resourceType == null) {
             $this->_parseUrlElements();
         }
-        
+
         return $this->_resourceType;
     }
 
@@ -187,13 +190,14 @@ class Glitch_Controller_Request_Rest
      * @param  $name
      * @return bool
      */
-    protected function _addUrlElement($element, $resource, $path, $module = null)
+    protected function _addUrlElement($element, $resource, $path, $module = null, $isCollection = false)
     {
         $this->_urlElements[] = array(
             'element' => $element,
             'resource' => urldecode($resource),
             'path' => $path,
-            'module' => $module
+            'module' => $module,
+            'isCollection' => $isCollection
         );
     }
 
@@ -204,8 +208,8 @@ class Glitch_Controller_Request_Rest
 
     public function getUrlElements()
     {
-		if($this->_urlElements == null) {
-			$this->_parseUrlElements();
+        if($this->_urlElements == null) {
+            $this->_parseUrlElements();
        }
 
        return $this->_urlElements;
@@ -265,19 +269,19 @@ class Glitch_Controller_Request_Rest
 
             if($this->_bootstrap == null) {
                 throw new \RuntimeException(
-                	'No bootstrap was found'
+                    'No bootstrap was found'
                 );
             }
         }
-        
+
         return $this->_bootstrap;
     }
-    
+
     protected function _getRouter()
     {
         return $this->_getRouterAppResourcePlugin()->getRouter();
     }
-    
+
     protected function _getRouterAppResourcePlugin()
     {
         $router = $this->_getBootstrap()->getPluginResource('router');
@@ -286,8 +290,8 @@ class Glitch_Controller_Request_Rest
                 'The router application resource plugin was not loaded'
             );
         }
-        
+
         return $router;
     }
-    
+
 }
