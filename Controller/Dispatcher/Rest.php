@@ -96,7 +96,7 @@ class Glitch_Controller_Dispatcher_Rest
             $className = $this->formatControllerNameByParams($element['path'].$element['element'], $element['module']);
             $ptController = new $className($request, $response, $this->getParams());
 
-            if (true !== $ptController->passThrough($request, $element['resource'])) {
+            if (true !== $ptController->passThrough($request, $element['resource'], $element['isCollection'])) {
                 throw new Glitch_Controller_Exception('Passthrough method returned false');
             }
 
