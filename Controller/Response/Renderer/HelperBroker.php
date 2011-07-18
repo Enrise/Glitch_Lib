@@ -7,7 +7,7 @@ class Glitch_Controller_Response_Renderer_HelperBroker
     protected static $_staticHelpers;
 
     protected $_shortcuts = array(
-        '_' => 'escape'
+        '_' => 'translate'
     );
 
     public function __construct($getStatic = true)
