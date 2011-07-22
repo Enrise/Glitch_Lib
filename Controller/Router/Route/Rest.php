@@ -58,12 +58,16 @@ class Glitch_Controller_Router_Route_Rest
      * Matches a user submitted path with a previously defined route.
      * Assigns and returns an array of defaults on a successful match.
      *
-     * @param string $path Path used to match against this routing map
+     * @param Zend_Controller_Request_Abstract $request
      * @return array|false An array of assigned values or a false on a mismatch
      */
-    public function match($path, $partial = false)
+    public function match($request, $partial = false)
     {
-        return parent::match(trim($path,'/'), true);
+        return parent::match(trim($request->getPathInfo(), '/'), true);
+    }
+
+    public function getVersion() {
+        return 2;
     }
 
     public function assemble($data = array(), $reset = false, $encode = false)
