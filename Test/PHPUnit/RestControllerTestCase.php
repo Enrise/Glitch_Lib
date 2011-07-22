@@ -161,7 +161,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
     {
         $module = 'error';
         $controller = 'Error_Controller_Error';
-        $action = 'restAction';
+        $action = 'error';
 
         return $this->_testDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $module, $controller, $action, $displayBody);
     }
@@ -228,7 +228,6 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
     protected function assertXpathContentRightContains($path, $match, $message = '')
     {
         $domQuery = new Zend_Dom_Query($this->_response->outputBody());
-
         $result = $domQuery->query($path)->current()->value;
 
         $this->assertEquals(

@@ -13,6 +13,12 @@ abstract class Glitch_Controller_Action_RestError
         return $this->_errorMethod;
     }
 
+    public function error()
+    {
+        $request = $this->getRequest();
+        return $this->{$this->dispatch($request)}();
+    }
+
     public function restAction()
     {
 

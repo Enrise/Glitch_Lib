@@ -248,11 +248,13 @@ class Glitch_Controller_Request_Rest
      * @param string $value
      * @return Zend_Controller_Request_Abstract
      */
-    public function setControllerName($value)
+    public function setControllerName($value, $keepUrlElements = false)
     {
         $this->_controller = $value;
-        $this->_urlElements = array(0 => array('element' => $value));
-        $this->_parentElements = array();
+        if (! $keepUrlElements) {
+            $this->_urlElements = array(0 => array('element' => $value));
+            $this->_parentElements = array();
+        }
 
         return $this;
     }

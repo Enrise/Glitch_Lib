@@ -63,6 +63,11 @@ abstract class Glitch_Controller_Action_Rest
 
     public function getActionMethod(Glitch_Controller_Request_Rest $request)
     {
+        return static::getStaticActionMethod($request);
+    }
+
+    public static function getStaticActionMethod(Glitch_Controller_Request_Rest $request)
+    {
         return $request->getResourceType()
               . ucfirst(strtolower($request->getMethod()))
               . 'Action';
