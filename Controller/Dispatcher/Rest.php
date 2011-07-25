@@ -136,7 +136,7 @@ class Glitch_Controller_Dispatcher_Rest
         if($response->renderBody()) {
             $response->setBody(
                 $this->getResponseRenderer()
-                            ->renderResponse($vars, $controller, $request)
+                            ->renderResponse($response, $vars, $controller, $request)
             );
         }
     }
