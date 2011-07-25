@@ -39,7 +39,7 @@ class Glitch_Controller_Response_Renderer
                       . ucfirst($response->getOutputFormat()) . '.php';
         }
 
-        return static::renderFile($filename, $vars, $this->getResponse());
+        return static::renderFile($filename, $vars, $response);
     }
 
     protected function _getRenderScriptName(
@@ -47,7 +47,7 @@ class Glitch_Controller_Response_Renderer
                             Zend_Controller_Request_Abstract $request,
                             $controller)
     {
-        $filename = ucfirst($this->_curModule) . '/View/Script/'
+        $filename = ucfirst($request->getModuleName()) . '/View/Script/'
                   . implode('/', Glitch_Controller_Dispatcher_Rest::getClassElements($request)) . '/'
                   . ucfirst($request->getActionName()) . '.';
 
@@ -61,17 +61,18 @@ class Glitch_Controller_Response_Renderer
 
     public static function renderFile($file, $vars, $response = null)
     {
-        $func = function($_vars, $_filename, $responseObject) {
+        $func = function($_vars, $_filename) {
             extract($_vars);
             unset($_vars);
             return include $_filename;
         };
 
         $vars['helper'] = static::getRendererHelperBroker();
+        $vars['responseObject'] = $response;
         $vars = array_merge($vars, $vars['helper']->getShortCuts());
 
         ob_start();
-        $func($vars, $file, $response);
+        $func($vars, $file);
 
         return ob_get_clean();
     }
