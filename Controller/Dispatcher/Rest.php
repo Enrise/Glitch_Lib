@@ -58,7 +58,7 @@ class Glitch_Controller_Dispatcher_Rest
 
     protected $_lastActionMethod;
 
-    protected $_rendererHelperBroker;
+    protected $_responseRenderer;
 
     public function getLastController()
     {
@@ -69,6 +69,22 @@ class Glitch_Controller_Dispatcher_Rest
     {
         return $this->_lastActionMethod;
     }
+
+    public function getResponseRenderer()
+    {
+        if (null == $this->_responseRenderer) {
+            $this->_responseRenderer = new Glitch_Controller_Response_Renderer();
+        }
+
+        return $this->_responseRenderer;
+    }
+
+    public function setResponseRenderer($renderer)
+    {
+        $this->_responseRenderer = $renderer;
+        return $this;
+    }
+
 
     /**
      * Dispatches a request object to a controller/action.  If the action
@@ -118,7 +134,10 @@ class Glitch_Controller_Dispatcher_Rest
         $vars = $controller->{$this->_lastActionMethod}();
 
         if($response->renderBody()) {
-            $response->setBody($this->_renderResponse($vars, $controller, $request));
+            $response->setBody(
+                $this->getResponseRenderer()
+                            ->renderResponse($vars, $controller, $request)
+            );
         }
     }
 

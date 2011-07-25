@@ -3,7 +3,7 @@ class Glitch_Controller_Response_Renderer
 {
     protected static $_rendererHelperBroker;
 
-     public function _renderResponse($response, $vars, $controller, $request)
+    public function renderResponse($response, $vars, $controller, $request)
     {
         // Move the requested output format to the response
         if(($format = $request->getParam('format')) != null) {
