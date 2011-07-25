@@ -122,86 +122,6 @@ class Glitch_Controller_Dispatcher_Rest
         }
     }
 
-    protected function _renderResponse($vars, $controller, $request)
-    {
-        // Move the requested output format to the response
-        if(($format = $request->getParam('format')) != null) {
-            $this->getResponse()->setOutputFormat($format);
-        }
-
-        if(!is_array($vars)) {
-            $vars = array('data' => array());
-        } elseif(!isset($vars['data'])) {
-            $vars['data'] = array();
-        }
-
-        //@todo Code looks duplicated with _getRenderScriptName(). Evaluate and fix.
-        $response = $this->getResponse();
-        $filename = '/'.$this->_curModule . '/views/scripts/'
-                  . $controller->getActionMethod($request) . '.';
-        if(($subResRenderer = $response->getSubResponseRenderer()) != '') {
-            $filename .= $subResRenderer . '.';
-        }
-
-        $filename = $this->_getRenderScriptName($request, $controller);
-
-        $includePaths = explode(PATH_SEPARATOR, '.' . PATH_SEPARATOR . get_include_path());
-        $path = false;
-        foreach($includePaths as $incpath) {
-            if(file_exists($incpath . '/' . $filename)) {
-                $path = $incpath . '/' . $filename;
-                break;
-            }
-        }
-
-        if($path === false) {
-            if($this->getResponse()->hasSubResponseRenderer()) {
-                throw new Glitch_Controller_Exception(
-                    'A SubResponseRenderer was set but could not be located. '
-                   .'Looked for "'.$filename.'" in: ' . get_include_path()
-                );
-            }
-
-            $filename = 'Glitch/Controller/Response/Renderer/'
-                      . ucfirst($this->getResponse()->getOutputFormat()) . '.php';
-        }
-
-        return $this->_renderFile($filename, $vars, $this->getResponse());
-    }
-
-    protected function _getRenderScriptName(
-                            Zend_Controller_Request_Abstract $request,
-                            $controller)
-    {
-        $response = $this->getResponse();
-
-        $filename = ucfirst($this->_curModule) . '/View/Script/'
-                  . implode('/', $this->_getClassElements($request)) . '/'
-                  . ucfirst($request->getActionName()) . '.';
-
-        if($response->hasSubResponseRenderer()) {
-            $filename .= $response->getSubResponseRenderer() . '.';
-        }
-
-        return $filename . $response->getOutputFormat() . '.phtml';
-    }
-
-    protected function _renderFile($file, $vars, $response)
-    {
-        $func = function($_vars, $_filename, $responseObject) {
-            extract($_vars);
-            unset($_vars);
-            return include $_filename;
-        };
-
-        $vars['helper'] = $this->getRendererHelperBroker();
-        $vars = array_merge($vars, $vars['helper']->getShortCuts());
-
-        ob_start();
-        $func($vars, $file, $response);
-
-        return ob_get_clean();
-    }
 
     public static function cloneFromDispatcher(
             Zend_Controller_Dispatcher_Interface $dispatcher)
@@ -249,14 +169,14 @@ class Glitch_Controller_Dispatcher_Rest
                                     Zend_Controller_Request_Abstract $request)
     {
         return ucfirst($request->getModuleName()) . '_Controller'
-             . '_' . implode('_', static::_getClassElements($request));
+             . '_' . implode('_', static::getClassElements($request));
     }
 
     /**
      * @param Zend_Controller_Request_Abstract $request
      * @return array
      */
-    protected static function _getClassElements(Zend_Controller_Request_Abstract $request)
+    public static function getClassElements(Zend_Controller_Request_Abstract $request)
     {
         $parentElements = $request->getUrlElements();
         $out = array();
@@ -277,19 +197,5 @@ class Glitch_Controller_Dispatcher_Rest
         return $this->formatModuleName($module) . '_Controller_' . $this->_formatName($controllername);
     }
 
-    public function getRendererHelperBroker()
-    {
-        if (null == $this->_rendererHelperBroker) {
-            $this->_rendererHelperBroker = new Glitch_Controller_Response_Renderer_HelperBroker();
-        }
-
-        return $this->_rendererHelperBroker;
-    }
-
-    public function setRendererHelperBroker($broker)
-    {
-        $this->_rendererHelperBroker = $broker;
-        return $this;
-    }
 
 }
