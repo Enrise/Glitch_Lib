@@ -99,12 +99,12 @@ abstract class Glitch_Controller_Action_Rest
 
     public function notAcceptedException()
     {
-        throw new Glitch_Exception_message('Incorrect format specified', 406);
+        throw new Glitch_Exception_Message('Incorrect format specified', 406);
     }
 
     public function incorrectFormatException()
     {
-        throw new Glitch_Exception_message('Incorrect format specified', 501);
+        throw new Glitch_Exception_Message('Incorrect format specified', 501);
     }
 
     public function badRequestException() {
