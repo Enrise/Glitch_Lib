@@ -84,12 +84,9 @@ class Glitch_Application_Resource_Db extends Zend_Application_Resource_Db
             if ($db->getProfiler()->getEnabled())
             {
                 // Check whether this is a HTTP request; if not, don't use Firebug
-                $this->_bootstrap->bootstrap('Request');
-                $request = $this->_bootstrap->getResource('Request');
-
-                $profiler = ($request instanceof Zend_Controller_Request_Http)
-                    ? new Zend_Db_Profiler_Firebug('Database queries')
-                    : new Zend_Db_Profiler();
+                $profiler = (defined('STDIN'))
+                    ? new Zend_Db_Profiler() // Running in CLI mode
+                    : new Zend_Db_Profiler_Firebug('Database Queries');
 
                 $profiler->setEnabled(true);
                 $db->setProfiler($profiler);
