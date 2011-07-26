@@ -68,7 +68,7 @@ class Glitch_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_S
      */
     public function loadClass($className)
     {
-            // Autoload class if it doesn't exist
+        // Autoload class if it doesn't exist
         if (false === @class_exists($className))
         {
             // Throw this specific exception to go into the error handler

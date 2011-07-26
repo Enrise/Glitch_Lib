@@ -187,8 +187,16 @@ class Glitch_Controller_Dispatcher_Rest
     public static function getStaticControllerClass(
                                     Zend_Controller_Request_Abstract $request)
     {
+        $elements = static::getClassElements($request);
+
+        if (0 == count($elements)) {
+            $suffix = $request->getParam('controller');
+        } else {
+            $suffix = implode('_', $elements);
+        }
+
         return ucfirst($request->getModuleName()) . '_Controller'
-             . '_' . implode('_', static::getClassElements($request));
+             . '_' . $suffix;
     }
 
     /**
@@ -215,6 +223,5 @@ class Glitch_Controller_Dispatcher_Rest
 
         return $this->formatModuleName($module) . '_Controller_' . $this->_formatName($controllername);
     }
-
 
 }
