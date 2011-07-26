@@ -183,7 +183,7 @@ class Glitch_Config_Ini
 
     	// Optionally load developer-specific settings, overriding previous settings
     	$configFile = GLITCH_CONFIGS_PATH . DIRECTORY_SEPARATOR . self::FILENAME_USER;
-    	if (('development' == $section || 'testing' == $section) && file_exists($configFile))
+    	if (file_exists($configFile))
     	{
             $ini->merge(new Zend_Config_Ini($configFile, $section));
     	}
