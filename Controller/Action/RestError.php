@@ -32,7 +32,7 @@ abstract class Glitch_Controller_Action_RestError
         $message = '';
         $code = 500;
 
-        if($exception instanceof Glitch_Exception_Message) {
+        if($exception instanceof Glitch_Exception_MessageInterface) {
             // Set correct message and output
             $message = $exception->getMessage();
             if($exception->getCode() != 0) {
