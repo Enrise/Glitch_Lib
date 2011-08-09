@@ -12,7 +12,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
 
         // Reset the database to the original settings
         $config = Glitch_Config_Ini::getConfig();
-        $sql = file_get_contents($config->resources->db->phpunit->initial_data);
+        $sql = file_get_contents($config->resources->db->phpunit->initial_data_dir);
         $db = Glitch_Registry::getDb();
         foreach (preg_split("|;\n|m", $sql, -1, PREG_SPLIT_NO_EMPTY) as $sqlline)
         {
