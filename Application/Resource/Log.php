@@ -53,7 +53,7 @@ class Glitch_Application_Resource_Log
      */
     public function init()
     {
-        return $this->_initLog();
+        Glitch_Registry::setLog($this->getLog());
     }
 
     /**
