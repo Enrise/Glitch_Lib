@@ -26,7 +26,7 @@
  */
 class Glitch_Application_Resource_Profiler extends Zend_Application_Resource_ResourceAbstract
 {
-	const REGISTRY_KEY = 'profiler';
+    const REGISTRY_KEY = 'profiler';
 
     /**
      * Resource object
@@ -66,7 +66,7 @@ class Glitch_Application_Resource_Profiler extends Zend_Application_Resource_Res
             // enable or disable the profiler by ratio
             if (isset($options['ratio']))
             {
-            	$ratio = intval($options['ratio']);
+                $ratio = intval($options['ratio']);
                 if (($ratio >= 0 && $ratio <= 100) && $enabled)
                 {
                     $enabled = (rand(0, 100) > (100 - $ratio));

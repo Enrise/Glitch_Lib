@@ -53,19 +53,19 @@
  */
 class Glitch_Controller_Plugin_EsiParser extends Zend_Controller_Plugin_Abstract
 {
-	/**#@+
-	 * Class constants
-	 *
-	 * @var string
-	 */
-	const ESI_INCLUDE_REGEX = '~<esi:include src="(.+?)"[ ]*/>~s';
-	const ESI_CACHE_REGEX = '~Cache-Control: max-age=(\d+)~';
-	const ESI_CACHE_PATH = GLITCH_CACHES_PATH; //adept to own needs
-	const ESI_CACHEKEY_PREFIX = 'esi_';
-	const ESI_DATA_HASH_CHECK = 'crc32';
+    /**#@+
+     * Class constants
+     *
+     * @var string
+     */
+    const ESI_INCLUDE_REGEX = '~<esi:include src="(.+?)"[ ]*/>~s';
+    const ESI_CACHE_REGEX = '~Cache-Control: max-age=(\d+)~';
+    const ESI_CACHE_PATH = GLITCH_CACHES_PATH; //adept to own needs
+    const ESI_CACHEKEY_PREFIX = 'esi_';
+    const ESI_DATA_HASH_CHECK = 'crc32';
     /**#@-*/
 
-	/**
+    /**
      * Cache object
      *
      * @var Zend_Cache_Core
@@ -86,21 +86,21 @@ class Glitch_Controller_Plugin_EsiParser extends Zend_Controller_Plugin_Abstract
      */
     protected $_httpContext = null;
 
-	/**
-	 * On end of dispatchLoop check for esi:include tags
-	 *
-	 * @return void
-	 */
+    /**
+     * On end of dispatchLoop check for esi:include tags
+     *
+     * @return void
+     */
     public function dispatchLoopShutdown()
     {
-    	if (null === self::$_cache)
-    	{
-    		self::setCache();
-    	}
+        if (null === self::$_cache)
+        {
+            self::setCache();
+        }
 
-    	$data = $this->getResponse()->getBody();
-    	$data = $this->_replaceEsiIncludes($data);
-    	$this->getResponse()->setBody($data);
+        $data = $this->getResponse()->getBody();
+        $data = $this->_replaceEsiIncludes($data);
+        $this->getResponse()->setBody($data);
     }
 
     /**
@@ -150,17 +150,17 @@ class Glitch_Controller_Plugin_EsiParser extends Zend_Controller_Plugin_Abstract
      */
     protected function _getHttpContext()
     {
-    	if (null === $this->_httpContext)
-    	{
-	    	$this->_httpContext = stream_context_create(
-	    	    array('http' =>
-	    	        array(
-	    	            'ignore_errors' => true, // only available since php 5.2.10
-	    	        )
-	    	    )
-	        );
-    	}
-    	return $this->_httpContext;
+        if (null === $this->_httpContext)
+        {
+            $this->_httpContext = stream_context_create(
+                array('http' =>
+                    array(
+                        'ignore_errors' => true, // only available since php 5.2.10
+                    )
+                )
+            );
+        }
+        return $this->_httpContext;
     }
 
     /**
@@ -177,14 +177,14 @@ class Glitch_Controller_Plugin_EsiParser extends Zend_Controller_Plugin_Abstract
         {
             foreach($esiTags as $esiTag)
             {
-            	$content = $this->_replaceEsiInclude($esiTag[1]);
+                $content = $this->_replaceEsiInclude($esiTag[1]);
                 $data = str_replace($esiTag[0], $content, $data);
             }
         }
 
         if ($hash != hash(self::ESI_DATA_HASH_CHECK, $data))
         {
-        	return $this->_replaceEsiIncludes($data);
+            return $this->_replaceEsiIncludes($data);
         }
         return $data;
     }
@@ -197,43 +197,43 @@ class Glitch_Controller_Plugin_EsiParser extends Zend_Controller_Plugin_Abstract
      */
     protected function _replaceEsiInclude($url)
     {
-    	$uri = 'http://'.$_SERVER['HTTP_HOST'] . $url;
-    	$key = $this->_getCacheId($uri);
-    	if ($this->_cacheEnabled())
-    	{
-    		// detect if url is cached
+        $uri = 'http://'.$_SERVER['HTTP_HOST'] . $url;
+        $key = $this->_getCacheId($uri);
+        if ($this->_cacheEnabled())
+        {
+            // detect if url is cached
             $data = self::$_cache->load($key);
             if (false !== $data)
             {
-            	return $data;
+                return $data;
             }
-    	}
+        }
 
-    	$fp = fopen($uri, 'r', false, $this->_getHttpContext());
-    	if (false !== $fp)
-    	{
-	        $data = stream_get_contents($fp);
-	        if ($this->_cacheEnabled())
-	        {
-	        	$meta = stream_get_meta_data($fp); // fetch the metadata of the fopen call
-		        foreach ($meta['wrapper_data'] as $header)
-		        {
-		        	$match = array();
-		        	if (preg_match(self::ESI_CACHE_REGEX, $header, $match))
-		        	{
-		                if (false !== $data)
-		                {
-		                	// cache url with the respected max-age setting
-		                	self::$_cache->save($data, $key, array(), intval($match[1]));
-		                	break;
-		                }
-		        	}
-		        }
-	        }
-	        fclose($fp);
-	        return $data;
-    	}
-    	return null;
+        $fp = fopen($uri, 'r', false, $this->_getHttpContext());
+        if (false !== $fp)
+        {
+            $data = stream_get_contents($fp);
+            if ($this->_cacheEnabled())
+            {
+                $meta = stream_get_meta_data($fp); // fetch the metadata of the fopen call
+                foreach ($meta['wrapper_data'] as $header)
+                {
+                    $match = array();
+                    if (preg_match(self::ESI_CACHE_REGEX, $header, $match))
+                    {
+                        if (false !== $data)
+                        {
+                            // cache url with the respected max-age setting
+                            self::$_cache->save($data, $key, array(), intval($match[1]));
+                            break;
+                        }
+                    }
+                }
+            }
+            fclose($fp);
+            return $data;
+        }
+        return null;
     }
 
     /**

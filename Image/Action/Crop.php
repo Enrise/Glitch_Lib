@@ -19,42 +19,42 @@ class Glitch_Image_Action_Crop extends Glitch_Image_Action_ActionAbstract
      *
      * @var int x
      */
-	protected $_x;
+    protected $_x;
 
     /**
      * The y coordinate of the top left corner of the crop's bounding box
      *
      * @var int y
      */
-	protected $_y;
+    protected $_y;
 
     /**
      * The x coordinate of the top left corner of the crop's bounding box
      *
      * @var int x
      */
-	protected $_x1;
+    protected $_x1;
 
     /**
      * The y coordinate of the top left corner of the crop's bounding box
      *
      * @var int y
      */
-	protected $_y1;
+    protected $_y1;
 
     /**
      * The width of the crop
      *
      * @var int width
      */
-	protected $_width;
+    protected $_width;
 
     /**
      * The height of the crop
      *
      * @var int height
      */
-	protected $_height;
+    protected $_height;
 
 
     public function addOptions($options = array()) {
@@ -85,9 +85,9 @@ class Glitch_Image_Action_Crop extends Glitch_Image_Action_ActionAbstract
      *
      * @return int
      */
-	public function getX() {
-		return $this->_x;
-	}
+    public function getX() {
+        return $this->_x;
+    }
 
     /**
      * Set x coordinate of top left of bounding box
@@ -108,9 +108,9 @@ class Glitch_Image_Action_Crop extends Glitch_Image_Action_ActionAbstract
      *
      * @return int
      */
-	public function getY() {
-		return $this->_y;
-	}
+    public function getY() {
+        return $this->_y;
+    }
 
     /**
      * Set y coordinate of top left corner of bounding box
@@ -131,9 +131,9 @@ class Glitch_Image_Action_Crop extends Glitch_Image_Action_ActionAbstract
      *
      * @return int
      */
-	public function getX1() {
-		return $this->_x1;
-	}
+    public function getX1() {
+        return $this->_x1;
+    }
 
     /**
      * Set x coordinate of top left of bounding box
@@ -155,9 +155,9 @@ class Glitch_Image_Action_Crop extends Glitch_Image_Action_ActionAbstract
      *
      * @return int
      */
-	public function getY1() {
-		return $this->_y1;
-	}
+    public function getY1() {
+        return $this->_y1;
+    }
 
     /**
      * Set y coordinate of top left corner of bounding box
@@ -195,9 +195,9 @@ class Glitch_Image_Action_Crop extends Glitch_Image_Action_ActionAbstract
      *
      * @return int
      */
-	public function getWidth() {
-		return $this->_width;
-	}
+    public function getWidth() {
+        return $this->_width;
+    }
 
     /**
      * Set width of bounding box
@@ -235,9 +235,9 @@ class Glitch_Image_Action_Crop extends Glitch_Image_Action_ActionAbstract
      *
      * @return int
      */
-	public function getHeight() {
-		return $this->_height;
-	}
+    public function getHeight() {
+        return $this->_height;
+    }
 
     /**
      * Set height of bounding box

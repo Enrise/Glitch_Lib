@@ -46,7 +46,7 @@ class Glitch_Controller_Router_Cli extends Zend_Controller_Router_Abstract
         $reqString = $console->request;
         if(empty($reqString)) {
             throw new Glitch_Controller_Router_Exception_InvalidArgumentException(
-            			'No Request String found in Glitch_Console_GetOpt'
+                        'No Request String found in Glitch_Console_GetOpt'
             );
         }
 
@@ -54,7 +54,7 @@ class Glitch_Controller_Router_Cli extends Zend_Controller_Router_Abstract
         if (count($parts) != 3)
         {
             throw new Glitch_Controller_Router_Exception_InvalidArgumentException(
-            			'Request is not in format module.controller.action'
+                        'Request is not in format module.controller.action'
             );
         }
 

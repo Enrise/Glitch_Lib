@@ -33,9 +33,9 @@ class Glitch_Application extends Zend_Application
      */
     public function unsetResource($key)
     {
-    	if ($this->hasOption('resources'))
-    	{
-    		unset($this->_options['resources'][$key]);
-    	}
+        if ($this->hasOption('resources'))
+        {
+            unset($this->_options['resources'][$key]);
+        }
     }
 }

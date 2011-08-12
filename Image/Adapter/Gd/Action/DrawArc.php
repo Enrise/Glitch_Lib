@@ -16,12 +16,12 @@ class Glitch_Image_Adapter_Gd_Action_DrawArc
         Glitch_Image_Action_DrawArc $arcObject)
     {
 
-	    $color = $arcObject->getFillColor()->getRgb();
-		$colorAlphaAlloc =  imagecolorallocatealpha($adapter->getHandle(),
-							 				   		$color['red'],
-							   						$color['green'],
-							   						$color['blue'],
-							   						127 - $arcObject->getFillAlpha() * 1.27);
+        $color = $arcObject->getFillColor()->getRgb();
+        $colorAlphaAlloc =  imagecolorallocatealpha($adapter->getHandle(),
+                                                        $color['red'],
+                                                       $color['green'],
+                                                       $color['blue'],
+                                                       127 - $arcObject->getFillAlpha() * 1.27);
 
         if(!$arcObject->isFilled()) {
             $style = IMG_ARC_NOFILL + IMG_ARC_EDGED;
@@ -41,5 +41,5 @@ class Glitch_Image_Adapter_Gd_Action_DrawArc
                        $colorAlphaAlloc,
                        $style);
 
-	}
+    }
 }

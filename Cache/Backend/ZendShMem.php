@@ -25,7 +25,7 @@
  */
 class Glitch_Cache_Backend_ZendShMem extends Zend_Cache_Backend implements Zend_Cache_Backend_Interface
 {
-	/**
+    /**
      * Available options
      *
      * =====> (string) namespace :
@@ -81,7 +81,7 @@ class Glitch_Cache_Backend_ZendShMem extends Zend_Cache_Backend implements Zend_
     public function test($id)
     {
         $tmp = zend_shm_cache_fetch($this->_options['namespace'] . '::' . $id);
-    	if ($tmp !== null && $tmp !== false)
+        if ($tmp !== null && $tmp !== false)
         {
             return true;
         }

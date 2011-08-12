@@ -127,7 +127,7 @@ class Glitch_Application_Resource_Translate
                     'Translation caching was enabled but no caching object
                      identified by "translate" could be retrieved from the
                      cachemanager'
-				);
+                );
             }
 
             if(isset($options['log'])) {

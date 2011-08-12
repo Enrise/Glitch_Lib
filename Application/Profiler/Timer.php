@@ -4,11 +4,11 @@
  *
  * This class provides 
  *
- * @category	Glitch
- * @package		Glitch_Application
- * @subpackage	Profiler
- * @author		Jeroen van Dijk <jeroen@4worx.com>
- * @version		$Id$
+ * @category    Glitch
+ * @package        Glitch_Application
+ * @subpackage    Profiler
+ * @author        Jeroen van Dijk <jeroen@4worx.com>
+ * @version        $Id$
  */
 class Glitch_Application_Profiler_Timer
 {
@@ -97,10 +97,10 @@ class Glitch_Application_Profiler_Timer
      */
     public function end($timerComment = null)
     {
-    	if (null !== $timerComment)
-    	{
-    		$this->_comment .= " ".$timerComment;
-    	}
+        if (null !== $timerComment)
+        {
+            $this->_comment .= " ".$timerComment;
+        }
         $this->_endedMicrotime = microtime(true);
     }
 

@@ -34,11 +34,11 @@ class Glitch_Application_Resource_Esi extends Zend_Application_Resource_Resource
      */
     public function init()
     {
-    	$options = $this->getOptions();
-    	if (isset($options['active']) && (true === (boolean)$options['active']))
-    	{
-    		$this->enableEsi();
-    	}
+        $options = $this->getOptions();
+        if (isset($options['active']) && (true === (boolean)$options['active']))
+        {
+            $this->enableEsi();
+        }
     }
 
     /**
@@ -52,7 +52,7 @@ class Glitch_Application_Resource_Esi extends Zend_Application_Resource_Resource
 
         if (isset($options['headerName']))
         {
-        	Glitch_View_Helper_Esi::setHeader($options['headerName'], 1);
+            Glitch_View_Helper_Esi::setHeader($options['headerName'], 1);
         }
 
         // Ensure the front controller is initialized
@@ -83,13 +83,13 @@ class Glitch_Application_Resource_Esi extends Zend_Application_Resource_Resource
      */
     public function setModuleOptions($module)
     {
-    	$options = $this->getOptions();
-    	$defaultModule = (isset($options['defaultModule'])) ? $options['defaultModule'] : 'snippets';
+        $options = $this->getOptions();
+        $defaultModule = (isset($options['defaultModule'])) ? $options['defaultModule'] : 'snippets';
 
-    	if (strtolower($module) == $defaultModule)
-    	{
+        if (strtolower($module) == $defaultModule)
+        {
             // disable the layout helper, because we are dealing with a snippet call
             $this->getBootstrap()->getPluginResource('layout')->getLayout()->disableLayout();
-    	}
+        }
     }
 }

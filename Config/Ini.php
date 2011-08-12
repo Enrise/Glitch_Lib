@@ -126,9 +126,9 @@ class Glitch_Config_Ini
         if(GLITCH_APP_ENV != 'testing' && GLITCH_APP_ENV != 'development') {
             if (function_exists('zend_shm_cache_store'))
             {
-            	$backend = 'ZendServer_ShMem';
+                $backend = 'ZendServer_ShMem';
             } else if (extension_loaded('apc')) {
-            	$backend = 'Apc';
+                $backend = 'Apc';
             }
         }
 
@@ -162,37 +162,37 @@ class Glitch_Config_Ini
      */
     public static function loadConfig($section)
     {
-    	// Load the main configuration file
+        // Load the main configuration file
         $configFile = GLITCH_CONFIGS_PATH . DIRECTORY_SEPARATOR . self::FILENAME_APPLICATION;
         $ini = new Zend_Config_Ini($configFile, $section, array('allowModifications' => true));
 
-    	// Recursively load all other ini files, if any, but exclude the special cases
-    	$pattern = '~^(?!'
-    	         . preg_quote(self::FILENAME_APPLICATION) . '|'
-    	         . preg_quote(self::FILENAME_USER)
-    	         . ').+\.ini$~';
+        // Recursively load all other ini files, if any, but exclude the special cases
+        $pattern = '~^(?!'
+                 . preg_quote(self::FILENAME_APPLICATION) . '|'
+                 . preg_quote(self::FILENAME_USER)
+                 . ').+\.ini$~';
 
         $dirIterator = new RecursiveDirectoryIterator(GLITCH_CONFIGS_PATH, RecursiveDirectoryIterator::KEY_AS_FILENAME);
         $recursiveIterator = new RecursiveIteratorIterator($dirIterator);
         $iterator = new RegexIterator($recursiveIterator, $pattern, RegexIterator::MATCH, RegexIterator::USE_KEY);
 
-    	foreach ($iterator as $file)
-    	{
+        foreach ($iterator as $file)
+        {
             $ini->merge(new Zend_Config_Ini($file->getPathname(), $section));
-    	}
+        }
 
-    	// Optionally load developer-specific settings, overriding previous settings
-    	$configFile = GLITCH_CONFIGS_PATH . DIRECTORY_SEPARATOR . self::FILENAME_USER;
-    	if (file_exists($configFile))
-    	{
+        // Optionally load developer-specific settings, overriding previous settings
+        $configFile = GLITCH_CONFIGS_PATH . DIRECTORY_SEPARATOR . self::FILENAME_USER;
+        if (file_exists($configFile))
+        {
             $ini->merge(new Zend_Config_Ini($configFile, $section));
-    	}
+        }
 
-	if ('testing' != $section) {
-	    	$ini->setReadOnly();
-	}
+    if ('testing' != $section) {
+            $ini->setReadOnly();
+    }
 
-    	return $ini;
+        return $ini;
     }
 
     /**

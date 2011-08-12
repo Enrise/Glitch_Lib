@@ -11,7 +11,7 @@ class Glitch_Console_Getopt
     public static function getInstance($name) {
         if(!isset(self::$_instances[$name])) {
             throw new Glitch_Console_Exception_RuntimeException(
-            			'No instance with name '.$name.' was set'
+                        'No instance with name '.$name.' was set'
             );
         }
 
@@ -28,7 +28,7 @@ class Glitch_Console_Getopt
     {
         if(GLITCH_APP_ENV != 'testing') {
             trigger_error(
-            	'Glitch_Console_Getopt::reset() should only be called in testing mode',
+                'Glitch_Console_Getopt::reset() should only be called in testing mode',
                 E_USER_NOTICE
             );
         }

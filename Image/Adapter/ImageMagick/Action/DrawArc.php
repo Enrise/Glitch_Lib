@@ -18,7 +18,7 @@ class Glitch_Image_Adapter_ImageMagick_Action_DrawArc
 
         $draw = new ImagickDraw();
 
-	    $color = (string)$arcObject->getFillColor();
+        $color = (string)$arcObject->getFillColor();
         $draw->setStrokeColor($color);
 
         $location = $arcObject->getLocation($adapter);
@@ -40,5 +40,5 @@ class Glitch_Image_Adapter_ImageMagick_Action_DrawArc
 
         $adapter->getHandle()->drawImage($draw);
 
-	}
+    }
 }

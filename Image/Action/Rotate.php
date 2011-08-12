@@ -14,7 +14,7 @@
 class Glitch_Image_Action_Rotate extends Glitch_Image_Action_ActionAbstract
 {
 
-	const NAME  = 'Rotate';
+    const NAME  = 'Rotate';
 
     /**
      *
@@ -52,17 +52,17 @@ class Glitch_Image_Action_Rotate extends Glitch_Image_Action_ActionAbstract
      *
      * @return string background color
      */
-	public function getBackgroundColor($asString = false) {
-	    if($this->_backgroundColor === null) {
-	        $this->setBackgroundColor(0, 0, 0);
-	    }
-	
-	    if($asString) {
-	        return $this->_backgroundColor->__toString();
-	    }
-	
-		return $this->_backgroundColor;
-	}
+    public function getBackgroundColor($asString = false) {
+        if($this->_backgroundColor === null) {
+            $this->setBackgroundColor(0, 0, 0);
+        }
+    
+        if($asString) {
+            return $this->_backgroundColor->__toString();
+        }
+    
+        return $this->_backgroundColor;
+    }
 
     /**
      * Set background
@@ -80,9 +80,9 @@ class Glitch_Image_Action_Rotate extends Glitch_Image_Action_ActionAbstract
      *
      * @return int angle
      */
-	public function getAngle() {
-		return $this->_angle;
-	}
+    public function getAngle() {
+        return $this->_angle;
+    }
 
     /**
      *
@@ -101,7 +101,7 @@ class Glitch_Image_Action_Rotate extends Glitch_Image_Action_ActionAbstract
      *
      * @return string Action name
      */
-	public function getName() {
-		return self::NAME;
-	}
+    public function getName() {
+        return self::NAME;
+    }
 }

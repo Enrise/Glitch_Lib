@@ -77,7 +77,7 @@ class Glitch_Application_Resource_Db extends Zend_Application_Resource_Db
         {
             // Use parent for basic initialization
             if (null === ($db = parent::init())) {
-            	return null;
+                return null;
             }
 
             // Has profiler? Attach it to the database adapter

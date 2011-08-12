@@ -40,7 +40,7 @@ class Glitch_Loader_Autoloader implements Zend_Loader_Autoloader_Interface
      */
     public function __construct()
     {
-    	spl_autoload_register(array($this, 'autoload'));
+        spl_autoload_register(array($this, 'autoload'));
     }
 
     /**

@@ -143,7 +143,7 @@ class Glitch_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_
          */
         if (!count($this->_memcached->getServerList()))
         {
-        	// check servers array for options that are set
+            // check servers array for options that are set
             foreach ($this->_options['servers'] as &$server)
             {
                 if (!array_key_exists('port', $server))
@@ -217,30 +217,30 @@ class Glitch_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_
             $result = $this->_memcached->set($id, $data, $lifetime);
             if ($this->_memcached->getResultCode() == Memcached::RES_ERRNO)
             {
-            	/*
-            	 * start error reporting
-            	 */
-            	$server = $this->_memcached->getServerByKey($id);
-            	$msg = sprintf('Memcached server %s:%d is down!!', $server['host'], $server['port']);
+                /*
+                 * start error reporting
+                 */
+                $server = $this->_memcached->getServerByKey($id);
+                $msg = sprintf('Memcached server %s:%d is down!!', $server['host'], $server['port']);
 
-            	/**
-            	 * @TODO
-            	 *
-            	 * This try/catch construct is a temporary fix for preventing fatal PHP errors. Somehow the log line
-            	 * gets written to file but fwrite (in Zend_Log_Writer_Stream) returns false, which causes Zend_Log to
-            	 * throw an exception. An exception at this point in the code execution causes an out-of-stack error.
-            	 *
-            	 * For now the exception is catched and ignored, the only risk is missing a log line.
-            	 * But this issue needs further research!
-            	 */
-            	try
-            	{
+                /**
+                 * @TODO
+                 *
+                 * This try/catch construct is a temporary fix for preventing fatal PHP errors. Somehow the log line
+                 * gets written to file but fwrite (in Zend_Log_Writer_Stream) returns false, which causes Zend_Log to
+                 * throw an exception. An exception at this point in the code execution causes an out-of-stack error.
+                 *
+                 * For now the exception is catched and ignored, the only risk is missing a log line.
+                 * But this issue needs further research!
+                 */
+                try
+                {
                     Zend_Registry::get('logger')->alert($msg);
-            	}
-            	catch (Exception $e)
-            	{
-            	    // ignore
-            	}
+                }
+                catch (Exception $e)
+                {
+                    // ignore
+                }
             }
         //}
         return $result;

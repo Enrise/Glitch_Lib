@@ -18,7 +18,7 @@ class Glitch_Image_Adapter_ImageMagick_Action_DrawEllipse
 
         $draw = new ImagickDraw();
 
-	    $strokeColor = (string)$ellipseObject->getStrokeColor();
+        $strokeColor = (string)$ellipseObject->getStrokeColor();
         $strokeAlpha = $ellipseObject->getStrokeAlpha() * 0.01;
         $draw->setStrokeColor($strokeColor);
         $draw->setStrokeOpacity($strokeAlpha);
@@ -48,6 +48,6 @@ class Glitch_Image_Adapter_ImageMagick_Action_DrawEllipse
 
         $adapter->getHandle()->drawImage($draw);
 
-	}
+    }
 
 }

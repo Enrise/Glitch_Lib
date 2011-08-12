@@ -68,8 +68,8 @@ class Glitch_Image_Point {
      */
     public function setLocation($param1,$param2 = null) {
         if($param1 instanceof Glitch_Image_Point) {
-        	$param2 = $param1->getY();
-        	$param1 = $param1->getX();
+            $param2 = $param1->getY();
+            $param1 = $param1->getX();
         }
 
         if($param1 !== null) {
@@ -82,7 +82,7 @@ class Glitch_Image_Point {
     }
 
     public function getLocation() {
-    	return array('x' => $this->getX(),
-    	             'y' => $this->getY());
+        return array('x' => $this->getX(),
+                     'y' => $this->getY());
     }
 }

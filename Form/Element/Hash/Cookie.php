@@ -102,7 +102,7 @@ class Glitch_Form_Element_Hash_Cookie implements Glitch_Form_Element_Hash_Interf
     {
         if (null !== $this->getCookie($this->_key))
         {
-        	$timeout = Glitch_Request::getRequest()->getServer('REQUEST_TIME')+$this->_parent->getTimeout();
+            $timeout = Glitch_Request::getRequest()->getServer('REQUEST_TIME')+$this->_parent->getTimeout();
             setcookie($this->_key, $this->_parent->getHash(), $timeout, $this->_url);
         }
     }

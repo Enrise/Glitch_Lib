@@ -6,71 +6,71 @@
  * If you want to store the profile info, create the following table
  * and the database <dbname>_profiler
  * create table profiler_log_template (
- *	ip int unsigned not null,
- *	page varchar(255) not null,
- *	user_agent VARCHAR(255) not null,
- *	referer VARCHAR(255) not null,
- *	dispatch float not null,
- *	dispatch_comment text not null,
- *	model float not null,
- *	model_comment text not null,
- *	view float not null,
- *	view_comment text not null,
- *	controller float not null,
- *	controller_comment text not null,
- *	db float not null,
- *	db_comment text not null,
- *	dba float not null,
- *	dba_comment text not null,
- *	cache float not null,
- *	cache_comment text not null,
- *	service float not null,
- *	service_comment text not null,
- *	other float not null,
- *	other_comment text not null,
- *	logdate timestamp not null default current_timestamp on update CURRENT_TIMESTAMP
+ *    ip int unsigned not null,
+ *    page varchar(255) not null,
+ *    user_agent VARCHAR(255) not null,
+ *    referer VARCHAR(255) not null,
+ *    dispatch float not null,
+ *    dispatch_comment text not null,
+ *    model float not null,
+ *    model_comment text not null,
+ *    view float not null,
+ *    view_comment text not null,
+ *    controller float not null,
+ *    controller_comment text not null,
+ *    db float not null,
+ *    db_comment text not null,
+ *    dba float not null,
+ *    dba_comment text not null,
+ *    cache float not null,
+ *    cache_comment text not null,
+ *    service float not null,
+ *    service_comment text not null,
+ *    other float not null,
+ *    other_comment text not null,
+ *    logdate timestamp not null default current_timestamp on update CURRENT_TIMESTAMP
  * ) engine = ARCHIVE;
  *
- * @category	Glitch
- * @package		Glitch_Application
- * @author		Jeroen van Dijk <jeroen@4worx.com>
- * @version		$Id$
+ * @category    Glitch
+ * @package        Glitch_Application
+ * @author        Jeroen van Dijk <jeroen@4worx.com>
+ * @version        $Id$
  */
 
 class Glitch_Application_Profiler
 {
-	const DISPATCH = 1;
-	const MODEL = 2;
-	const VIEW = 4;
-	const CONTROLLER = 8;
-	const DB = 16;
-	const DBA = 32;
-	const CACHE = 64;
-	const SERVICE = 128;
-	const OTHER = 256;
+    const DISPATCH = 1;
+    const MODEL = 2;
+    const VIEW = 4;
+    const CONTROLLER = 8;
+    const DB = 16;
+    const DBA = 32;
+    const CACHE = 64;
+    const SERVICE = 128;
+    const OTHER = 256;
 
-	private $_tableNames = array(
-		1 => "dispatch",
-		2 => "model",
-		4 => "view",
-		8 => "controller",
-		16 => "db",
-		32 => "dba",
-		64 => "cache",
-		128 => "service",
-		256 => "other"
-	);
+    private $_tableNames = array(
+        1 => "dispatch",
+        2 => "model",
+        4 => "view",
+        8 => "controller",
+        16 => "db",
+        32 => "dba",
+        64 => "cache",
+        128 => "service",
+        256 => "other"
+    );
 
-	private static $_instance;
+    private static $_instance;
 
-	/**
+    /**
      * Array of Glitch_Application_Profiler_Timer objects.
      *
      * @var array
      */
     protected $_timerProfiles = array();
 
-	/**
+    /**
      * Stores enabled state of the profiler.  If set to False, calls to
      * timerStart() will simply be ignored.
      *
@@ -99,7 +99,7 @@ class Glitch_Application_Profiler
      */
     protected $_filterTypes = null;
 
-	/**
+    /**
      * Class constructor.  The profiler is disabled by default unless it is
      * specifically enabled by passing in $enabled here or calling setEnabled().
      *
@@ -111,33 +111,33 @@ class Glitch_Application_Profiler
         $this->setEnabled($enabled);
     }
 
-	/**
-	 * factory
-	 *
-	 * @return	instance
-	 */
-	public static function factory($enabled = false)
-	{
-		if (!self::$_instance)
-		{
-			self::$_instance = new self($enabled);
-		}
-		return self::$_instance;
-	}
+    /**
+     * factory
+     *
+     * @return    instance
+     */
+    public static function factory($enabled = false)
+    {
+        if (!self::$_instance)
+        {
+            self::$_instance = new self($enabled);
+        }
+        return self::$_instance;
+    }
 
-	/**
-	 * getInstance
-	 *
-	 * @return	instance
-	 */
-	public static function getInstance()
-	{
-		if (!self::$_instance)
-		{
-			self::$_instance = self::factory();
-		}
-		return self::$_instance;
-	}
+    /**
+     * getInstance
+     *
+     * @return    instance
+     */
+    public static function getInstance()
+    {
+        if (!self::$_instance)
+        {
+            self::$_instance = self::factory();
+        }
+        return self::$_instance;
+    }
 
     /**
      * Enable or disable the profiler.  If $enable is false, the profiler
@@ -164,7 +164,7 @@ class Glitch_Application_Profiler
         return $this->_enabled;
     }
 
-	/**
+    /**
      * Sets a minimum number of seconds for saving timer profiles.  If this
      * is set, only those timers whose elapsed time is equal or greater than
      * $minimumSeconds will be saved.  To save all timers regardless of
@@ -253,7 +253,7 @@ class Glitch_Application_Profiler
         return key($this->_timerProfiles);
     }
 
-	/**
+    /**
      * Starts a timer.  Creates a new timer profile object (Glitch_Application_Profiler_Timer)
      * and returns the "timer profiler handle".  Run the timer, then call
      * timerEnd() and pass it this handle to make the timer as ended and
@@ -261,7 +261,7 @@ class Glitch_Application_Profiler
      * action and immediately returns null.
      *
      * @param  integer $timerType   OPTIONAL Type of timer, one of the Glitch_Application_Profiler::* constants
-     * @param  string  $timerComment	info related to the timer
+     * @param  string  $timerComment    info related to the timer
      * @return integer|null
      */
     public function timerStart($timerType = null, $timerComment = "")
@@ -282,7 +282,7 @@ class Glitch_Application_Profiler
         return key($this->_timerProfiles);
     }
 
-	/**
+    /**
      * Ends a timer.  Pass it the handle that was returned by timerStart().
      * This will mark the timer as ended and save the time.
      *
@@ -479,81 +479,81 @@ class Glitch_Application_Profiler
     /**
      * Store the profile info
      *
-     * @param	Zend_Db_Adapter_Abstract $db
-     * @return	void
+     * @param    Zend_Db_Adapter_Abstract $db
+     * @return    void
      */
     public function saveProfileInfo(Zend_Db_Adapter_Abstract $db = null, Zend_Controller_Request_Abstract $request)
     {
-    	if ((($db instanceof Zend_Db_Adapter_Pdo_Mysql) ||
-    		($db instanceof Zend_Db_Adapter_Mysqli))
-    		&& $this->_enabled
-    	)
-    	{
-	    	$values = array();
-	    	$values["ip"] = new Zend_Db_Expr('inet_aton("' . $request->getServer('REMOTE_ADDR', '') . '")');
-	    	$values["page"] = $request->getServer('REQUEST_URI', '');
-	    	$values["user_agent"] = $request->getServer('HTTP_USER_AGENT', '');
-	    	$values["referer"] = $request->getServer('HTTP_REFERER', '');
-			foreach ($this->_tableNames as $key => $value)
-			{
-				$values[$value] = 0;
-				$values[$value."_comment"] = "";
-			}
+        if ((($db instanceof Zend_Db_Adapter_Pdo_Mysql) ||
+            ($db instanceof Zend_Db_Adapter_Mysqli))
+            && $this->_enabled
+        )
+        {
+            $values = array();
+            $values["ip"] = new Zend_Db_Expr('inet_aton("' . $request->getServer('REMOTE_ADDR', '') . '")');
+            $values["page"] = $request->getServer('REQUEST_URI', '');
+            $values["user_agent"] = $request->getServer('HTTP_USER_AGENT', '');
+            $values["referer"] = $request->getServer('HTTP_REFERER', '');
+            foreach ($this->_tableNames as $key => $value)
+            {
+                $values[$value] = 0;
+                $values[$value."_comment"] = "";
+            }
 
-			foreach ($this->_timerProfiles as $key => $tp)
-	        {
-	            if ($tp->hasEnded())
-	            {
-					$values[$this->_tableNames[$tp->getTimerType()]] += $tp->getElapsedSecs();
-					$values[$this->_tableNames[$tp->getTimerType()] . "_comment"] .= $tp->getTimerComment();
-	            }
-	        }
+            foreach ($this->_timerProfiles as $key => $tp)
+            {
+                if ($tp->hasEnded())
+                {
+                    $values[$this->_tableNames[$tp->getTimerType()]] += $tp->getElapsedSecs();
+                    $values[$this->_tableNames[$tp->getTimerType()] . "_comment"] .= $tp->getTimerComment();
+                }
+            }
 
-	        $dbname = "profiler";
-	        $config = $db->getConfig();
-	        if (isset($config["dbname"]))
-	        {
-	        	$dbname = (strpos($config["dbname"], $dbname) !== false) ? $config["dbname"] : $config["dbname"]."_profiler";
-	        }
+            $dbname = "profiler";
+            $config = $db->getConfig();
+            if (isset($config["dbname"]))
+            {
+                $dbname = (strpos($config["dbname"], $dbname) !== false) ? $config["dbname"] : $config["dbname"]."_profiler";
+            }
 
-	    	$tableName = $dbname.".profiler_log_".date("Ymd");
+            $tableName = $dbname.".profiler_log_".date("Ymd");
 
-			try
-			{
-				/**
-				 * Catch table not exists error
-				 * faster then checking if table exists
-				 */
-				$db->insert($tableName, $values);
-			}
-    		catch (Zend_Db_Statement_Mysqli_Exception $zdsmex)
-			{
-				if (preg_match("/Mysqli prepare error: Table '(.*)' doesn't exist/", $zdsmex->getMessage()))
-				{
-					$db->query("create table ".$tableName." like ".$dbname.".profiler_log_template");
-					$db->insert($tableName, $values);
-				}
-				else
-				{
-					throw $zdsmex;
-				}
-			}
-    		catch (Zend_Db_Statement_Exception $zdsex)
-			{
-				if (preg_match("/SQLSTATE\[42S02\]: Base table or view not found: 1146 Table '(.*)' doesn't exist/", $zdsex->getMessage()))
-				{
-					$db->query("create table ".$tableName." like ".$dbname.".profiler_log_template");
-					$db->insert($tableName, $values);
-				}
-				else
-				{
-					throw $zdsex;
-				}
-			}
-	    	catch (Exception $ex)
-	    	{
-	    		throw $ex;
-	    	}
-    	}
+            try
+            {
+                /**
+                 * Catch table not exists error
+                 * faster then checking if table exists
+                 */
+                $db->insert($tableName, $values);
+            }
+            catch (Zend_Db_Statement_Mysqli_Exception $zdsmex)
+            {
+                if (preg_match("/Mysqli prepare error: Table '(.*)' doesn't exist/", $zdsmex->getMessage()))
+                {
+                    $db->query("create table ".$tableName." like ".$dbname.".profiler_log_template");
+                    $db->insert($tableName, $values);
+                }
+                else
+                {
+                    throw $zdsmex;
+                }
+            }
+            catch (Zend_Db_Statement_Exception $zdsex)
+            {
+                if (preg_match("/SQLSTATE\[42S02\]: Base table or view not found: 1146 Table '(.*)' doesn't exist/", $zdsex->getMessage()))
+                {
+                    $db->query("create table ".$tableName." like ".$dbname.".profiler_log_template");
+                    $db->insert($tableName, $values);
+                }
+                else
+                {
+                    throw $zdsex;
+                }
+            }
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
     }
 }

@@ -148,7 +148,7 @@ class Glitch_Image_Action_Resize extends Glitch_Image_Action_ActionAbstract {
             }
         } elseif (self::TYPE_RELATIVE == $this->getXType()) {
             $ratio = $newY / $adapter->getHeight();
-			$newX = $adapter->getWidth() * $ratio;  
+            $newX = $adapter->getWidth() * $ratio;  
         }
         
         if (null === $newY) {
@@ -158,8 +158,8 @@ class Glitch_Image_Action_Resize extends Glitch_Image_Action_ActionAbstract {
                 $newY = $adapter->getHeight();
             }
         } elseif (self::TYPE_RELATIVE == $this->getYType()) {
-			$ratio = $newX / $adapter->getWidth();
-			$newY = $adapter->getHeight() * $ratio;           
+            $ratio = $newX / $adapter->getWidth();
+            $newY = $adapter->getHeight() * $ratio;           
         }
         
         $this->_yAmountCalculated = $newY;

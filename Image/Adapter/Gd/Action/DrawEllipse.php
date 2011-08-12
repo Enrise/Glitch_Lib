@@ -22,11 +22,11 @@ class Glitch_Image_Adapter_Gd_Action_DrawEllipse
             $alpha = $ellipseObject->getStrokeAlpha();
         }
 
-		$colorAlphaAlloc = 	imagecolorallocatealpha($handle->getHandle(),
-							 				   		$color['red'],
-							   						$color['green'],
-							   						$color['blue'],
-							   						127 - $alpha * 1.27);
+        $colorAlphaAlloc =     imagecolorallocatealpha($handle->getHandle(),
+                                                        $color['red'],
+                                                       $color['green'],
+                                                       $color['blue'],
+                                                       127 - $alpha * 1.27);
 
         if($ellipseObject->filled()) {
             imagefilledellipse($handle->getHandle(),
@@ -43,6 +43,6 @@ class Glitch_Image_Adapter_Gd_Action_DrawEllipse
                          $ellipseObject->getHeight(),
                          $colorAlphaAlloc);
         }
-	}
+    }
 
 }

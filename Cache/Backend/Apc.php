@@ -53,7 +53,7 @@ class Glitch_Cache_Backend_Apc extends Zend_Cache_Backend implements Zend_Cache_
     public function load($id, $doNotTestCacheValidity = false)
     {
         $success = false;
-    	$tmp = apc_fetch($id, $success);
+        $tmp = apc_fetch($id, $success);
         if (true === $success)
         {
             return $tmp;
@@ -70,7 +70,7 @@ class Glitch_Cache_Backend_Apc extends Zend_Cache_Backend implements Zend_Cache_
     public function test($id)
     {
         $success = false;
-    	$tmp = apc_fetch($id, $success);
+        $tmp = apc_fetch($id, $success);
         return $success;
     }
 

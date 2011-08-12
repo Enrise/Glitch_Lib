@@ -58,7 +58,7 @@ class Glitch_Registry extends Zend_Registry
      */
     public static function getConfig()
     {
-    	return self::get(self::KEY_CONFIG);
+        return self::get(self::KEY_CONFIG);
     }
 
     /**
@@ -210,25 +210,25 @@ class Glitch_Registry extends Zend_Registry
      */
     public static function getCache($type)
     {
-    	if (is_string($type) && !array_key_exists($type, self::$_managedCaches))
-    	{
-    		    		$front = Zend_Controller_Front::getInstance();
-	        if ($front->getParam('bootstrap') && $front->getParam('bootstrap')->getResource('CacheManager'))
-	        {
-	            $manager = $front->getParam('bootstrap')
-	                             ->getResource('CacheManager');
-	        }
-	        else
-	        {
-	        	$manager = new Zend_Cache_Manager();
-	        }
+        if (is_string($type) && !array_key_exists($type, self::$_managedCaches))
+        {
+                        $front = Zend_Controller_Front::getInstance();
+            if ($front->getParam('bootstrap') && $front->getParam('bootstrap')->getResource('CacheManager'))
+            {
+                $manager = $front->getParam('bootstrap')
+                                 ->getResource('CacheManager');
+            }
+            else
+            {
+                $manager = new Zend_Cache_Manager();
+            }
 
-	        if (!$manager->hasCache($type))
-	        {
-	            throw new InvalidArgumentException('Cache of type '. $type . ' does not exist!');
-	        }
-	        self::$_managedCaches[$type] = $manager->getCache($type);
-    	}
+            if (!$manager->hasCache($type))
+            {
+                throw new InvalidArgumentException('Cache of type '. $type . ' does not exist!');
+            }
+            self::$_managedCaches[$type] = $manager->getCache($type);
+        }
         return self::$_managedCaches[$type];
     }
 }

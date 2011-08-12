@@ -88,7 +88,7 @@ abstract class Glitch_Controller_Action_Rest
     public function notImplementedException($functionname = '')
     {
         throw new Glitch_Exception_Message(
-        	'Requested action ' . $functionname . ' not implemented', 501
+            'Requested action ' . $functionname . ' not implemented', 501
         );
     }
 

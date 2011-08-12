@@ -29,7 +29,7 @@ class Glitch_Image_Adapter_Gd_Action_DrawLine
                                                        $lineObject->getStrokeAlpha());
 
         if($lineObject->getStrokeWidth()==1) {
-        	// Simple line
+            // Simple line
             imageline($handle, $lineObject->getPointStart()->getX(),
                                $lineObject->getPointStart()->getY(),
                                $lineObject->getPointEnd()->getX(),
@@ -40,7 +40,7 @@ class Glitch_Image_Adapter_Gd_Action_DrawLine
         } elseif($lineObject->getPointStart()->getX() == $lineObject->getPointEnd()->getX() ||
                  $lineObject->getPointStart()->getY() == $lineObject->getPointEnd()->getY())
         {
-        	// Simple thick line
+            // Simple thick line
             $x1 = round(min($lineObject->getPointStart()->getX(), $lineObject->getPointEnd()->getX()) - ( $lineObject->getStrokeWidth() / 2 - 0.5 ));
             $y1 = round(min($lineObject->getPointStart()->getY(), $lineObject->getPointEnd()->getY()) - ( $lineObject->getStrokeWidth() / 2 - 0.5 ));
             $x2 = round(max($lineObject->getPointStart()->getX(), $lineObject->getPointEnd()->getX()) + ( $lineObject->getStrokeWidth() / 2 - 0.5 ));
@@ -53,7 +53,7 @@ class Glitch_Image_Adapter_Gd_Action_DrawLine
             }
 
         } else {
-        	// Not horizontal nor vertical thick line
+            // Not horizontal nor vertical thick line
             $polygonObject = new Glitch_Image_Action_DrawPolygon();
 
             $slope = ($lineObject->getPointEnd()->getY() - $lineObject->getPointStart()->getY())

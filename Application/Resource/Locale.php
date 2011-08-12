@@ -35,7 +35,7 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
      */
     protected function _setCache()
     {
-    	$options = $this->getOptions();
+        $options = $this->getOptions();
 
         // Disable cache? If not defined, cache will be active
         if (isset($options['cache']['active']) && !$options['cache']['active'])
@@ -73,12 +73,12 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
             $options = $this->getOptions();
 
             // Force these options to be set - don't rely on the defaults!
-        	if (!isset($options['default']))
-        	{
-        		throw new Glitch_Application_Resource_Exception('Locale option "default" not set');
-        	}
+            if (!isset($options['default']))
+            {
+                throw new Glitch_Application_Resource_Exception('Locale option "default" not set');
+            }
 
-        	// First init cache, then create the locale
+            // First init cache, then create the locale
             $this->_setCache();
 
             $this->_locale = new Zend_Locale();

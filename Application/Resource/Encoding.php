@@ -68,18 +68,18 @@ class Glitch_Application_Resource_Encoding extends Zend_Application_Resource_Res
             $options = $this->getOptions();
 
             // Force these options to be set - don't rely on the defaults!
-        	if (!isset($options['encoding']))
-        	{
-        		throw new Glitch_Application_Resource_Exception('Undefined encoding option: "encoding"');
-        	}
+            if (!isset($options['encoding']))
+            {
+                throw new Glitch_Application_Resource_Exception('Undefined encoding option: "encoding"');
+            }
 
-        	$this->_encoding = (string) $options['encoding'];
+            $this->_encoding = (string) $options['encoding'];
 
-        	// Override the default charset; also sends the appropriate HTTP header
-        	ini_set('default_charset', $this->_encoding);
+            // Override the default charset; also sends the appropriate HTTP header
+            ini_set('default_charset', $this->_encoding);
 
-        	// ZF uses iconv for e.g. form validation and Zend_Locale
-        	iconv_set_encoding('internal_encoding', $this->_encoding);
+            // ZF uses iconv for e.g. form validation and Zend_Locale
+            iconv_set_encoding('internal_encoding', $this->_encoding);
 
             // MB extension is not required by ZF, so don't throw exceptions
             if (function_exists('mb_internal_encoding'))
@@ -88,8 +88,8 @@ class Glitch_Application_Resource_Encoding extends Zend_Application_Resource_Res
                 mb_internal_encoding($this->_encoding);
             }
 
-        	// Allow application-wide access; e.g. Zend_Mail uses this
-        	Glitch_Registry::setEncoding($this->_encoding);
+            // Allow application-wide access; e.g. Zend_Mail uses this
+            Glitch_Registry::setEncoding($this->_encoding);
         }
 
         return $this->_encoding;

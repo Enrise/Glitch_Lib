@@ -60,15 +60,15 @@ class Glitch_Cache_Frontend_StaticPage extends Zend_Cache_Frontend_Page
         $data = $this->load($id);
         if ($data !== false)
         {
-        	echo $data;
-        	die();
+            echo $data;
+            die();
         }
         
         ob_start(array($this, '_flush'));
         ob_implicit_flush(false);
         return false;
     }
-	
+    
     /**
      * Test if a cache is available for the given id and (if yes) return it (false else)
      *

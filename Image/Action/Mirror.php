@@ -8,7 +8,7 @@
 class Glitch_Image_Action_Mirror extends Glitch_Image_Action_ActionAbstract
 {
 
-	const NAME  = 'Mirror';
+    const NAME  = 'Mirror';
 
     protected $_flip = false;
 
@@ -105,7 +105,7 @@ class Glitch_Image_Action_Mirror extends Glitch_Image_Action_ActionAbstract
      *
      * @return string Action name
      */
-	public function getName() {
-		return self::NAME;
-	}
+    public function getName() {
+        return self::NAME;
+    }
 }

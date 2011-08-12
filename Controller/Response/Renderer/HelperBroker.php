@@ -36,19 +36,19 @@ class Glitch_Controller_Response_Renderer_HelperBroker
         return array(
         'escape' =>
             function($string)
-	        {
+            {
                 return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
-	        },
-	     'translate' =>
-	        function($string)
-	        {
-	            $options = func_get_args();
+            },
+         'translate' =>
+            function($string)
+            {
+                $options = func_get_args();
                 array_shift($options);
 
                 return Zend_Layout::getMvcInstance()
                             ->getView()
                                 ->getHelper('translate')->translate($string, $options);
-	        }
+            }
         );
     }
 
@@ -72,7 +72,7 @@ class Glitch_Controller_Response_Renderer_HelperBroker
             $helper = $this->_helpers[$value];
             if (!is_callable($helper) || !is_object($helper)) {
                 throw new \RuntimeException(
-                	'All shortcut helpers must be closures but '.$name.' wasn\'t'
+                    'All shortcut helpers must be closures but '.$name.' wasn\'t'
                 );
             }
 

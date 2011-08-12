@@ -54,7 +54,7 @@ class Glitch_Controller_Plugin_Modules extends Zend_Controller_Plugin_Abstract
                 throw new Glitch_Controller_Exception('Class is not a valid bootstrap instance');
             }
         }
-    	return $this->_bootstrap;
+        return $this->_bootstrap;
     }
 
     /**

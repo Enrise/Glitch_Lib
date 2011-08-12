@@ -39,13 +39,13 @@ class Glitch_Controller_Plugin_Profiler extends Zend_Controller_Plugin_Abstract
      */
     public function dispatchLoopShutdown()
     {
-    	$profiler = Zend_Registry::get('profiler');
+        $profiler = Zend_Registry::get('profiler');
 
         $profiler->timerEnd($this->_timerID);
 
         if ($profiler->getEnabled())
         {
-        	$str = '';
+            $str = '';
             foreach ($profiler->getTimerProfiles() as $key => $tp)
             {
                 if ($tp->hasEnded())

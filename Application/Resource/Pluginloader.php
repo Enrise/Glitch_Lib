@@ -86,12 +86,12 @@ class Glitch_Application_Resource_PluginLoader extends Zend_Application_Resource
         // Plugin cache is always stored in dedicated directory
         $cacheFile = GLITCH_CACHES_PATH . DIRECTORY_SEPARATOR . $this->_filename;
 
-    	// Set appropriate rights, to allow access for both CLI and HTTP users/groups.
-    	// Must be done early, because we can't hook into setIncludeFileCache() to do it later on.
-    	if (!file_exists($cacheFile))
-    	{
+        // Set appropriate rights, to allow access for both CLI and HTTP users/groups.
+        // Must be done early, because we can't hook into setIncludeFileCache() to do it later on.
+        if (!file_exists($cacheFile))
+        {
             if (false === file_put_contents($cacheFile, '<?php' . PHP_EOL) ||
-    		    false === chmod($cacheFile, $this->_filemode))
+                false === chmod($cacheFile, $this->_filemode))
             {
                 $this->_bootstrap->bootstrap('Log');
                 $log = $this->_bootstrap->getResource('Log');
@@ -101,9 +101,9 @@ class Glitch_Application_Resource_PluginLoader extends Zend_Application_Resource
             }
         }
 
-    	include_once $cacheFile;
+        include_once $cacheFile;
 
-    	// Use trick to call static method on a variable class name
+        // Use trick to call static method on a variable class name
         call_user_func(array($this->_className, 'setIncludeFileCache'), $cacheFile);
     }
 }
