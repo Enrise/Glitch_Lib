@@ -111,13 +111,17 @@ class Glitch_Controller_Dispatcher_Rest
 
         foreach ($request->getParentElements() as $element) {
             $className = $this->formatControllerNameByParams($element['path'].$element['element'], $element['module']);
+            if (!class_exists($className)) {
+                throw new RuntimeException('Passthrough class '.$className.' could not be found');
+            }
+
             $ptController = new $className($request, $response, $this->getParams());
 
             if (true !== $ptController->passThrough($request, $element['resource'], $element['isCollection'])) {
                 throw new Glitch_Controller_Exception('Passthrough method returned false');
             }
 
-            unset($ptController);
+            unset($ptController); // Be careful with our RAM
         }
 
         $request->setDispatched(true);
