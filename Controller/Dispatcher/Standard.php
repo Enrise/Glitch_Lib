@@ -72,7 +72,11 @@ class Glitch_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_S
         if (false === @class_exists($className))
         {
             // Throw this specific exception to go into the error handler
-            throw new Zend_Controller_Dispatcher_Exception('Cannot load controller class "' . $className . '"');
+            // Cannot be overriden by Glitch because ZF uses get_class() in
+            // Zend_Controller_Plugin_ErrorHandler
+            throw new Zend_Controller_Dispatcher_Exception(
+                'Cannot load controller class "' . $className . '"', 404
+            );
         }
 
         return $className;
