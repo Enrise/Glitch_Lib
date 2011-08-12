@@ -85,7 +85,13 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
 
             $override = true;
             if (isset($options['allowed'])) {
-                $locale = $this->_detectLocale($options['allowed']);
+                if (array_key_exists('autoDetection', $options)) {
+                    $autoDetection = (bool) $options['autoDetection'];
+                } else {
+                    $autoDetection = true;
+                }
+
+                $locale = $this->_detectLocale($options['allowed'], $autoDetection);
                 $override = ! $locale;
             }
 
@@ -107,7 +113,7 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
         return $this->_locale;
     }
 
-    protected function _detectLocale($allowed)
+    protected function _detectLocale($allowed, $autoDetection = true)
     {
         $session = new Zend_Session_Namespace(self::SESSION_NAME);
         if(isset($session->locale) &&
@@ -115,7 +121,7 @@ class Glitch_Application_Resource_Locale extends Zend_Application_Resource_Local
                  in_array($session->locale, $allowed))
         {
             return $session->locale;
-        } else {
+        } elseif ($autoDetection) {
             $envLocale = $this->_locale->getDefault(Zend_Locale::BROWSER, true);
 
             foreach ($envLocale as $locale => $present) {
