@@ -139,7 +139,7 @@ class Glitch_Controller_Request_Rest
             $mapping = $this->_getRestMapping($k);
             if ($mapping === false) {
                 throw new Glitch_Controller_Request_ExceptionMessage(
-                    'No configuration could be found for the requested RESt-mapping', 404
+                    'No configuration could be found for the requested REST-mapping', 404
                 );
             }
 
