@@ -94,21 +94,29 @@ abstract class Glitch_Controller_Action_Rest
 
     public function notFoundException()
     {
-        throw new Glitch_Exception_Message('Requested resource could not be found', 404);
+        throw new Glitch_Controller_Action_ExceptionMessage(
+            'Requested resource could not be found', 404
+        );
     }
 
     public function notAcceptedException()
     {
-        throw new Glitch_Exception_Message('Incorrect format specified', 406);
+        throw new Glitch_Controller_Action_ExceptionMessage(
+            'Incorrect format specified', 406
+        );
     }
 
     public function incorrectFormatException()
     {
-        throw new Glitch_Exception_Message('Incorrect format specified', 501);
+        throw new Glitch_Controller_Action_ExceptionMessage(
+            'Incorrect format specified', 501
+        );
     }
 
     public function badRequestException() {
-        throw new Glitch_Exception_Message('Bad request', 400);
+        throw new Glitch_Controller_Action_ExceptionMessage(
+            'Bad request', 400
+        );
     }
 
     public function __call($function, $args)
