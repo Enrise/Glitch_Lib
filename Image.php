@@ -19,8 +19,6 @@
  * @version    $Id$
  */
 
-/** @see Zend_Loader_Autoloader */
-require_once 'Zend/Loader/Autoloader.php';
 
 /**
  * @category   Zend
@@ -84,7 +82,6 @@ class Glitch_Image
                     break;
                 }
             } else {
-                require_once 'Glitch/Image/Exception.php';
                 throw new Glitch_Image_Exception("Could not find adapter '" . $adapter . "'");
             }
         }
@@ -94,8 +91,7 @@ class Glitch_Image
             return $name;
         }
 
-        require_once 'Glitch/Image/Exception.php';
-	    throw new Glitch_Image_Exception('Was not able to detect an available adapter');
+        throw new Glitch_Image_Exception('Was not able to detect an available adapter');
     }
 
     /**
