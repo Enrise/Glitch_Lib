@@ -28,7 +28,6 @@ class Glitch_Form_Element_Text_Number extends Glitch_Form_Element_Text
             {
                 $validator = 'LessThan';
             }
-            var_dump($validatorOpts);
             if (null !== $validator)
             {
                 $this->addValidator($validator, false, $validatorOpts);
