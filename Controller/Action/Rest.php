@@ -106,6 +106,21 @@ abstract class Glitch_Controller_Action_Rest
         );
     }
 
+    public function conflictException()
+    {
+        throw new Glitch_Controller_Action_ExceptionMessage(
+            'Conflict', 409
+        );
+    }
+
+    public function notModifiedException()
+    {
+        throw new Glitch_Controller_Action_ExceptionMessage(
+            'Not Modified', 304
+        );
+
+    }
+
     public function incorrectFormatException()
     {
         throw new Glitch_Controller_Action_ExceptionMessage(
