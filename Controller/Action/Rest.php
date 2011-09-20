@@ -106,10 +106,10 @@ abstract class Glitch_Controller_Action_Rest
         );
     }
 
-    public function conflictException()
+    public function conflictException($message = null)
     {
         throw new Glitch_Controller_Action_ExceptionMessage(
-            'Conflict', 409
+            'Conflict' . ((!$message)?'':': '.$message), 409
         );
     }
 
