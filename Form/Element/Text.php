@@ -117,6 +117,17 @@ class Glitch_Form_Element_Text extends Zend_Form_Element_Text
     {
         return $this->_autoloadFilters;
     }
+    
+	/**
+     * Overrides the parent setRequired() method to add the required attribute to HTML5 forms for $flag === TRUE
+     * (non-PHPdoc)
+     * @see Zend_Form_Element::setRequired()
+     */
+    public function setRequired($flag) {
+    	if ($flag === TRUE && $this->_isHtml5())
+    		$this->setAttrib('required', 'required');
+    	return parent::setRequired($flag);
+    }
 
     /**
      * Check if the doctype is HTML5
