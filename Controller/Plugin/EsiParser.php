@@ -197,6 +197,9 @@ class Glitch_Controller_Plugin_EsiParser extends Zend_Controller_Plugin_Abstract
      */
     protected function _replaceEsiInclude($url)
     {
+        if (!array_key_exists('HTTP_HOST', $_SERVER)) {
+            return null;
+        }
         $uri = 'http://'.$_SERVER['HTTP_HOST'] . $url;
         $key = $this->_getCacheId($uri);
         if ($this->_cacheEnabled())
