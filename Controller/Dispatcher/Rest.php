@@ -124,6 +124,7 @@ class Glitch_Controller_Dispatcher_Rest
             unset($ptController); // Be careful with our RAM
         }
 
+        $controller->preDispatch();
         $request->setDispatched(true);
 
         if (($this->_lastActionMethod = $request->getActionName()) === null) {
@@ -136,7 +137,7 @@ class Glitch_Controller_Dispatcher_Rest
         }
 
         $vars = $controller->{$this->_lastActionMethod}();
-
+        $controller->postDispatch();
         if($response->renderBody()) {
             $response->setBody(
                 $this->getResponseRenderer()
