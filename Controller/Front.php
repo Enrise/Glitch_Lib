@@ -50,7 +50,7 @@ class Glitch_Controller_Front extends Zend_Controller_Front
     public function dispatch(Zend_Controller_Request_Abstract $request = null,
                              Zend_Controller_Response_Abstract $response = null)
     {
-        $glitchRouter = false;
+         $glitchRouter = false;
         if (null == ($bootstrap = $this->getParam('bootstrap')) ||
             null == ($router = $bootstrap->getPluginResource('router')) ||
             ! $router instanceof Glitch_Application_Resource_Router ||
