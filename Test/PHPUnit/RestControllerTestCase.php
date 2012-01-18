@@ -5,6 +5,8 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
 {
     protected $_application;
 
+    public $response;
+
     protected function setUp()
     {
         $this->bootstrap = array($this, 'appBootstrap');
@@ -40,7 +42,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
     {
         if (null === $this->_response) {
             // require_once 'Zend/Controller/Response/HttpTestCase.php';
-            $this->_response = new Glitch_Controller_Response_RestTestCase;
+            $this->_response = $this->response = new Glitch_Controller_Response_RestTestCase;
         }
 
         return $this->_response;
@@ -77,8 +79,9 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
             }
         }
 
+
         $this->_request->setMethod($requestMethod);
-        $this->_response = $this->dispatch($uri);
+        $this->_response = $this->response = $this->dispatch($uri);
 
         if ($displayBody) {
             // @codeCoverageIgnoreStart
