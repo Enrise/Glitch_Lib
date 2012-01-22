@@ -28,9 +28,19 @@ class Glitch_Controller_Request_RestTestCase
         $this->_headers[$key] = $value;
     }
 
-    public function getHeader($key) {
-        if(isset($this->_headers[$key])) {
-            return $this->_headers[$key];
+    public function setHeaders(array $headers)
+    {
+        foreach($headers as $key => $value) {
+            $this->setHeader($key, $value);
+        }
+    }
+
+    public function getHeader($key)
+    {
+        foreach($this->_headers as $name => $value) {
+            if (strcasecmp($key, $name) == 0) {
+                return $value;
+            }
         }
 
         return parent::getHeader($key);
@@ -60,5 +70,28 @@ class Glitch_Controller_Request_RestTestCase
     public function getRawBody()
     {
         return $this->_rawBody;
+    }
+
+
+    /**
+     * Clear GET values
+     *
+     * @return Zend_Controller_Request_HttpTestCase
+     */
+    public function clearQuery()
+    {
+        $_GET = array();
+        return $this;
+    }
+
+    /**
+     * Clear POST values
+     *
+     * @return Zend_Controller_Request_HttpTestCase
+     */
+    public function clearPost()
+    {
+        $_POST = array();
+        return $this;
     }
 }

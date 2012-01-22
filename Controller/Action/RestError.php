@@ -21,7 +21,6 @@ abstract class Glitch_Controller_Action_RestError
 
     public function restAction()
     {
-
         $error = $this->_getParam('error_handler');
         $exception = $error->exception;
 
