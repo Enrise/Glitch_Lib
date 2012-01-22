@@ -131,12 +131,12 @@ class Glitch_Controller_Request_Rest
         $path = '';
         while (count($items))
         {
-            $k = array_shift($items);
-            if (strlen($k) == 0) {
+            $partName = array_shift($items);
+            if (strlen($partName) == 0) {
                 continue;
             }
 
-            $mapping = $this->_getRestMapping($k);
+            $mapping = $this->_getRestMapping($partName);
             if ($mapping === false) {
                 throw new Glitch_Controller_Request_ExceptionMessage(
                     'No configuration could be found for the requested REST-mapping', 404
