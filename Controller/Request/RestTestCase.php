@@ -50,6 +50,12 @@ class Glitch_Controller_Request_RestTestCase
         return $this->_headers;
     }
 
+    public function clearHeaders()
+    {
+        $this->_headers = array();
+        return $this;
+    }
+
     /**
      * Set raw POST body
      *

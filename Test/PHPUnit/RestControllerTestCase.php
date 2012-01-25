@@ -11,7 +11,8 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
 
     protected function setUp()
     {
-        Glitch_Registry::_unsetInstance();
+//         Glitch_Registry::_unsetInstance();
+//         Glitch_Registry::getInstance();
         $this->bootstrap = array($this, 'appBootstrap');
         parent::setUp();
 
@@ -94,11 +95,13 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
             // @codeCoverageIgnoreStart
 
             // Display (debug) data
-            print "From: ".$requestMethod." ".$uri."\n";
-            print 'STATUSCODE: ' . $this->_response->getHttpResponseCode()."\n";;
+            print "URL: ".$requestMethod." ".$uri."\n";
+            print 'STATUSCODE: ' . $this->_response->getHttpResponseCode()."\n";
+            print "HEADERS REQUEST/RESPONSE:\n";
             print_r($this->_request->getHeaders());
             print_r($this->_response->getHeaders());
-            echo $this->_response->getBody();
+            print "BODY:\n";
+            var_dump($this->_response->getBody());
             flush();
             // @codeCoverageIgnoreEnd
         }

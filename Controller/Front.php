@@ -13,11 +13,13 @@ class Glitch_Controller_Front extends Zend_Controller_Front
         $invokeParams = $this->_invokeParams;
         $router = $this->getRouter();
         $dispatcher = $this->getDispatcher();
+        $pluginBroker = $this->_plugins;
 
         // Reset front controller instance
         parent::resetInstance();
 
         // Restore information
+        $this->_plugins = $pluginBroker;
         $this->setRouter($router);
         $this->setDispatcher($dispatcher);
         $this->_invokeParams = $invokeParams;
@@ -149,5 +151,11 @@ class Glitch_Controller_Front extends Zend_Controller_Front
     public function isRouterSet()
     {
         return $this->_router != null;
+    }
+
+    public function resetPluginBroker()
+    {
+        $this->_plugins = new Zend_Controller_Plugin_Broker();
+        return $this;
     }
 }
