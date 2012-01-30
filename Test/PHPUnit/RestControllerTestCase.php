@@ -11,8 +11,7 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
 
     protected function setUp()
     {
-//         Glitch_Registry::_unsetInstance();
-//         Glitch_Registry::getInstance();
+        Glitch_Registry::getInstance();
         $this->bootstrap = array($this, 'appBootstrap');
         parent::setUp();
 
@@ -25,6 +24,11 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
             $db->query($sqlline);
         }
 
+    }
+
+    protected function tearDown()
+    {
+        Glitch_Registry::_unsetInstance();
     }
 
     public function getRequest()
