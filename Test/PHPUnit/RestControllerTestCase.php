@@ -27,10 +27,10 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
 
     }
 
-    protected function tearDown()
+/*    protected function tearDown()
     {
         Glitch_Registry::_unsetInstance();
-    }
+    }*/
 
     public function getRequest()
     {
