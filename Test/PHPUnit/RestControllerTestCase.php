@@ -102,11 +102,10 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
             // Display (debug) data
             print "URL: ".$requestMethod." ".$uri."\n";
             print 'STATUSCODE: ' . $this->_response->getHttpResponseCode()."\n";
-            print "HEADERS REQUEST/RESPONSE:\n";
-            print_r($this->_request->getHeaders());
-            print_r($this->_response->getHeaders());
+            echo 'REQUEST HEADERS: '.print_r($this->_request->getHeaders(), 1);
+            echo 'REQUEST HEADERS: '.print_r($this->_response->getHeaders(), 1);
             print "BODY:\n";
-            var_dump($this->_response->getBody());
+            var_dump($this->_response->outputBody());
             flush();
             // @codeCoverageIgnoreEnd
         }
