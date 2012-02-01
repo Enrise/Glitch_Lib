@@ -174,13 +174,17 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
         return $response;
     }
 
-    protected function _testDispatchToError($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $displayBody=false)
+    protected function _testDispatchToError($requestMethod, $uri, $acceptHeader,
+                                            $postData, $httpCode, $displayBody=false,
+                                            $headers = array())
     {
         $module = 'error';
         $controller = 'Error_Controller_Error';
         $action = 'error';
 
-        return $this->_testDispatch($requestMethod, $uri, $acceptHeader, $postData, $httpCode, $module, $controller, $action, $displayBody);
+        return $this->_testDispatch($requestMethod, $uri, $acceptHeader, $postData,
+                                    $httpCode, $module, $controller, $action, $displayBody,
+                                    $headers);
     }
 
     protected function _getHeaderFromResponse($name)
