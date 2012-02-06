@@ -189,10 +189,11 @@ abstract class Glitch_Test_PHPUnit_RestControllerTestCase
 
     protected function _getHeaderFromResponse($name)
     {
+        $name = strtolower($name);
         $headers = $this->getResponse()->getHeaders();
         foreach ($headers as $header)
         {
-            if ($header['name'] == $name) {
+            if (strtolower($header['name']) == $name) {
                 return $header['value'];
             }
         }
