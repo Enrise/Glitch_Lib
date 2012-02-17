@@ -214,14 +214,17 @@ class Glitch_Config_Ini
 
             // Allow application-wide access
             Glitch_Registry::setConfig(self::$_config);
+        }
 
-            // Store the application settings, if any
+        // Store the application settings, if any
+        if (!Glitch_Registry::isRegistered(Glitch_Registry::KEY_SETTINGS)) {
             $settings = self::$_config->get('settings');
             if (null !== $settings)
             {
                 Glitch_Registry::setSettings($settings);
             }
         }
+
         return self::$_config;
     }
 }
