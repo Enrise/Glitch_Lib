@@ -52,6 +52,12 @@ abstract class Glitch_Controller_Action_RestError
         }
 
         $this->getResponse()->setHttpResponseCode($code);
-        return array('data' => array('message' => $message, 'code' => $code));
+        $response = array('message' => $message, 'code' => $code);
+
+        if ('development' === GLITCH_APP_ENV) {
+            $response['stacktrace'] = $exception->getTraceAsString();
+        }
+
+        return array('data' => $response);
     }
 }
