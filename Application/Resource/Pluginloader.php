@@ -95,7 +95,7 @@ class Glitch_Application_Resource_PluginLoader extends Zend_Application_Resource
             {
                 $this->_bootstrap->bootstrap('Log');
                 $log = $this->_bootstrap->getResource('Log');
-                $log->warn('Failed to create or chmod plugin cache file (in '.__CLASS__.') "' . $cacheFile . '"');
+                $log->warn('Failed to create or chmod plugin cache file "' . $cacheFile . '" (in '.__CLASS__.')');
 
                 return;
             }
