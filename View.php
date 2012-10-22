@@ -27,7 +27,9 @@
  * @category    Glitch
  * @package     Glitch
  */
-class Glitch_View extends Zend_View
+use Zend\View\Renderer\RendererInterface;
+
+class Glitch_View extends Zend_View implements RendererInterface
 {
     /**#@+
      * View path directories
@@ -135,5 +137,19 @@ class Glitch_View extends Zend_View
         } else {
             include func_get_arg(0);
         }
+    }
+
+    public function render($name, $values = NULL)
+    {
+        // ZF1 views do not have a $values argument, this is only defined
+        // to satisfy Zend\View\Renderer\RendererInterface.
+        return parent::render($name);
+    }
+
+    public function setResolver(Zend\View\Resolver\ResolverInterface $resolver)
+    {
+        throw new RuntimeException('Not implemented.'
+            . ' ZF1 views do not use resolvers, this is only implemented'
+            . ' to satisfy Zend\View\Renderer\RendererInterface.');
     }
 }
