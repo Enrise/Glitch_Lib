@@ -55,12 +55,50 @@ class Glitch_Loader_Autoloader implements Zend_Loader_Autoloader_Interface
      */
     public function autoload($class)
     {
-        // E.g. "Zend_Application" --> "Zend/Application.php"
-        $filename = str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $class) . '.php';
+        $filename = $this->getFileNameFromClassName($class);
 
         // Don't use require_once: halts execution instantly when file is not found
         $isLoaded = include_once $filename;
 
+        if (!class_exists($class, false) && !interface_exists($class, false)) {
+            $isLoaded = $this->fallbackAutoload($class);
+        }
+
         return (false !== $isLoaded);
+    }
+
+    /**
+     * Extract the file name from the class name
+     *
+     * @param string $class
+     * @return string Class filename
+     */
+    protected function getFileNameFromClassName($class)
+    {
+        // E.g. "Zend_Application" --> "Zend/Application.php"
+        return str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $class) . '.php';
+    }
+
+    /**
+     * Autoload classes for all paths
+     *
+     * @param string $class
+     * @return void
+     */
+    protected function fallbackAutoload($class)
+    {
+        $filename = $this->getFileNameFromClassName($class);
+
+        $expath = explode(PATH_SEPARATOR, get_include_path());
+        foreach ($expath as $path) {
+            $path .= DIRECTORY_SEPARATOR . $filename;
+            if (file_exists($path)) {
+                require_once $path;
+                if (class_exists($class, false) && !interface_exists($class, false)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
