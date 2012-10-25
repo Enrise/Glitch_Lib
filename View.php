@@ -27,8 +27,21 @@
  * @category    Glitch
  * @package     Glitch
  */
-use Zend\View\Renderer\RendererInterface;
-use Zend\View\HelperPluginManager;
+
+/**
+ * RenderInterface hack.
+ *
+ * See if the interface exists if so, extend it.
+ * otherwise extend dummy interface so application wont crash.
+ */
+if (@interface_exists('Zend\View\Renderer\RendererInterface')) {
+    class_alias('Zend\View\Renderer\RendererInterface', 'RendererInterface');
+} else {
+    class_alias('Glitch_View_RendererInterface_RendererInterface', 'RendererInterface');
+}
+/**
+ * end of RenderInterface hack
+ */
 
 class Glitch_View extends Zend_View implements RendererInterface
 {
