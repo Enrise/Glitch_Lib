@@ -27,7 +27,23 @@
  * @category    Glitch
  * @package     Glitch
  */
-class Glitch_View extends Zend_View
+
+/**
+ * RenderInterface hack.
+ *
+ * See if the interface exists if so, extend it.
+ * otherwise extend dummy interface so application wont crash.
+ */
+if (@interface_exists('Zend\View\Renderer\RendererInterface')) {
+    class_alias('Zend\View\Renderer\RendererInterface', 'RendererInterface');
+} else {
+    class_alias('Glitch_View_RendererInterface_RendererInterface', 'RendererInterface');
+}
+/**
+ * end of RenderInterface hack
+ */
+
+class Glitch_View extends Zend_View implements RendererInterface
 {
     /**#@+
      * View path directories
@@ -135,5 +151,58 @@ class Glitch_View extends Zend_View
         } else {
             include func_get_arg(0);
         }
+    }
+
+    public function render($name, $values = NULL)
+    {
+        // ZF1 views do not have a $values argument, this is only defined
+        // to satisfy Zend\View\Renderer\RendererInterface.
+        return parent::render($name);
+    }
+
+    public function setResolver(Zend\View\Resolver\ResolverInterface $resolver)
+    {
+        throw new RuntimeException('Not implemented.'
+            . ' ZF1 views do not use resolvers, this is only implemented'
+            . ' to satisfy Zend\View\Renderer\RendererInterface.');
+    }
+
+    /**
+     * Accesses a helper object from within a script.
+     *
+     * If the helper class has a 'view' property, sets it with the current view
+     * object.
+     *
+     * Override the ZendAbstract __call function in order to add the ZF2 __invoke
+     * function for helpers
+     *
+     * @param string $name The helper name.
+     * @param array $args The parameters for the helper.
+     * @return string The result of the helper output.
+     */
+    public function __call($name, $args)
+    {
+        // is the helper already loaded?
+        $helper = $this->getHelper($name);
+
+        if(method_exists($helper, '__invoke')) {
+            $name = "__invoke";
+        };
+
+        // call the helper method
+        return call_user_func_array(
+            array($helper, $name),
+            $args
+        );
+    }
+
+    /**
+     *
+     * @param string $type
+     */
+    public function plugin($type)
+    {
+        $broker = new WegenerServiceCentre_Form_View_HelperPluginManager();
+        return $broker->get($type);
     }
 }
