@@ -3,7 +3,7 @@
     "description": "Enrise Glitch Library",
 	"type": "library",
 	"require": {
-		"enrise/zendframework": "dev-master",
+		"enrise/zendframework1": "dev-master",
 		"php": ">=5.2.4"
 	},
 	"repositories": [
