@@ -1,16 +1,16 @@
 {
     "name": "enrise/glitch-lib",
     "description": "Enrise Glitch Library",
-	"type": "library",
-	"require": {
-		"php": ">=5.2.4"
-	},
+    "type": "library",
+    "require": {
+        "php": ">=5.2.4"
+    },
     "autoload": {
         "psr-0": {
             "Glitch": "lib"
         }
     },
     "include-path": [
-		"lib"
-	]
+	    "lib"
+    ]
 }
