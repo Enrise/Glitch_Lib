@@ -14,10 +14,10 @@
     ],
     "autoload": {
         "psr-0": {
-            "Glitch": ""
+            "Glitch": "lib"
         }
     },
     "include-path": [
-		"./"
+		"./lib"
 	]
 }
