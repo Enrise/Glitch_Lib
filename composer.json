@@ -3,15 +3,8 @@
     "description": "Enrise Glitch Library",
 	"type": "library",
 	"require": {
-		"enrise/zendframework1": "dev-master",
 		"php": ">=5.2.4"
 	},
-	"repositories": [
-        {
-			"type": "vcs",
-			"url": "http://github.com/CrazyAwesomeCompany/Zend"
-        }
-    ],
     "autoload": {
         "psr-0": {
             "Glitch": "lib"
