@@ -25,6 +25,10 @@ class Glitch_Image_Adapter_Gd_Action_Resize
 
         //$handle->resizeImage($newX, $newY, $resize->getFilter(), 1, $fit);
         $newImg = imagecreatetruecolor( $newX, $newY);
+        imagealphablending($newImg, false);
+        imagesavealpha($newImg,true);
+        $transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
+        imagefilledrectangle($newImg, 0, 0, $newX, $newY, $transparent);
         imagecopyresampled($newImg, $handle, 0, 0, 0, 0, $newX, $newY, $adapter->getWidth(), $adapter->getHeight());
 
         return $newImg;
