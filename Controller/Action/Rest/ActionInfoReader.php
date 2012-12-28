@@ -5,7 +5,7 @@ use Zend\Code\Reflection\MethodReflection;
  * This class reads meta information defined as annotations from a REST resource.
  * These REST resources are actually controller/action combinations
  */
-class Glitch_Controller_Action_Rest_ActionInfoReader extends Zend_Controller_Plugin_Abstract
+class Glitch_Controller_Action_Rest_ActionInfoReader
 {
     protected $recognizedAnnotations = array(
         'filter' => 'Glitch_Controller_Action_Rest_Annotation_ResourceFilterFactory'
@@ -85,11 +85,5 @@ class Glitch_Controller_Action_Rest_ActionInfoReader extends Zend_Controller_Plu
         $factory = new $this->recognizedAnnotations[$normalizedTagName];
         return $factory->fromTag($tag);
     }
-
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
-    {
-        var_dump($request);
-    }
-
 
 }
