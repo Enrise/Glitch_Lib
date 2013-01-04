@@ -7,6 +7,10 @@ use Zend\Code\Reflection\MethodReflection;
  */
 class Glitch_Controller_Action_Rest_ActionInfoReader
 {
+    /**
+     * @var array Contains all recognised annotations along with the corresponding
+     * entity builder
+     */
     protected $recognizedAnnotations = array(
         'filter' => 'Glitch_Controller_Action_Rest_Annotation_ResourceFilterFactory'
     );

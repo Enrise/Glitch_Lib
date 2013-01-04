@@ -81,7 +81,7 @@ class Glitch_Controller_Action_Rest_Annotation_ResourceFilter
     /**
      * @param string $constraint
      * @return Glitch_Controller_Action_Rest_Annotation_ResourceFilter
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException When an invalid constraint is provided
      */
     public function setConstraint($constraint)
     {
@@ -92,7 +92,9 @@ class Glitch_Controller_Action_Rest_Annotation_ResourceFilter
         );
 
         if (! in_array($constraint, $validConstraints)) {
-            throw new \InvalidArgumentException('Trying to set invalid filter constraint.');
+            throw new \InvalidArgumentException(
+                sprintf('Trying to set invalid filter constraint %s.', $constraint)
+            );
         }
 
         $this->constraint = $constraint;

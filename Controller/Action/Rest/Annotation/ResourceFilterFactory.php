@@ -5,6 +5,13 @@ use Zend\Code\Reflection\DocBlock\Tag\TagInterface;
 class Glitch_Controller_Action_Rest_Annotation_ResourceFilterFactory
     implements Glitch_Controller_Action_Rest_Annotation_Factory
 {
+    /**
+     * Builds a Glitch_Controller_Action_Rest_Annotation_ResourceFilter entity
+     * based on the provided tag's docblock
+     *
+     * @param Zend\Code\Reflection\DocBlock\Tag\TagInterface $tag
+     * @return Glitch_Controller_Action_Rest_Annotation_ResourceFilter
+     */
     public function fromTag(TagInterface $tag)
     {
         $tagValues = explode(' ', $tag->getContent());

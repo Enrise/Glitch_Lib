@@ -46,6 +46,11 @@ class Glitch_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_S
         return $this->formatModuleName($this->_curModule) . '_Controller_' . $this->_formatName($unformatted);
     }
 
+    public function formatClassName($module, $class)
+    {
+        return $class;
+    }
+
     /**
      * Formats a module name
      *
