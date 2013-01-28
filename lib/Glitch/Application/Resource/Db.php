@@ -46,8 +46,7 @@ class Glitch_Application_Resource_Db extends Zend_Application_Resource_Db
         $options = $this->getOptions();
 
         // Disable cache? If not defined, cache will be active
-        if (isset($options['cache']['active']) && !$options['cache']['active'])
-        {
+        if (isset($options['cache']['active']) && !$options['cache']['active']) {
             // Explicitly pass null to deactivate, in case it was enabled before
             Zend_Db_Table_Abstract::setDefaultMetadataCache(null);
             return;
@@ -73,16 +72,14 @@ class Glitch_Application_Resource_Db extends Zend_Application_Resource_Db
      */
     public function getDb()
     {
-        if (null === $this->_db)
-        {
+        if (null === $this->_db) {
             // Use parent for basic initialization
             if (null === ($db = parent::init())) {
                 return null;
             }
 
-            // Has profiler? Attach it to the database adapter
-            if ($db->getProfiler()->getEnabled())
-            {
+            // Doesn't have profiler and settings indicate a profiler should be used
+            if (!$db->getProfiler() instanceof Zend_Db_Profiler && $db->getProfiler()->getEnabled()) {
                 // Check whether this is a HTTP request; if not, don't use Firebug
                 $profiler = (defined('STDIN'))
                     ? new Zend_Db_Profiler() // Running in CLI mode
