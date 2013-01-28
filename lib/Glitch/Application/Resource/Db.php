@@ -58,9 +58,13 @@ class Glitch_Application_Resource_Db extends Zend_Application_Resource_Db
         $cache = $manager->getCache('db');
 
         // Write caching errors to log file (if activated in the config)
-        $this->_bootstrap->bootstrap('Log');
-        $logger = $this->_bootstrap->getResource('Log');
-        $cache->setOption('logger', $logger);
+        try {
+            $this->_bootstrap->bootstrap('Log');
+            $logger = $this->_bootstrap->getResource('Log');
+            $cache->setOption('logger', $logger->getLog('cache'));
+        } catch (Glitch_Application_Exception_RuntimeException $e) {
+            //Logger could not be found
+        }
 
         Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
     }
