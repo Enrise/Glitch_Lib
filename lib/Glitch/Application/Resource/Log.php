@@ -49,13 +49,14 @@ class Glitch_Application_Resource_Log
     /**
      * Defined by Zend_Application_Resource_Resource
      *
-     * @return Zend_Log
+     * @return Glitch_Application_Resource_Log
      */
     public function init()
     {
         $log = $this->getLog();
         Glitch_Registry::setLog($log);
-        return $log;
+        //Returning $this ensures other resources can get a different log instance
+        return $this;
     }
 
     /**
