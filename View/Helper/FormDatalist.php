@@ -34,8 +34,14 @@ class Glitch_View_Helper_FormDatalist extends Zend_View_Helper_FormSelect
         // options; also ensure it's a string for comparison purposes.
         $value = array_map('strval', (array) $value);
 
+        $type = 'text';
+        if (array_key_exists('type', $attribs)) {
+            $type = $attribs['type'];
+            unset($attribs['type']);
+        }
+
         // Build the surrounding select element first.
-        $xhtml = '<input list="' . $this->view->escape($name) . '" />';
+        $xhtml = '<input type="' . $type . '" list="' . $this->view->escape($name) . '" />';
         $xhtml .= '<datalist'
                 . ' name="' . $this->view->escape($name) . '"'
                 . ' id="' . $this->view->escape($id) . '"'
