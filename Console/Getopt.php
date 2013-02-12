@@ -26,7 +26,7 @@ class Glitch_Console_Getopt
 
     public static function reset()
     {
-        if(GLITCH_APP_ENV != 'testing') {
+        if(GLITCH_APP_ENV != 'testing' && GLITCH_APP_ENV != 'testing-pullrequests') {
             trigger_error(
                 'Glitch_Console_Getopt::reset() should only be called in testing mode',
                 E_USER_NOTICE

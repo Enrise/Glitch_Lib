@@ -123,7 +123,7 @@ class Glitch_Config_Ini
         );
 
         $backend = 'BlackHole';
-        if(GLITCH_APP_ENV != 'testing' && GLITCH_APP_ENV != 'development') {
+        if(GLITCH_APP_ENV != 'testing' && GLITCH_APP_ENV != 'testing-pullrequests' && GLITCH_APP_ENV != 'development') {
             if (function_exists('zend_shm_cache_store'))
             {
                 $backend = 'ZendServer_ShMem';
@@ -188,7 +188,7 @@ class Glitch_Config_Ini
             $ini->merge(new Zend_Config_Ini($configFile, $section));
         }
 
-    if ('testing' != $section) {
+    if ('testing' != $section && 'testing-pullrequests' != $section) {
             $ini->setReadOnly();
     }
 
