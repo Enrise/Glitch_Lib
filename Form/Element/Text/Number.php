@@ -1,7 +1,12 @@
 <?php
 class Glitch_Form_Element_Text_Number extends Glitch_Form_Element_Text
 {
-    public function init()
+	public function __construct($spec, $options = null){
+		if(!isset($options['type'])) $options['type'] = Glitch_Form_Element_Text::FIELD_NUMBER;
+		parent::__construct($spec, $options);
+	}
+
+	public function init()
     {
         if ($this->isAutoloadFilters())
         {
