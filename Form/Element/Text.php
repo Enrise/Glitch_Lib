@@ -143,4 +143,22 @@ class Glitch_Form_Element_Text extends Zend_Form_Element_Text
         }
         return self::DEFAULT_TYPE;
     }
+
+	/**
+	 * Set required flag and add HTML5 "required" attribute
+	 *
+	 * @param bool $flag
+	 * @return Glitch_Form_Element_Text Provides a fluent interface
+	 */
+	public function setRequired($flag = true){
+		$flag = (bool)$flag;
+		parent::setRequired($flag);
+
+		if($this->_isHtml5()){
+			if(!$flag && isset($this->required))	unset($this->required);
+			else									$this->setAttrib('required', 'required');
+		}
+
+		return $this;
+	}
 }
