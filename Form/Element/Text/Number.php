@@ -8,14 +8,16 @@ class Glitch_Form_Element_Text_Number extends Glitch_Form_Element_Text
 
 	public function init()
     {
+		$symbols = Zend_Locale_Data::getList(Zend_Locale::findLocale(), 'symbols');
+
         if ($this->isAutoloadFilters())
         {
-            $this->addFilter('Digits');
+			$this->addFilter('PregReplace', array('match' => "/[^-+.0-9]/", 'replace' => '__replaced__'));
         }
 
         if ($this->isAutoloadValidators())
         {
-            $this->addValidator('Digits');
+			$this->addValidator('Regex', true, array('pattern' => "/^[-+]?[0-9]*\\.?[0-9]+$/"));
             $validatorOpts = array_filter(array(
                 'min' => $this->getAttrib('min'),
                 'max' => $this->getAttrib('max'),
