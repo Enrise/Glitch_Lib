@@ -327,7 +327,7 @@ class Glitch_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_
 
             // Cast all values to strings. This prevents serialization differences, e.g.:
             // array('compression' => true) versus array('compression' => 1)
-            $options = array_map('strval', $options);
+            $options = $this->evaluateOptionsToString($options);
 
             // Sort the filtered options to have a consistent key
             ksort($options);
@@ -338,5 +338,24 @@ class Glitch_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_
         $key = md5($prefix);
 
         return $key;
+    }
+
+    /**
+     * Cast all values to strings. This prevents serialization differences, e.g.:
+     * array('compression' => true) versus array('compression' => 1)
+     *
+     * @param array $options
+     * @return array
+     */
+    protected function evaluateOptionsToString($options)
+    {
+        foreach ($options as $key => $value) {
+            if (is_array($value)) {
+                $options[$key] = $this->evaluateOptionsToString($value);
+            } else {
+                $options[$key] = strval($value);
+            }
+        }
+        return $options;
     }
 }
