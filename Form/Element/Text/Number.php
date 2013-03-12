@@ -12,12 +12,12 @@ class Glitch_Form_Element_Text_Number extends Glitch_Form_Element_Text
 
         if ($this->isAutoloadFilters())
         {
-			$this->addFilter('PregReplace', array('match' => "/[^-+.0-9]/", 'replace' => '__replaced__'));
+			$this->addFilter('PregReplace', array('match' => "/[^-+.0-9]/", 'replace' => ''));
         }
 
         if ($this->isAutoloadValidators())
         {
-			$this->addValidator('Regex', true, array('pattern' => "/^[-+]?[0-9]*\\.?[0-9]+$/"));
+			$this->addValidator('Regex', false, array('pattern' => "/^[-+]?[0-9]*\\.?[0-9]+$/"));
             $validatorOpts = array_filter(array(
                 'min' => $this->getAttrib('min'),
                 'max' => $this->getAttrib('max'),
