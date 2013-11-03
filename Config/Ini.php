@@ -45,7 +45,7 @@ class Glitch_Config_Ini
      *
      * @var int|null
      */
-    const CACHE_LIFETIME = null; // Valid forever!
+    const CACHE_LIFETIME = 604800; // Valid for a week
 
     /**
      * Singleton instance
@@ -96,8 +96,7 @@ class Glitch_Config_Ini
      */
     public static function getInstance()
     {
-        if (null === self::$_instance)
-        {
+        if (null === self::$_instance) {
             self::$_instance = new self();
         }
         return self::$_instance;
@@ -116,16 +115,19 @@ class Glitch_Config_Ini
     {
         $frontendOptions = array(
             'lifetime' => self::CACHE_LIFETIME,
-            'cached_entity' => __CLASS__
+            'cached_entity' => __CLASS__,
+            'cache_by_default' => false,
+            'cached_methods' => array('getConfig', 'loadConfig'),
+            'write_control' => false,
         );
         $backendOptions = array(
-            'namespace' => APP_NAME . '_Config'
+            // create unique name per app & release
+            'namespace' => APP_NAME . '_' . substr(md5(__FILE__), 0, 6)
         );
 
         $backend = 'BlackHole';
         if(GLITCH_APP_ENV != 'testing' && GLITCH_APP_ENV != 'testing-pullrequests' && GLITCH_APP_ENV != 'development') {
-            if (function_exists('zend_shm_cache_store'))
-            {
+            if (function_exists('zend_shm_cache_store')) {
                 $backend = 'ZendServer_ShMem';
             } else if (extension_loaded('apc')) {
                 $backend = 'Apc';
@@ -176,21 +178,19 @@ class Glitch_Config_Ini
         $recursiveIterator = new RecursiveIteratorIterator($dirIterator);
         $iterator = new RegexIterator($recursiveIterator, $pattern, RegexIterator::MATCH, RegexIterator::USE_KEY);
 
-        foreach ($iterator as $file)
-        {
+        foreach ($iterator as $file) {
             $ini->merge(new Zend_Config_Ini($file->getPathname(), $section));
         }
 
         // Optionally load developer-specific settings, overriding previous settings
         $configFile = GLITCH_CONFIGS_PATH . DIRECTORY_SEPARATOR . self::FILENAME_USER;
-        if (file_exists($configFile))
-        {
+        if (file_exists($configFile)) {
             $ini->merge(new Zend_Config_Ini($configFile, $section));
         }
 
-    if ('testing' != $section && 'testing-pullrequests' != $section) {
+        if ('testing' != $section && 'testing-pullrequests' != $section) {
             $ini->setReadOnly();
-    }
+        }
 
         return $ini;
     }
@@ -208,8 +208,7 @@ class Glitch_Config_Ini
     public static function getConfig()
     {
         // Don't call the cached method more than once
-        if (null === self::$_config)
-        {
+        if (null === self::$_config) {
             self::$_config = self::getInstance()->_cache->loadConfig(GLITCH_APP_ENV);
 
             // Allow application-wide access
@@ -219,8 +218,7 @@ class Glitch_Config_Ini
         // Store the application settings, if any
         if (!Glitch_Registry::isRegistered(Glitch_Registry::KEY_SETTINGS)) {
             $settings = self::$_config->get('settings');
-            if (null !== $settings)
-            {
+            if (null !== $settings) {
                 Glitch_Registry::setSettings($settings);
             }
         }
