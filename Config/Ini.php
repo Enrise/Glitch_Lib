@@ -128,7 +128,7 @@ class Glitch_Config_Ini
         $backend = 'BlackHole';
         if(GLITCH_APP_ENV != 'testing' && GLITCH_APP_ENV != 'testing-pullrequests' && GLITCH_APP_ENV != 'development') {
             if (function_exists('zend_shm_cache_store')) {
-                $backend = 'ZendServer_ShMem';
+                $backend = 'ZendServer_Disk';
             } else if (extension_loaded('apc')) {
                 $backend = 'Apc';
             }
@@ -170,9 +170,9 @@ class Glitch_Config_Ini
 
         // Recursively load all other ini files, if any, but exclude the special cases
         $pattern = '~^(?!'
-                 . preg_quote(self::FILENAME_APPLICATION) . '|'
-                 . preg_quote(self::FILENAME_USER)
-                 . ').+\.ini$~';
+            . preg_quote(self::FILENAME_APPLICATION) . '|'
+            . preg_quote(self::FILENAME_USER)
+            . ').+\.ini$~';
 
         $dirIterator = new RecursiveDirectoryIterator(GLITCH_CONFIGS_PATH, RecursiveDirectoryIterator::KEY_AS_FILENAME);
         $recursiveIterator = new RecursiveIteratorIterator($dirIterator);
