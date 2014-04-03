@@ -133,7 +133,7 @@ class Glitch_Application_Resource_Log
                 // @todo (unti)test
                 foreach($option['filters'] as $filterOptions) {
                     $filterClass = $this->_getActorClassName('Filter', $filterOptions['name']);
-                    $filter = new $filterClass($filterOptions['options']);
+                    $filter = $filterClass::factory($filterOptions['options']);
                     $writer->addFilter($filter);
                 }
             }
