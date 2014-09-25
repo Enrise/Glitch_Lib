@@ -20,6 +20,7 @@ class Glitch_Form_Element_Text extends Zend_Form_Element_Text
     const FIELD_DATE_TIME_LOCAL = 'datetime-local';
     const FIELD_SEARCH = 'search';
     const FIELD_COLOR = 'color';
+    const FIELD_TEL = 'tel';
     /**#@-*/
 
     /**
@@ -41,6 +42,7 @@ class Glitch_Form_Element_Text extends Zend_Form_Element_Text
         self::FIELD_DATE_TIME_LOCAL => 'datetime-local',
         self::FIELD_SEARCH => 'search',
         self::FIELD_COLOR => 'color',
+        self::FIELD_TEL => 'tel',
     );
 
     /**
