@@ -79,7 +79,11 @@ class Glitch_Application_Resource_Encoding extends Zend_Application_Resource_Res
             ini_set('default_charset', $this->_encoding);
 
             // ZF uses iconv for e.g. form validation and Zend_Locale
-            iconv_set_encoding('internal_encoding', $this->_encoding);
+            if (PHP_VERSION_ID < 50600) {
+              iconv_set_encoding('internal_encoding',  $this->_encoding);
+            } else {
+               ini_set('default_charset',  $this->_encoding);
+            }
 
             // MB extension is not required by ZF, so don't throw exceptions
             if (function_exists('mb_internal_encoding'))
