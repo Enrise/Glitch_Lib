@@ -90,7 +90,7 @@ class Glitch_Application_Resource_PluginLoader extends Zend_Application_Resource
         // Must be done early, because we can't hook into setIncludeFileCache() to do it later on.
         if (!file_exists($cacheFile))
         {
-            if (false === file_put_contents($cacheFile, '<?php' . PHP_EOL) ||
+            if (false === file_put_contents($cacheFile, '<?php //Zend Plugin Cache, managed by Glitch ?>' . PHP_EOL) ||
                 false === chmod($cacheFile, $this->_filemode))
             {
                 $this->_bootstrap->bootstrap('Log');
