@@ -86,7 +86,7 @@ class Glitch_Loader_Autoloader implements Zend_Loader_Autoloader_Interface
      * Autoload classes for all paths
      *
      * @param string $class
-     * @return void
+     * @return bool
      */
     protected function fallbackAutoload($class)
     {
