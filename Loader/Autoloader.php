@@ -57,8 +57,11 @@ class Glitch_Loader_Autoloader implements Zend_Loader_Autoloader_Interface
     {
         $filename = $this->getFileNameFromClassName($class);
 
-        // Don't use require_once: halts execution instantly when file is not found
-        $isLoaded = include_once $filename;
+        $isLoaded = false;
+
+        if (file_exists($filename)) {
+            $isLoaded = include_once $filename;
+        }
 
         if (!class_exists($class, false) && !interface_exists($class, false)) {
             $isLoaded = $this->fallbackAutoload($class);
@@ -83,7 +86,7 @@ class Glitch_Loader_Autoloader implements Zend_Loader_Autoloader_Interface
      * Autoload classes for all paths
      *
      * @param string $class
-     * @return void
+     * @return bool
      */
     protected function fallbackAutoload($class)
     {
